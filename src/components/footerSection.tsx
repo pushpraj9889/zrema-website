@@ -21,7 +21,7 @@ export default function QazmiFooter() {
               href={footerLinks[0].url}
               className="text-gray-700 hover:text-pink-500 text-sm"
             >
-              {footerLinks[0].title}
+              {footerLinks[0]?.title}
             </a>
           </div>
           <div>
@@ -29,7 +29,7 @@ export default function QazmiFooter() {
               href={footerLinks[1].url}
               className="text-gray-700 hover:text-pink-500 text-sm"
             >
-              {footerLinks[1].title}
+              {footerLinks[1]?.title}
             </a>
           </div>
           <div>
@@ -37,7 +37,7 @@ export default function QazmiFooter() {
               href={footerLinks[2].url}
               className="text-gray-700 hover:text-pink-500 text-sm"
             >
-              {footerLinks[2].title}
+              {footerLinks[2]?.title}
             </a>
           </div>
           <div>
@@ -45,7 +45,7 @@ export default function QazmiFooter() {
               href={footerLinks[3].url}
               className="text-gray-700 hover:text-pink-500 text-sm"
             >
-              {footerLinks[3].title}
+              {footerLinks[3]?.title}
             </a>
           </div>
           <div>
@@ -53,7 +53,7 @@ export default function QazmiFooter() {
               href={footerLinks[4].url}
               className="text-gray-700 hover:text-pink-500 text-sm"
             >
-              {footerLinks[4].title}
+              {footerLinks[4]?.title}
             </a>
           </div>
         </div>
@@ -64,7 +64,7 @@ export default function QazmiFooter() {
               href={footerLinks[5].url}
               className="text-gray-700 hover:text-pink-500 text-sm"
             >
-              {footerLinks[5].title}
+              {footerLinks[5]?.title}
             </a>
           </div>
           <div className="md:text-right text-center md:col-start-3">
@@ -72,7 +72,7 @@ export default function QazmiFooter() {
               href={footerLinks[6].url}
               className="text-gray-700 hover:text-pink-500 text-sm"
             >
-              {footerLinks[6].title}
+              {footerLinks[6]?.title}
             </a>
           </div>
         </div>

@@ -1,45 +1,105 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import logo from "../../assets/images/LOGO.jpg";
+import { BadgeIcon } from "lucide-react";
+import { UserDetailsAction } from "../../redux/actions";
 
 const CheckoutPage = () => {
   const [emailNews, setEmailNews] = useState(true);
   const [saveInfo, setSaveInfo] = useState(false);
   const [billingAddressOption, setBillingAddressOption] = useState("same");
-
-  // Cart items data
-  const cartItems = [
-    {
-      id: 1,
-      name: "330 Aari Long Kurti For Women",
-      variant: "Pink / Viscose Rayon / S",
-      price: 979.0,
-      quantity: 1,
-      image: "/api/placeholder/80/80",
-    },
-    {
-      id: 2,
-      name: "Noura Long Kurti For Women",
-      variant: "Brown / Viscose Rayon / XS",
-      price: 1199.0,
-      quantity: 1,
-      image: "/api/placeholder/80/80",
-    },
-    {
-      id: 3,
-      name: "Samara Maroon Long Kurti For Women",
-      variant: "Maroon / Viscose Rayon / XS",
-      price: 1249.0,
-      quantity: 1,
-      image: "/api/placeholder/80/80",
-    },
-  ];
+  const { cart } = useSelector((store) => store?.product || { cart: [] });
+  const [userDetails, setUserDetails] = useState({
+    first_name: "",
+    last_name: "",
+    phone_number: "",
+    address: "",
+    pincode: "",
+    city: "",
+    state: "",
+    landmark: "",
+  });
+  const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // Calculate totals
-  const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+  const subtotal = cart.reduce(
+    (sum, item) => sum + item.mrp * item.quantity,
     0
   );
   const taxes = 0;
   const total = subtotal + taxes;
+
+  const bagclick = () => {
+    navigate("/QazmiCartPage");
+  };
+
+  // Handle input changes for all form fields
+  const handleInputChange = (field, value) => {
+    setUserDetails({
+      ...userDetails,
+      [field]: value,
+    });
+
+    // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors({
+        ...errors,
+        [field]: "",
+      });
+    }
+  };
+
+  // Validate user details before proceeding
+  const validateUserDetails = () => {
+    const newErrors = {};
+    const requiredFields = [
+      "first_name",
+      "last_name",
+      "phone_number",
+      "address",
+      "pincode",
+      "city",
+      "state",
+    ];
+
+    requiredFields.forEach((field) => {
+      if (!userDetails[field]) {
+        newErrors[field] = `${field.replace("_", " ")} is required`;
+      }
+    });
+
+    // Phone number validation
+    if (
+      userDetails.phone_number &&
+      !/^\d{10}$/.test(userDetails.phone_number)
+    ) {
+      newErrors.phone_number = "Please enter a valid 10-digit phone number";
+    }
+
+    // Pincode validation
+    if (userDetails.pincode && !/^\d{6}$/.test(userDetails.pincode)) {
+      newErrors.pincode = "Please enter a valid 6-digit PIN code";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const proceedOrderPress = () => {
+    if (validateUserDetails()) {
+      dispatch(UserDetailsAction(userDetails));
+      navigate("/Order");
+    } else {
+      // Scroll to first error
+      const firstErrorField = document.querySelector(".error-message");
+      if (firstErrorField) {
+        firstErrorField.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -47,27 +107,12 @@ const CheckoutPage = () => {
       <header className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-2 flex items-center justify-between">
           <div className="flex items-center">
-            <button className="mr-4 text-gray-500">
+            <button className="mr-4 text-gray-500" onClick={() => navigate(-1)}>
               <i className="fas fa-arrow-left"></i>
             </button>
-            <span className="text-gray-800 truncate max-w-md">
-              qazmi.in/checkouts/cn/Z2NwLWFzaWEtc291dGhiYXN0MUQjBKNQ
-            </span>
+            <img src={logo} alt="Logo" className="h-10 w-auto" />
           </div>
-          <div className="flex items-center">
-            <button className="mx-2 text-gray-500">
-              <i className="fas fa-sync-alt"></i>
-            </button>
-            <button className="mx-2 text-gray-500">
-              <i className="far fa-star"></i>
-            </button>
-            <button className="mx-2 text-gray-500">
-              <i className="fas fa-download"></i>
-            </button>
-            <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white ml-2">
-              <span>P</span>
-            </div>
-          </div>
+          <BadgeIcon className="h-8 w-8 cursor-pointer" onClick={bagclick} />
         </div>
       </header>
 
@@ -76,111 +121,172 @@ const CheckoutPage = () => {
         <div className="flex flex-col md:flex-row gap-6">
           {/* Left Column - Contact & Delivery Form */}
           <div className="w-full md:w-3/5">
-            {/* Contact Section */}
+            {/* Billing Details Section */}
             <div className="mb-8">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-medium">Contact</h2>
-                <a href="#" className="text-blue-500">
-                  Log in
-                </a>
-              </div>
-              <div className="mb-4">
-                <input
-                  type="text"
-                  placeholder="Email or mobile phone number"
-                  className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                />
-              </div>
-              <div className="flex items-center mb-4">
-                <input
-                  type="checkbox"
-                  id="news"
-                  checked={emailNews}
-                  onChange={() => setEmailNews(!emailNews)}
-                  className="w-5 h-5 text-blue-600 border-gray-300 rounded"
-                />
-                <label htmlFor="news" className="ml-2 text-gray-700">
-                  Email me with news and offers
-                </label>
+                <h2 className="text-xl font-medium">Billing Details</h2>
               </div>
             </div>
 
             {/* Delivery Section */}
             <div className="mb-8">
-              <h2 className="text-xl font-medium mb-4">Delivery</h2>
-              <div className="mb-4">
-                <div className="relative">
-                  <select className="w-full border border-gray-300 rounded-md p-3 pr-10 appearance-none focus:outline-none focus:ring-1 focus:ring-blue-500">
-                    <option>India</option>
-                  </select>
-                  <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                    <i className="fas fa-chevron-down text-gray-400"></i>
-                  </div>
-                </div>
-              </div>
+              {/* Personal Information */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <input
-                  type="text"
-                  placeholder="First name"
-                  className="border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                />
-                <input
-                  type="text"
-                  placeholder="Last name"
-                  className="border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                />
-              </div>
-              <div className="mb-4">
-                <div className="relative">
+                <div>
                   <input
                     type="text"
-                    placeholder="Address"
-                    className="w-full border border-gray-300 rounded-md p-3 pr-10 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    placeholder="First name"
+                    className={`border ${
+                      errors.first_name ? "border-red-500" : "border-gray-300"
+                    } rounded-md p-3 w-full focus:outline-none focus:ring-1 focus:ring-blue-500`}
+                    value={userDetails.first_name}
+                    onChange={(e) =>
+                      handleInputChange("first_name", e.target.value)
+                    }
                   />
-                  <div className="absolute inset-y-0 right-0 flex items-center px-2">
-                    <i className="fas fa-search text-gray-400"></i>
-                  </div>
+                  {errors.first_name && (
+                    <p className="text-red-500 text-sm mt-1 error-message">
+                      {errors.first_name}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Last name"
+                    className={`border ${
+                      errors.last_name ? "border-red-500" : "border-gray-300"
+                    } rounded-md p-3 w-full focus:outline-none focus:ring-1 focus:ring-blue-500`}
+                    value={userDetails.last_name}
+                    onChange={(e) =>
+                      handleInputChange("last_name", e.target.value)
+                    }
+                  />
+                  {errors.last_name && (
+                    <p className="text-red-500 text-sm mt-1 error-message">
+                      {errors.last_name}
+                    </p>
+                  )}
                 </div>
               </div>
-              <div className="mb-4">
-                <input
-                  type="text"
-                  placeholder="Apartment, suite, etc. (optional)"
-                  className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                />
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
-                <input
-                  type="text"
-                  placeholder="City"
-                  className="border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                />
-                <div className="relative">
-                  <select className="w-full border border-gray-300 rounded-md p-3 pr-10 appearance-none focus:outline-none focus:ring-1 focus:ring-blue-500">
-                    <option>Delhi</option>
-                  </select>
-                  <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                    <i className="fas fa-chevron-down text-gray-400"></i>
-                  </div>
-                </div>
-                <input
-                  type="text"
-                  placeholder="PIN code"
-                  className="border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                />
-              </div>
+
+              {/* Phone */}
               <div className="mb-4">
                 <div className="relative">
                   <input
                     type="tel"
                     placeholder="Phone"
-                    className="w-full border border-gray-300 rounded-md p-3 pr-10 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className={`w-full border ${
+                      errors.phone_number ? "border-red-500" : "border-gray-300"
+                    } rounded-md p-3 pr-10 focus:outline-none focus:ring-1 focus:ring-blue-500`}
+                    value={userDetails.phone_number}
+                    onChange={(e) =>
+                      handleInputChange("phone_number", e.target.value)
+                    }
                   />
                   <div className="absolute inset-y-0 right-0 flex items-center px-2">
                     <i className="fas fa-question-circle text-gray-400"></i>
                   </div>
                 </div>
+                {errors.phone_number && (
+                  <p className="text-red-500 text-sm mt-1 error-message">
+                    {errors.phone_number}
+                  </p>
+                )}
               </div>
+
+              {/* Address */}
+              <div className="mb-4">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Address"
+                    className={`w-full border ${
+                      errors.address ? "border-red-500" : "border-gray-300"
+                    } rounded-md p-3 pr-10 focus:outline-none focus:ring-1 focus:ring-blue-500`}
+                    value={userDetails.address}
+                    onChange={(e) =>
+                      handleInputChange("address", e.target.value)
+                    }
+                  />
+                  <div className="absolute inset-y-0 right-0 flex items-center px-2">
+                    <i className="fas fa-search text-gray-400"></i>
+                  </div>
+                </div>
+                {errors.address && (
+                  <p className="text-red-500 text-sm mt-1 error-message">
+                    {errors.address}
+                  </p>
+                )}
+              </div>
+
+              {/* Landmark */}
+              <div className="mb-4">
+                <input
+                  type="text"
+                  placeholder="Near landmark"
+                  className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  value={userDetails.landmark}
+                  onChange={(e) =>
+                    handleInputChange("landmark", e.target.value)
+                  }
+                />
+              </div>
+
+              {/* PIN, City, State */}
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+                <div>
+                  <input
+                    type="text"
+                    placeholder="PIN code"
+                    className={`border ${
+                      errors.pincode ? "border-red-500" : "border-gray-300"
+                    } rounded-md p-3 w-full focus:outline-none focus:ring-1 focus:ring-blue-500`}
+                    value={userDetails.pincode}
+                    onChange={(e) =>
+                      handleInputChange("pincode", e.target.value)
+                    }
+                  />
+                  {errors.pincode && (
+                    <p className="text-red-500 text-sm mt-1 error-message">
+                      {errors.pincode}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="City"
+                    className={`border ${
+                      errors.city ? "border-red-500" : "border-gray-300"
+                    } rounded-md p-3 w-full focus:outline-none focus:ring-1 focus:ring-blue-500`}
+                    value={userDetails.city}
+                    onChange={(e) => handleInputChange("city", e.target.value)}
+                  />
+                  {errors.city && (
+                    <p className="text-red-500 text-sm mt-1 error-message">
+                      {errors.city}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="State"
+                    className={`border ${
+                      errors.state ? "border-red-500" : "border-gray-300"
+                    } rounded-md p-3 w-full focus:outline-none focus:ring-1 focus:ring-blue-500`}
+                    value={userDetails.state}
+                    onChange={(e) => handleInputChange("state", e.target.value)}
+                  />
+                  {errors.state && (
+                    <p className="text-red-500 text-sm mt-1 error-message">
+                      {errors.state}
+                    </p>
+                  )}
+                </div>
+              </div>
+
               <div className="flex items-center mb-4">
                 <input
                   type="checkbox"
@@ -193,138 +299,20 @@ const CheckoutPage = () => {
                   Save this information for next time
                 </label>
               </div>
-            </div>
 
-            {/* Shipping Method Section */}
-            <div className="mb-8">
-              <h2 className="text-xl font-medium mb-4">Shipping method</h2>
-              <div className="bg-gray-50 border border-gray-200 rounded-md p-4 text-center text-gray-500">
-                Enter your shipping address to view available shipping methods.
-              </div>
-            </div>
-
-            {/* Payment Section */}
-            <div className="mb-8">
-              <h2 className="text-xl font-medium mb-4">Payment</h2>
-              <p className="text-gray-600 mb-4">
-                All transactions are secure and encrypted.
-              </p>
-
-              {/* Payment Option */}
-              <div className="border border-gray-300 rounded-md mb-4">
-                <div className="p-4 flex items-center justify-between">
-                  <div className="flex-1">
-                    <div className="font-medium">
-                      Razorpay Secure (UPI, Cards, Wallets, NetBanking)
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <img
-                      src="/api/placeholder/32/20"
-                      alt="UPI"
-                      className="h-5"
-                    />
-                    <img
-                      src="/api/placeholder/32/20"
-                      alt="Visa"
-                      className="h-5"
-                    />
-                    <img
-                      src="/api/placeholder/32/20"
-                      alt="Mastercard"
-                      className="h-5"
-                    />
-                    <img
-                      src="/api/placeholder/32/20"
-                      alt="Bank"
-                      className="h-5"
-                    />
-                    <span className="text-gray-500 text-sm">+17</span>
-                  </div>
-                </div>
-
-                {/* Payment Information */}
-                <div className="p-6 bg-gray-50 border-t border-gray-200 flex flex-col items-center">
-                  <div className="w-32 h-16 border border-gray-300 bg-white mb-6 flex items-center justify-center relative">
-                    <div className="absolute top-0 left-0 w-6 h-1 border-b border-gray-300 flex justify-between">
-                      <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-                      <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-                      <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-                    </div>
-                    <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                      <i className="fas fa-arrow-right text-gray-400"></i>
-                    </div>
-                  </div>
-                  <p className="text-center text-gray-700">
-                    After clicking "Pay now", you will be redirected to
-                    <br />
-                    Razorpay Secure (UPI, Cards, Wallets, NetBanking) to
-                    <br />
-                    complete your purchase securely.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Billing Address Section */}
-            <div className="mb-8">
-              <h2 className="text-xl font-medium mb-4">Billing address</h2>
-              <div className="border border-gray-300 rounded-md overflow-hidden">
-                <div
-                  className={`p-4 flex items-center border-b border-gray-200 ${
-                    billingAddressOption === "same" ? "bg-blue-50" : ""
-                  }`}
-                  onClick={() => setBillingAddressOption("same")}
-                >
-                  <div className="w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center mr-3 flex-shrink-0">
-                    {billingAddressOption === "same" && (
-                      <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                    )}
-                  </div>
-                  <div className="font-medium">Same as shipping address</div>
-                </div>
-                <div
-                  className={`p-4 flex items-center ${
-                    billingAddressOption === "different" ? "bg-blue-50" : ""
-                  }`}
-                  onClick={() => setBillingAddressOption("different")}
-                >
-                  <div className="w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center mr-3 flex-shrink-0">
-                    {billingAddressOption === "different" && (
-                      <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                    )}
-                  </div>
-                  <div className="font-medium">
-                    Use a different billing address
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Pay Now Button */}
-            <div className="mb-8">
-              <button className="w-full bg-blue-600 text-white py-4 px-6 rounded-md font-medium hover:bg-blue-700 transition-colors">
-                Pay now
+              <button
+                onClick={proceedOrderPress}
+                className="bg-gradient-to-r from-purple-600 to-blue-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:scale-105 transition-transform duration-200"
+              >
+                Proceed For Order
               </button>
-            </div>
 
-            {/* Footer Links */}
-            <div className="flex flex-wrap gap-4 text-sm text-blue-600 mb-8">
-              <a href="#" className="hover:underline">
-                Refund policy
-              </a>
-              <a href="#" className="hover:underline">
-                Shipping policy
-              </a>
-              <a href="#" className="hover:underline">
-                Privacy policy
-              </a>
-              <a href="#" className="hover:underline">
-                Terms of service
-              </a>
-              <a href="#" className="hover:underline">
-                Contact information
-              </a>
+              {/* General error message if any field is missing */}
+              {Object.keys(errors).length > 0 && (
+                <p className="text-red-500 mt-2">
+                  Please fill in all required fields correctly
+                </p>
+              )}
             </div>
           </div>
 
@@ -332,38 +320,43 @@ const CheckoutPage = () => {
           <div className="w-full md:w-2/5 bg-white p-6 rounded-md shadow-sm">
             {/* Cart Items */}
             <div className="border-b border-gray-200 pb-6">
-              {cartItems.map((item) => (
-                <div key={item.id} className="flex items-start mb-4">
-                  <div className="relative">
-                    <div className="w-20 h-20 bg-gray-100 rounded-md overflow-hidden">
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="w-full h-full object-cover"
-                      />
+              {cart.length > 0 ? (
+                cart.map((item) => (
+                  <div key={item.id} className="flex items-start mb-4">
+                    <div className="relative">
+                      <div className="w-20 h-20 bg-gray-100 rounded-md overflow-hidden">
+                        <img
+                          src={item.images[0]}
+                          alt={item.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <span className="absolute -top-1 -right-1 w-5 h-5 bg-gray-500 rounded-full text-white text-xs flex items-center justify-center">
+                        {item.quantity}
+                      </span>
                     </div>
-                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-gray-500 rounded-full text-white text-xs flex items-center justify-center">
-                      {item.quantity}
-                    </span>
+                    <div className="flex-1 ml-4">
+                      <h3 className="font-medium">{item.name}</h3>
+                    </div>
+                    <div className="ml-4 text-right">
+                      <span className="font-medium">
+                        ₹{item.mrp.toLocaleString("en-IN")}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex-1 ml-4">
-                    <h3 className="font-medium">{item.name}</h3>
-                    <p className="text-gray-500 text-sm">{item.variant}</p>
-                  </div>
-                  <div className="ml-4 text-right">
-                    <span className="font-medium">
-                      ₹{item.price.toLocaleString("en-IN")}
-                    </span>
-                  </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p className="text-gray-500 text-center py-4">
+                  Your cart is empty
+                </p>
+              )}
             </div>
 
             {/* Order Summary */}
             <div className="py-4 border-b border-gray-200">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-gray-700">
-                  Subtotal · {cartItems.length} items
+                  Subtotal · {cart.length} item{cart.length !== 1 ? "s" : ""}
                 </span>
                 <span className="font-medium">
                   ₹{subtotal.toLocaleString("en-IN")}
@@ -374,7 +367,11 @@ const CheckoutPage = () => {
                   <span className="text-gray-700">Shipping</span>
                   <i className="fas fa-question-circle text-gray-400 ml-1"></i>
                 </div>
-                <span className="text-gray-500">Enter shipping address</span>
+                <span className="text-gray-500">
+                  {userDetails.address
+                    ? "Free Shipping"
+                    : "Enter shipping address"}
+                </span>
               </div>
             </div>
 

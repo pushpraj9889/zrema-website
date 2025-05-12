@@ -2,71 +2,43 @@ import { useState } from "react";
 import { X, ChevronDown, ChevronUp, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import QazmiFooter from "./footerSection";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  deleteAction,
+  incrementQuantity,
+  decreaseQuantity,
+} from "../redux/actions";
 
 export default function QazmiCart({ isOpen, setIsOpen }) {
+  const { cart } = useSelector((store) => store?.product || { cart: [] });
+  console.log("geettingafjkds", cart);
   const navigate = useNavigate();
-  // Cart items data
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "330 Aari Long Kurti For Women",
-      color: "Pink",
-      material: "Viscose Rayon",
-      size: "S",
-      price: 3499.0,
-      salePrice: 979.0,
-      quantity: 1,
-      image: "/api/placeholder/100/120",
-    },
-    {
-      id: 2,
-      name: "Noura Long Kurti For Women",
-      color: "Brown",
-      material: "Viscose Rayon",
-      size: "XS",
-      price: 3999.0,
-      salePrice: 1199.0,
-      quantity: 1,
-      image: "/api/placeholder/100/120",
-    },
-    {
-      id: 3,
-      name: "Samara Maroon Long Kurti For Women",
-      color: "Maroon",
-      material: "Viscose Rayon",
-      size: "XS",
-      price: 3999.0,
-      salePrice: 1249.0,
-      quantity: 1,
-      image: "/api/placeholder/100/120",
-    },
-  ]);
+  const dispatch = useDispatch();
 
   // Calculate total amount
-  const totalAmount = cartItems.reduce(
-    (total, item) => total + item.salePrice * item.quantity,
+  const totalAmount = cart.reduce(
+    (total, item) => total + item.mrp * item.quantity,
     0
   );
 
-  // Handle quantity change
-  const updateQuantity = (id, newQuantity) => {
-    if (newQuantity < 1) return;
+  const handleIncrementQuantity = (productId) => {
+    dispatch(incrementQuantity(productId));
+  };
 
-    setCartItems(
-      cartItems.map((item) =>
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      )
-    );
+  const handleDecrementQuantity = (productId) => {
+    dispatch(decreaseQuantity(productId));
   };
 
   // Handle item removal
   const removeItem = (id) => {
-    setCartItems(cartItems.filter((item) => item.id !== id));
+    dispatch(deleteAction(id));
   };
+
   const goToCartPage = () => {
     setIsOpen(false); // Close the cart panel
     navigate("/QazmiCartPage"); // Navigate to the cart page
   };
+
   const goToCheckOut = () => {
     setIsOpen(false);
     navigate("/CheckoutPage");
@@ -111,21 +83,21 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
 
               {/* Cart items */}
               <div className="flex-1 overflow-y-auto p-4">
-                {cartItems.length === 0 ? (
+                {cart.length === 0 ? (
                   <div className="py-6 text-center">
                     <p className="text-gray-500">Your cart is empty</p>
                   </div>
                 ) : (
-                  cartItems.map((item) => (
+                  cart?.map((item) => (
                     <div
-                      key={item.id}
+                      key={item._id}
                       className="py-4 flex border-b border-gray-200 last:border-b-0"
                     >
                       {/* Product image */}
-                      <div className="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
+                      <div className="flex-shrink-0 w-24 h-30 border border-gray-200 rounded-md overflow-hidden">
                         <img
-                          src={item.image}
-                          alt={item.name}
+                          src={item?.images[0]}
+                          alt={"Product image"}
                           className="w-full h-full object-center object-cover"
                         />
                       </div>
@@ -135,10 +107,10 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
                         <div>
                           <div className="flex justify-between">
                             <h3 className="text-sm font-medium text-gray-900">
-                              {item.name}
+                              {item.name.slice(0, 40)}
                             </h3>
                             <p className="ml-4 text-sm font-medium text-gray-900">
-                              Rs. {(item.salePrice * item.quantity).toFixed(2)}
+                              Rs. {(item?.mrp * item?.quantity).toFixed(2)}
                             </p>
                           </div>
                           <p className="mt-1 text-sm text-gray-500">
@@ -151,18 +123,16 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
                           <div className="flex items-center border border-gray-300 rounded">
                             <button
                               className="px-2 py-1 text-gray-600"
-                              onClick={() =>
-                                updateQuantity(item.id, item.quantity - 1)
-                              }
+                              onClick={() => handleDecrementQuantity(item._id)}
                             >
                               <ChevronDown size={16} />
                             </button>
-                            <span className="px-2 py-1">{item.quantity}</span>
+                            <span className="px-2 py-1 text-black">
+                              {item.quantity}
+                            </span>
                             <button
                               className="px-2 py-1 text-gray-600"
-                              onClick={() =>
-                                updateQuantity(item.id, item.quantity + 1)
-                              }
+                              onClick={() => handleIncrementQuantity(item._id)}
                             >
                               <ChevronUp size={16} />
                             </button>
@@ -170,7 +140,7 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
 
                           <button
                             className="text-sm font-medium text-pink-600 hover:text-pink-500 flex items-center"
-                            onClick={() => removeItem(item.id)}
+                            onClick={() => removeItem(item._id)}
                           >
                             <X size={16} className="mr-1" />
                             Remove
@@ -185,7 +155,7 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
               {/* Cart footer with totals and checkout buttons */}
               <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                 <div className="flex justify-between text-sm text-gray-600 mb-2">
-                  <p>Total products ({cartItems.length})</p>
+                  <p>Total products ({cart?.length})</p>
                   <p>Rs. {totalAmount.toFixed(2)}</p>
                 </div>
                 <div className="flex justify-between text-base font-medium text-gray-900 mb-6">

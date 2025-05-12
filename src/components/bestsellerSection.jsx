@@ -9,12 +9,15 @@ import {
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { get } from "../Services/apicallMethode";
+import QazmiCart from "./commonProductModal";
+import QazmiCartProdcut from "./commonProductModal";
 
 const BestsellersSection = () => {
   const scrollContainerRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const [products, setProducts] = useState([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const navigate = useNavigate();
   // More products to demonstrate scrolling
   // console.log("fdsggsjsgjdk", products);
@@ -32,56 +35,6 @@ const BestsellersSection = () => {
   useEffect(() => {
     bestSellerCall();
   }, []);
-  // const products = [
-  //   {
-  //     id: 1,
-  //     name: "Mustard White Aari Short Kurti For Women",
-  //     originalPrice: 2499.0,
-  //     salePrice: 749.0,
-  //     image: "/api/placeholder/350/450",
-  //     colors: ["#e2d8c3", "#d4b38f"],
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Aafreen Long Kurti For Women",
-  //     originalPrice: 2999.0,
-  //     salePrice: 999.0,
-  //     image: "/api/placeholder/350/450",
-  //     colors: ["#1a2942", "#d4b38f"],
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Aashvi Kaftan Short Kurti For Women",
-  //     originalPrice: 2999.0,
-  //     salePrice: 849.0,
-  //     image: "/api/placeholder/350/450",
-  //     colors: ["#000000", "#333333"],
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "Aiza Aari Short Kurti For Women",
-  //     originalPrice: 2499.0,
-  //     salePrice: 749.0,
-  //     image: "/api/placeholder/350/450",
-  //     colors: ["#333333", "#da9f9f"],
-  //   },
-  //   {
-  //     id: 5,
-  //     name: "Embroidered Black Kurti For Women",
-  //     originalPrice: 2699.0,
-  //     salePrice: 899.0,
-  //     image: "/api/placeholder/350/450",
-  //     colors: ["#000000", "#663300"],
-  //   },
-  //   {
-  //     id: 6,
-  //     name: "Floral Print Short Kurti",
-  //     originalPrice: 2199.0,
-  //     salePrice: 699.0,
-  //     image: "/api/placeholder/350/450",
-  //     colors: ["#006699", "#cc6699"],
-  //   },
-  // ];
 
   const checkScrollability = () => {
     const container = scrollContainerRef.current;
@@ -136,7 +89,7 @@ const BestsellersSection = () => {
     }
   }, []);
   const viewPagePree = () => {
-    navigate("./ProductPage");
+    // navigate("./ProductPage");
   };
 
   return (
@@ -203,7 +156,14 @@ const BestsellersSection = () => {
                       className="bg-green-600 text-white p-2 rounded-full shadow-md hover:bg-green-800"
                       aria-label="Add to bag"
                     >
-                      <ShoppingBasket />
+                      <ShoppingBasket onClick={() => setIsCartOpen(true)} />
+                      {isCartOpen && (
+                        <QazmiCartProdcut
+                          isOpen={isCartOpen}
+                          setIsOpen={setIsCartOpen}
+                          productdata={product}
+                        />
+                      )}
                       {/* <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="20"

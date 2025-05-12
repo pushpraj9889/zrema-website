@@ -10,45 +10,22 @@ import {
   Lock,
 } from "lucide-react";
 import QazmiFooter from "../../components/footerSection";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  decreaseQuantity,
+  deleteAction,
+  incrementQuantity,
+} from "../../redux/actions";
+import QazmiCart from "../../components/cat";
+import { useNavigate } from "react-router-dom";
 
 export default function Viewcart() {
+  const { cart } = useSelector((store) => store?.product || { cart: [] });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   // State for cart items
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "330 Aari Long Kurti For Women",
-      color: "Pink",
-      material: "Viscose Rayon",
-      size: "S",
-      originalPrice: 3499.0,
-      salePrice: 979.0,
-      quantity: 1,
-      image: "/api/placeholder/120/150",
-    },
-    {
-      id: 2,
-      name: "Noura Long Kurti For Women",
-      color: "Brown",
-      material: "Viscose Rayon",
-      size: "XS",
-      originalPrice: 3999.0,
-      salePrice: 1199.0,
-      quantity: 1,
-      image: "/api/placeholder/120/150",
-    },
-    {
-      id: 3,
-      name: "Samara Maroon Long Kurti For Women",
-      color: "Maroon",
-      material: "Viscose Rayon",
-      size: "XS",
-      originalPrice: 3999.0,
-      salePrice: 1249.0,
-      quantity: 1,
-      image: "/api/placeholder/120/150",
-    },
-  ]);
+
   const cardOpen = () => {
     setIsCartOpen(!isCartOpen);
   };
@@ -64,25 +41,29 @@ export default function Viewcart() {
   const [specialInstructions, setSpecialInstructions] = useState("");
 
   // Calculate total
-  const totalAmount = cartItems.reduce(
-    (total, item) => total + item.salePrice * item.quantity,
+  const totalAmount = cart.reduce(
+    (total, item) => total + item.mrp * item.quantity,
     0
   );
 
-  // Handle quantity update
-  const updateQuantity = (id, newQuantity) => {
-    if (newQuantity < 1) return;
+  const handleIncrementQuantity = (productId) => {
+    console.log("getting productid", productId);
+    dispatch(incrementQuantity(productId));
+  };
 
-    setCartItems(
-      cartItems.map((item) =>
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      )
-    );
+  const handleDecrementQuantity = (productId) => {
+    dispatch(decreaseQuantity(productId));
   };
 
   // Handle item removal
   const removeItem = (id) => {
-    setCartItems(cartItems.filter((item) => item.id !== id));
+    dispatch(deleteAction(id));
+  };
+  const bagClick = () => {
+    setIsCartOpen(true);
+  };
+  const checkoutclick = () => {
+    navigate("/CheckoutPage");
   };
 
   // Navigation categories
@@ -117,6 +98,7 @@ export default function Viewcart() {
             </button>
             <div
               className="relative"
+              onClick={bagClick}
               // onClick={cardOpen}
             >
               <ShoppingBag size={20} />
@@ -178,7 +160,7 @@ export default function Viewcart() {
           <div className="flex flex-col lg:flex-row lg:space-x-8">
             {/* Cart items section */}
             <div className="lg:w-2/3 mb-8 lg:mb-0">
-              {cartItems.map((item) => (
+              {cart.map((item) => (
                 <div
                   key={item.id}
                   className="flex py-6 border-b border-gray-200"
@@ -186,8 +168,8 @@ export default function Viewcart() {
                   {/* Product image */}
                   <div className="w-24 h-32 flex-shrink-0 overflow-hidden rounded">
                     <img
-                      src={item.image}
-                      alt={item.name}
+                      src={item?.images[0]}
+                      alt={"item.name"}
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -208,7 +190,7 @@ export default function Viewcart() {
                     <div className="flex flex-1 items-end justify-between mt-4">
                       <div className="flex items-center">
                         <button
-                          onClick={() => removeItem(item.id)}
+                          onClick={() => removeItem(item._id)}
                           className="text-gray-500 hover:text-red-500"
                         >
                           <Trash2 size={18} />
@@ -216,21 +198,19 @@ export default function Viewcart() {
                       </div>
 
                       <div className="flex items-center">
-                        <div className="flex items-center border border-gray-300 rounded mr-6">
+                        <div className="flex items-center border border-gray-300 rounded">
                           <button
                             className="px-2 py-1 text-gray-600"
-                            onClick={() =>
-                              updateQuantity(item.id, item.quantity - 1)
-                            }
+                            onClick={() => handleDecrementQuantity(item._id)}
                           >
                             <ChevronDown size={16} />
                           </button>
-                          <span className="px-3 py-1">{item.quantity}</span>
+                          <span className="px-2 py-1 text-black">
+                            {item.quantity}
+                          </span>
                           <button
                             className="px-2 py-1 text-gray-600"
-                            onClick={() =>
-                              updateQuantity(item.id, item.quantity + 1)
-                            }
+                            onClick={() => handleIncrementQuantity(item._id)}
                           >
                             <ChevronUp size={16} />
                           </button>
@@ -239,10 +219,10 @@ export default function Viewcart() {
                         <div className="text-right">
                           <div className="flex items-center">
                             <span className="line-through text-sm text-gray-500 mr-2">
-                              Rs. {item.originalPrice.toFixed(2)}
+                              Rs. {item.mrp.toFixed(2)}
                             </span>
                             <span className="text-lg font-medium text-gray-900">
-                              Rs. {item.salePrice.toFixed(2)}
+                              Rs. {item.mrp.toFixed(2)}
                             </span>
                           </div>
                         </div>
@@ -295,7 +275,7 @@ export default function Viewcart() {
                 <div className="mb-6">
                   <div className="flex justify-between py-2">
                     <span className="text-gray-600">
-                      Total products ({cartItems.length})
+                      Total products ({cart.length})
                     </span>
                     <span className="font-medium">
                       Rs. {totalAmount.toFixed(2)}
@@ -310,7 +290,10 @@ export default function Viewcart() {
                 </div>
 
                 {/* Checkout button */}
-                <button className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-4 px-4 rounded-lg mb-4">
+                <button
+                  className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-4 px-4 rounded-lg mb-4"
+                  onClick={checkoutclick}
+                >
                   Checkout
                 </button>
 
@@ -362,7 +345,10 @@ export default function Viewcart() {
             Rs. {totalAmount.toFixed(2)}
           </span>
         </div>
-        <button className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-lg">
+        <button
+          className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-lg"
+          onClick={checkoutclick}
+        >
           Checkout
         </button>
         {/* <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-lg">

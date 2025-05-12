@@ -5,10 +5,16 @@ import HeaderSection from "./components/header";
 import CheckoutPage from "./pages/checkoutPage";
 import Viewcart from "./pages/ViewcartPage";
 import ProductPage from "./pages/singleProductPage";
+import Order from "./pages/order/Order";
 
 export default function App() {
   const location = useLocation();
-  const noHeaderRoutes = ["/CheckoutPage", "/ProductPage", "/QazmiCartPage"];
+  const noHeaderRoutes = [
+    "/CheckoutPage",
+    "/ProductPage",
+    "/QazmiCartPage",
+    "/Order",
+  ];
   const shouldShowHeader = !noHeaderRoutes.includes(location.pathname);
   return (
     <>
@@ -19,6 +25,7 @@ export default function App() {
         <Route path="/QazmiCartPage" element={<Viewcart />}></Route>
         <Route path="/CheckoutPage" element={<CheckoutPage />}></Route>
         <Route path="/ProductPage" element={<ProductPage />}></Route>
+        <Route path="/Order" element={<Order />}></Route>
       </Routes>
     </>
   );
