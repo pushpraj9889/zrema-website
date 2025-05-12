@@ -20,7 +20,7 @@ const SocialStoriesSection = () => {
       id: 1,
       type: "video",
       videoUrl:
-        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", // Dummy URL
+        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", // Dummy URL
       altText: "Two women wearing yellow and pink kurtis",
     },
     {
@@ -33,7 +33,7 @@ const SocialStoriesSection = () => {
       id: 3,
       type: "video",
       videoUrl:
-        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", // Dummy URL
+        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", // Dummy URL
       altText: "Woman in red kurti",
     },
     {
@@ -46,7 +46,7 @@ const SocialStoriesSection = () => {
       id: 5,
       type: "video",
       videoUrl:
-        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", // Dummy URL
+        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", // Dummy URL
       altText: "Kashmiri short kurti from Qazmi",
     },
     {
@@ -116,7 +116,7 @@ const SocialStoriesSection = () => {
       threshold: 0.6, // 60% visible to trigger
     };
 
-    const handleIntersect = (entries, observer) => {
+    const handleIntersect = (entries) => {
       entries.forEach((entry) => {
         const videoId = entry.target.dataset.id;
         const videoElement = videoRefs.current[videoId];
