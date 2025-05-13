@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { useSelector } from "react-redux";
-import { post } from "../../Services/apicallMethode";
+import axios from "axios";
+import AddressBillingFields from "../../components/addressBillingFeilds";
 
 // POST - /order/create
 
@@ -24,9 +25,23 @@ import { post } from "../../Services/apicallMethode";
 
 export default function Order() {
   const [billingAddressOption, setBillingAddressOption] = useState("same");
+  const [userDetailsdata, setUserDetails] = useState({});
   const [loading, setLoading] = useState(false);
   const { cart = [] } = useSelector((store) => store?.product || { cart: [] });
-  useSelector((store) => console.log("gettingthe error", store));
+  console.log("billingAddressOption", billingAddressOption);
+
+  const { userDetails = {} } = useSelector(
+    (store) => store?.userDetailsReducer || { userDetails: {} }
+  );
+  const token = userDetails?.token;
+  console.log("gettalfdjklsj", token);
+  // const products = cart.map((item) => ({
+  //   _id: item._id,
+  //   quantity: item.quantity,
+  // }));
+  // console.log("userDetails", userDetails);
+
+  // useSelector((store) => console.log("gettingthe error", products));
 
   // Calculate order totals
   const { subtotal, taxes, total } = useMemo(() => {
@@ -34,24 +49,47 @@ export default function Order() {
       (sum, item) => sum + item.mrp * (item.quantity || 1),
       0
     );
-    const taxesValue = subtotalValue * 0.08; // Assuming 8% tax rate
-    const totalValue = subtotalValue + taxesValue;
+    // const taxesValue = subtotalValue * 0.08; // Assuming 8% tax rate
+    // const totalValue = subtotalValue + taxesValue;
 
     return {
       subtotal: subtotalValue,
-      taxes: taxesValue,
-      total: totalValue,
+      // taxes: taxesValue,
+      // total: totalValue,
     };
   }, [cart]);
 
+  const handleFormDataChange = (formData) => {
+    setUserDetails(formData);
+  };
   const handlePayment = () => {
-    const data = {};
-    setLoading(true);
-    // Simulate payment processing
+    const data = setLoading(true);
     setTimeout(async () => {
-      const responese = await post("/order/create", data);
-      if (responese.data) {
+      try {
+        const response = await axios.post(
+          "https://api.zrema.in/order/create",
+          {
+            products: cart,
+            shipping_address: userDetails?.address,
+            shipping_pincode: userDetails?.pincode,
+            total_amount: 1800,
+            payment_type: "cod",
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response?.data) {
+          setLoading(false);
+          // Optional: navigate or show success message
+        }
+      } catch (error) {
+        console.error("Order creation failed:", error);
         setLoading(false);
+        // Optional: show error message to the user
       }
     }, 2000);
   };
@@ -286,6 +324,21 @@ export default function Order() {
               ))}
             </div>
           </div>
+          <>
+            {billingAddressOption == "different" && (
+              <div>
+                <AddressBillingFields
+                  onFormDataChange={handleFormDataChange}
+                  // You can also pass initial data if needed
+                  initialData={
+                    {
+                      // Any pre-filled data you want to show
+                    }
+                  }
+                />
+              </div>
+            )}
+          </>
 
           {/* Payment Button */}
           <div className="mb-8">
@@ -378,6 +431,17 @@ export default function Order() {
           <h2 className="text-xl font-semibold mb-6 pb-4 border-b border-gray-200">
             Order Summary
           </h2>
+          <h6 className="text-xl font-semibold mb-6 pb-4 border-b border-gray-200">
+            Name: {userDetails?.first_name} Mobile:{userDetails.phone_number}
+          </h6>
+          <h2 className="text-xl font-semibold mb-6 pb-4 border-b border-gray-200">
+            Address:
+            {userDetails?.address}
+            {userDetails?.city}
+            {userDetails?.state}
+            {userDetails?.landmark}
+            {userDetails?.pincode}
+          </h2>
 
           {/* Cart Items */}
           <div className="space-y-4 mb-6">
@@ -415,7 +479,7 @@ export default function Order() {
                   </div>
                   <div className="ml-4 text-right">
                     <span className="font-medium">
-                      ₹{(item?.mrp || 0).toLocaleString("en-IN")}
+                      ₹{(item?.mrp || 0)?.toLocaleString("en-IN")}
                     </span>
                   </div>
                 </div>
@@ -436,7 +500,7 @@ export default function Order() {
                   `· ${cart.length} item${cart.length !== 1 ? "s" : ""}`}
               </span>
               <span className="font-medium">
-                ₹{subtotal.toLocaleString("en-IN")}
+                ₹{subtotal?.toLocaleString("en-IN")}
               </span>
             </div>
             <div className="flex justify-between items-center">
@@ -446,7 +510,7 @@ export default function Order() {
             <div className="flex justify-between items-center">
               <span className="text-gray-600">Taxes</span>
               <span className="font-medium">
-                ₹{taxes.toLocaleString("en-IN")}
+                ₹{taxes?.toLocaleString("en-IN")}
               </span>
             </div>
           </div>
@@ -458,12 +522,12 @@ export default function Order() {
               <div className="text-right">
                 <div className="text-gray-500 text-xs">INR</div>
                 <div className="text-xl font-bold text-indigo-600">
-                  ₹{total.toLocaleString("en-IN")}
+                  ₹{total?.toLocaleString("en-IN")}
                 </div>
               </div>
             </div>
             <div className="text-gray-500 text-sm">
-              Including ₹{taxes.toLocaleString("en-IN")} in taxes
+              Including ₹{taxes?.toLocaleString("en-IN")} in taxes
             </div>
           </div>
 

@@ -38,7 +38,9 @@ export const UserDetailsAction = (userDetails) => {
     try {
       const response = await post("user/register", userDetails);
       console.log("responseview", response);
-      dispatch({ type: "USER_DETAILS", payload: response?.data });
+      if (response) {
+        dispatch({ type: "USER_DETAILS", payload: response });
+      }
     } catch (error) {
       console.log("kfdjsdfkljkfds", error);
     }
