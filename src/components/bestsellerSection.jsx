@@ -88,20 +88,20 @@ const BestsellersSection = () => {
       };
     }
   }, []);
-  const viewPagePree = () => {
-    // navigate("./ProductPage");
+  const viewPagePree = (id) => {
+    navigate(`/ProductPage/${id}`);
   };
 
   return (
     <section className="py-8 bg-gray-50">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto">
         {/* Section Title */}
-        <h2 className="text-3xl md:text-4xl font-serif text-center mb-8">
+        <h2 className="text-xl sm:text-4xl md:text-4xl font-serif text-center mb-8  font-black">
           Discover Bestsellers
         </h2>
 
         {/* Products Container with Scroll */}
-        <div className="relative px-4" onClick={viewPagePree}>
+        <div className="relative">
           {/* Left and Right Arrows */}
           {canScrollLeft && (
             <button
@@ -122,41 +122,65 @@ const BestsellersSection = () => {
           )}
 
           {/* Scrollable Product Container */}
-          <div
-            ref={scrollContainerRef}
-            className="flex overflow-x-auto pb-6 scrollbar-hide snap-x"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
-            {products?.map((product) => (
-              <div
-                key={product.id}
-                className="min-w-[280px] sm:min-w-[320px] mx-2 flex-shrink-0 snap-start group"
-              >
-                <div className="bg-white rounded overflow-hidden shadow-sm relative h-[490px] sm:h-[500px]">
-                  {/* <div className="bg-white rounded overflow-hidden shadow-sm relative h-full"> */}
-                  {/* Sale Badge */}
-                  <div className="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 text-sm z-[2]">
-                    Sale
+          <div>
+            {/* For small screens - Grid view */}
+            <div className="grid grid-cols-2 gap-1 sm:hidden px-2">
+              {products.slice(0, 8)?.map((product) => (
+                <div key={product.id} className="bg-white  p-2">
+                  <img
+                    src={product.images[0]}
+                    className="w-full h-[235px] object-cover"
+                    alt={product.name}
+                    onClick={() => viewPagePree(product._id)}
+                  />
+                  <h3 className=" text-xs sm:text-s mt-2 text-center font-Lato">
+                    {product.name.slice(0, 30)}
+                  </h3>
+                  <div className="flex justify-center items-center mt-1">
+                    <span className="text-primary line-through mr-2 text-xs sm:text-s">
+                      Rs. {product.mrp?.toFixed(2)}
+                    </span>
+                    <span className="text-black font-medium text-xs sm:text-s">
+                      Rs. {product.mrp?.toFixed(2)}
+                    </span>
                   </div>
+                </div>
+              ))}
+            </div>
 
-                  {/* Add to Bag Button (appears on hover) */}
-
-                  {/* Product Image */}
-                  <div className="relative z-0">
-                    <img
-                      src={product.images[0]}
-                      // alt={product.name}
-                      className="w-full h-[430px] object-cover"
-                    />
-                  </div>
-
-                  {/* Product Info */}
-                  <div className="absolute bottom-190 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button
-                      className="bg-green-600 text-white p-2 rounded-full shadow-md hover:bg-green-800"
-                      aria-label="Add to bag"
-                    >
-                      <ShoppingBasket onClick={() => setIsCartOpen(true)} />
+            {/* For medium and larger screens - Slider */}
+            <div
+              ref={scrollContainerRef}
+              className="hidden sm:flex overflow-x-auto pb-6 scrollbar-hide snap-x"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            >
+              {products?.map((product) => (
+                <div
+                  key={product.id}
+                  className="snap-start flex-shrink-0 mx-2 
+                   w-[90%] sm:w-[33.33%] lg:w-[25%] 
+                   max-w-[320px]"
+                >
+                  <div className="bg-white rounded overflow-hidden shadow-sm relative h-[500px] group">
+                    <div className="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 text-sm z-[2]">
+                      Sale
+                    </div>
+                    <div className="relative z-0">
+                      <img
+                        src={product.images[0]}
+                        className="w-full h-[430px] object-cover"
+                        alt={product.name}
+                        onClick={() => viewPagePree(product._id)}
+                      />
+                    </div>
+                    <div className="absolute bottom-190 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button
+                        className="bg-green-600 text-white p-2 rounded-full shadow-md hover:bg-green-800"
+                        aria-label="Add to bag"
+                        onClick={() => setIsCartOpen(true)}
+                      >
+                        <ShoppingBasket />
+                      </button>
                       {isCartOpen && (
                         <QazmiCartProdcut
                           isOpen={isCartOpen}
@@ -164,50 +188,24 @@ const BestsellersSection = () => {
                           productdata={product}
                         />
                       )}
-                      {/* <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                        <line x1="3" y1="6" x2="21" y2="6"></line>
-                        <path d="M16 10a4 4 0 0 1-8 0"></path>
-                      </svg> */}
-                    </button>
-                  </div>
-                  <div className="px-4 mt-2">
-                    <h3 className="text-sm font-normal  text-center font-Lato">
-                      {product.name.slice(0, 30)}
-                    </h3>
-                    <div className="flex justify-center items-center mb-2">
-                      <span className="text-primary line-through mr-2  ">
-                        Rs. {product.mrp?.toFixed(2)}
-                      </span>
-                      <span className="text-black font-medium">
-                        Rs. {product.mrp?.toFixed(2)}
-                      </span>
                     </div>
-
-                    {/* Color Options */}
-                    {/* <div className="flex justify-center mt-3">
-                      {product?.colors?.map((color, idx) => (
-                        <div
-                          key={idx}
-                          className="w-6 h-6 rounded-full border border-gray-300 mx-1"
-                          style={{ backgroundColor: color }}
-                        />
-                      ))}
-                    </div> */}
+                    <div className="px-4 mt-2">
+                      <h3 className="text-sm font-normal text-center font-Lato">
+                        {product.name.slice(0, 30)}
+                      </h3>
+                      <div className="flex justify-center items-center mb-2">
+                        <span className="text-primary line-through mr-2">
+                          Rs. {product.mrp?.toFixed(2)}
+                        </span>
+                        <span className="text-black font-medium">
+                          Rs. {product.mrp?.toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>

@@ -1,253 +1,371 @@
-import { useState } from "react";
-import { Heart, Share2, ChevronRight, Ruler } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+  Heart,
+  Share2,
+  ChevronRight,
+  Ruler,
+  ShoppingBag,
+  ArrowRight,
+  Loader2,
+} from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
+import { addTocartAction } from "../../redux/actions";
+import QazmiCart from "../../components/cat";
+import { useDispatch } from "react-redux";
+import axios from "axios";
 
 export default function ProductPage() {
-  const [selectedColor, setSelectedColor] = useState("Orange");
-  const [selectedSize, setSelectedSize] = useState("XS");
-  const [currentImage, setCurrentImage] = useState(0);
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const product = {
-    name: "Jasmine A-Line Short Kurti For Women",
-    originalPrice: 2499.0,
-    salePrice: 829.0,
-    colors: ["Orange", "Beige"],
-    fabric: "Viscose Rayon",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL", "3XL"],
-    sku: "Jasmine Orange A-Line Short_XS",
-    images: [
-      "https://dummyimage.com/400x600/ffb6c1/000000&text=Kurti+1",
-      "https://dummyimage.com/400x600/f0e68c/000000&text=Kurti+2",
-      "https://dummyimage.com/400x600/add8e6/000000&text=Kurti+3",
-      "https://dummyimage.com/400x600/dda0dd/000000&text=Kurti+4",
-      "https://dummyimage.com/400x600/ffb6c1/000000&text=Kurti+1",
-      "https://dummyimage.com/400x600/f0e68c/000000&text=Kurti+2",
-      "https://dummyimage.com/400x600/add8e6/000000&text=Kurti+3",
-      "https://dummyimage.com/400x600/dda0dd/000000&text=Kurti+4",
-    ],
-    thumbnails: ["/api/placeholder/80/100", "/api/placeholder/80/100"],
+  const [selectedColor, setSelectedColor] = useState("");
+  const [selectedSize, setSelectedSize] = useState("");
+  const [currentImage, setCurrentImage] = useState(0);
+  const [product, setProduct] = useState(null);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const getProductById = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await axios.post(
+        `https://api.zrema.in/product/update/${id}`,
+        {
+          name: "Chikenkari Kurti",
+          mrp: 675,
+          description: "Beautiful kurti with floral designs",
+        }
+      );
+
+      if (response?.data) {
+        setProduct(response.data);
+        // Set defaults when product loads
+        if (response.data.colors && response.data.colors.length > 0) {
+          setSelectedColor(response.data.colors[0]);
+        }
+        if (response.data.size && response.data.size.length > 0) {
+          setSelectedSize(response.data.size[0]);
+        }
+      }
+    } catch (error) {
+      console.error("Failed to fetch product:", error);
+      setError("Failed to load product. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  return (
-    <div className="max-w-6xl mx-auto">
-      {/* Navigation */}
-      <nav className="bg-white py-4 border-b">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center">
-            <div className="text-3xl font-bold italic">Zrema</div>
-            <div className="flex space-x-4">
-              <button className="p-2">
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </button>
-              <button className="p-2">
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
-              </button>
-              <button className="p-2 relative">
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                  />
-                </svg>
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  3
-                </span>
-              </button>
-            </div>
+  useEffect(() => {
+    getProductById();
+  }, [id]);
+
+  const addToCart = () => {
+    if (!product) return;
+
+    const productToAdd = {
+      ...product,
+      selectedSize,
+      selectedColor,
+    };
+
+    dispatch(addTocartAction(productToAdd));
+    setIsCartOpen(true);
+  };
+  const buyitNow = () => {
+    dispatch(addTocartAction(productToAdd));
+    navigate("/CheckoutPage");
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="flex flex-col items-center">
+          <Loader2 className="w-12 h-12 animate-spin text-green-500" />
+          <p className="mt-4 text-gray-600">Loading product details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="flex flex-col items-center text-center max-w-md">
+          <div className="mb-4 text-red-500">
+            <svg
+              className="w-16 h-16"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
           </div>
-        </div>
-      </nav>
-      {/* Categories */}
-      <div className="bg-gray-100 py-3">
-        <div className="container mx-auto px-4">
-          <ul className="flex justify-center space-x-6">
-            <li className="font-medium">SHORT KURTIS</li>
-            <li className="font-medium">LONG KURTIS</li>
-            <li className="font-medium">A-LINE KURTIS</li>
-            <li className="font-medium">CHINARKARI</li>
-            <li className="font-medium">KAFTANS</li>
-            <li className="font-medium">KURTA SETS</li>
-            <li className="font-medium">CONTACT</li>
-            <li className="font-medium bg-red-500 text-white px-2">SALE</li>
-          </ul>
+          <h2 className="text-2xl font-bold mb-2">Something went wrong</h2>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <button
+            className="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors"
+            onClick={getProductById}
+          >
+            Try Again
+          </button>
         </div>
       </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-2">Product Not Found</h2>
+          <p className="text-gray-600">
+            The product you're looking for doesn't exist or has been removed.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-white">
       {/* Breadcrumb */}
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center text-sm">
-          <a href="#" className="text-gray-500">
-            Homepage
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <nav className="flex items-center text-sm font-medium">
+          <a href="/" className="text-gray-500 hover:text-gray-900">
+            Home
           </a>
-          <ChevronRight className="w-4 h-4 mx-1 text-gray-400" />
-          <span className="text-gray-700">{product.name}</span>
-        </div>
+          <ChevronRight className="w-4 h-4 mx-2 text-gray-400 flex-shrink-0" />
+          <a href="/category" className="text-gray-500 hover:text-gray-900">
+            Collection
+          </a>
+          <ChevronRight className="w-4 h-4 mx-2 text-gray-400 flex-shrink-0" />
+          <span className="text-gray-900 truncate">{product.name}</span>
+        </nav>
       </div>
+
       {/* Product Section */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col lg:flex-row gap-8 overflow-y-auto ">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
           {/* Product Images */}
-          {/* Product Images */}
-          <div className="lg:w-1/2">
-            <div className="grid grid-cols-2 gap-4 max-h-[600px] overflow-y-auto pr-2">
-              {product.images.map((image, index) => (
-                <div key={index} className={`${index === 0 ? "relative" : ""}`}>
-                  <img
-                    src={image}
-                    alt={`${product.name} view ${index + 1}`}
-                    className="w-full rounded-md"
-                    onClick={() => setCurrentImage(index)}
-                  />
-                  {index === 0 && (
-                    <div className="absolute top-2 left-2 bg-red-500 text-white px-3 py-1 text-sm">
+          <div className="w-full lg:w-3/5 xl:w-1/2">
+            <div className="sticky top-24">
+              <div className="lg:flex lg:gap-4">
+                {/* Thumbnails - Visible on larger screens */}
+                {product.images && product.images.length > 1 && (
+                  <div className="hidden lg:flex flex-col gap-4 max-h-[500px] overflow-y-auto pr-2 scrollbar-thin">
+                    {product.images.map((image, index) => (
+                      <button
+                        key={`thumb-${index}`}
+                        className={`w-20 h-20 rounded-md overflow-hidden border-2 transition-all ${
+                          currentImage === index
+                            ? "border-green-500"
+                            : "border-transparent hover:border-gray-300"
+                        }`}
+                        onClick={() => setCurrentImage(index)}
+                      >
+                        <img
+                          src={image}
+                          alt={`${product.name} thumbnail ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* Main Image */}
+                <div className="relative rounded-lg overflow-hidden bg-gray-100 w-full">
+                  {product.images && product.images.length > 0 ? (
+                    <img
+                      src={product.images[currentImage]}
+                      alt={product.name}
+                      className="w-full h-full object-contain aspect-square"
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center h-96 bg-gray-100">
+                      <p className="text-gray-500">No image available</p>
+                    </div>
+                  )}
+
+                  {/* Sale badge */}
+                  {product.onSale && (
+                    <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 text-sm font-medium rounded-md">
                       Sale
                     </div>
                   )}
                 </div>
-              ))}
+              </div>
+
+              {/* Thumbnails row - Mobile only */}
+              {product.images && product.images.length > 1 && (
+                <div className="flex gap-2 mt-4 overflow-x-auto lg:hidden pb-2">
+                  {product.images.map((image, index) => (
+                    <button
+                      key={`mobile-thumb-${index}`}
+                      className={`w-20 h-20 rounded-md overflow-hidden flex-shrink-0 border-2 ${
+                        currentImage === index
+                          ? "border-green-500"
+                          : "border-transparent"
+                      }`}
+                      onClick={() => setCurrentImage(index)}
+                    >
+                      <img
+                        src={image}
+                        alt={`${product.name} view ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
           {/* Product Info */}
-          <div className="lg:w-1/2">
-            <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
+          <div className="w-full lg:w-2/5 xl:w-1/2 mt-8 lg:mt-0">
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              {product.name}
+            </h1>
 
-            <div className="flex items-center mb-6">
-              <button className="flex items-center mr-4">
-                <Share2 className="w-5 h-5 mr-1" />
+            {/* Price */}
+            <div className="flex items-baseline mb-6">
+              <p className="text-3xl font-bold text-gray-900">₹{product.mrp}</p>
+              {product.mrp !== product.price && (
+                <p className="ml-4 text-lg text-gray-500 line-through">
+                  ₹{product.price}
+                </p>
+              )}
+            </div>
+
+            {/* Share Button */}
+            <div className="flex items-center mb-8">
+              <button className="flex items-center text-gray-500 hover:text-gray-900 transition-colors">
+                <Share2 className="w-5 h-5 mr-2" />
                 <span>Share</span>
               </button>
             </div>
 
-            <div className="flex items-center mb-6">
-              <p className="text-gray-500 line-through mr-2">
-                Rs. {product.originalPrice.toFixed(2)}
-              </p>
-              <p className="text-2xl font-bold">
-                Rs. {product.salePrice.toFixed(2)}
-              </p>
-            </div>
+            {/* Divider */}
+            <div className="border-t border-gray-200 my-8"></div>
 
             {/* Color Selection */}
-            {/* <div className="mb-6">
-              <h3 className="font-medium mb-2">
-                Color <span className="ml-1">{selectedColor}</span>
-              </h3>
-              <div className="flex space-x-2">
-                {product.colors.map((color) => (
-                  <button
-                    key={color}
-                    className={`w-12 h-12 border ${
-                      selectedColor === color
-                        ? "border-black"
-                        : "border-gray-300"
-                    }`}
-                    onClick={() => setSelectedColor(color)}
-                  >
-                    <img
-                      src={product.thumbnails[product.colors.indexOf(color)]}
-                      alt={color}
-                      className="w-full h-full object-cover"
+            {product.colors && product.colors.length > 0 && (
+              <div className="mb-8">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="font-medium text-gray-900">Color</h3>
+                  <span className="text-sm text-gray-600">{selectedColor}</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  {product.colors.map((color) => (
+                    <button
+                      key={color}
+                      className={`w-12 h-12 rounded-full border-2 transition-all ${
+                        selectedColor === color
+                          ? "ring-2 ring-offset-2 ring-green-500 border-white"
+                          : "border-gray-200 hover:border-gray-300"
+                      }`}
+                      style={{ backgroundColor: color.toLowerCase() }}
+                      onClick={() => setSelectedColor(color)}
+                      aria-label={`Select ${color} color`}
                     />
-                  </button>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div> */}
+            )}
 
             {/* Fabric */}
-            <div className="mb-6">
-              <h3 className="font-medium mb-2">Fabric</h3>
-              <div className="inline-block border border-gray-800 px-4 py-2">
-                {product.fabric}
+            {product.fabric && (
+              <div className="mb-8">
+                <h3 className="font-medium text-gray-900 mb-3">Fabric</h3>
+                <div className="inline-block bg-gray-100 px-4 py-2 rounded-md text-gray-800">
+                  {product.fabric}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Size Selection */}
-            <div className="mb-6">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="font-medium">Size</h3>
-                <button className="flex items-center text-sm">
-                  <Ruler className="w-4 h-4 mr-1" />
-                  <span>Size chart</span>
-                </button>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {product.sizes.map((size) => (
-                  <button
-                    key={size}
-                    className={`w-12 h-12 flex items-center justify-center border ${
-                      selectedSize === size
-                        ? "border-black bg-white"
-                        : "border-gray-300 bg-white hover:border-gray-400"
-                    }`}
-                    onClick={() => setSelectedSize(size)}
-                  >
-                    {size}
+            {product.size && product.size.length > 0 && (
+              <div className="mb-8">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="font-medium text-gray-900">Size</h3>
+                  <button className="flex items-center text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                    <Ruler className="w-4 h-4 mr-1" />
+                    <span>Size guide</span>
                   </button>
-                ))}
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  {product.size.map((size) => (
+                    <button
+                      key={size}
+                      className={`min-w-12 h-12 px-4 flex items-center justify-center rounded-md transition-all ${
+                        selectedSize === size
+                          ? "bg-green-500 text-white"
+                          : "bg-gray-100 text-gray-800 hover:bg-gray-200"
+                      }`}
+                      onClick={() => setSelectedSize(size)}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* SKU */}
-            <div className="mb-6">
-              <p className="text-sm text-gray-600">SKU: {product.sku}</p>
-            </div>
+            {product.product_code && (
+              <div className="mb-8">
+                <p className="text-sm text-gray-600">
+                  SKU:{" "}
+                  <span className="font-medium">{product.product_code}</span>
+                </p>
+              </div>
+            )}
 
             {/* Buttons */}
-            <div className="space-y-4">
-              <button className="w-full py-4 bg-green-400 hover:bg-green-500 text-white font-medium rounded transition">
-                Add to cart
+            <div className="space-y-4 mt-8">
+              <button
+                className="w-full py-4 bg-green-500 hover:bg-green-600 text-white font-medium rounded-md flex items-center justify-center transition-colors group"
+                onClick={addToCart}
+              >
+                <ShoppingBag className="w-5 h-5 mr-2" />
+                <span>Add to cart</span>
               </button>
-              <button className="w-full py-4 border border-gray-300 hover:border-gray-400 font-medium rounded transition">
-                Buy it now
+              <button
+                className="w-full py-4 border border-gray-300 hover:bg-gray-50 text-gray-900 font-medium rounded-md flex items-center justify-center transition-colors"
+                onClick={buyitNow}
+              >
+                <span>Buy it now</span>
+                <ArrowRight className="w-5 h-5 ml-2" />
               </button>
             </div>
+
+            {/* Description */}
+            {product.description && (
+              <div className="mt-12">
+                <h3 className="font-medium text-gray-900 mb-4">Description</h3>
+                <div className="prose prose-sm text-gray-700">
+                  <p>{product.description}</p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
-      <div>
-        <span className="text-xs text-gray-900 dark:text-black">
-          {" "}
-          Description
-        </span>
-        {/* <p class="text-xs text-gray-900 dark:text-white">Aa</p> */}
 
-        <span>
-          Kashmiri Embroidered Kurti. Crafted with precision and adorned with
-          intricate Kashmiri embroidery, this kurti exudes elegance and charm.
-          Made from high-quality fabric, it offers both comfort and style,
-          making it perfect for various occasions.
-        </span>
-      </div>
+      {/* Cart Drawer */}
+      {isCartOpen && (
+        <QazmiCart isOpen={isCartOpen} setIsOpen={setIsCartOpen} />
+      )}
     </div>
   );
 }

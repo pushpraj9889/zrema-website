@@ -17,43 +17,46 @@ const SocialStoriesSection = () => {
   // Sample social media stories with mix of images and videos
   const stories = [
     {
-      id: 1,
-      type: "video",
-      videoUrl:
-        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", // Dummy URL
-      altText: "Two women wearing yellow and pink kurtis",
-    },
-    {
       id: 2,
-      type: "image",
-      image: "/api/placeholder/350/600",
+      type: "video", // Changed from image to video since videoUrl is provided
+      videoUrl: "https://zrema.s3.ap-south-1.amazonaws.com/videos/short2.mp4",
       altText: "Woman in black embroidered kurti",
     },
     {
       id: 3,
       type: "video",
-      videoUrl:
-        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", // Dummy URL
+      videoUrl: "https://zrema.s3.ap-south-1.amazonaws.com/videos/short3.mp4",
       altText: "Woman in red kurti",
     },
     {
       id: 4,
-      type: "image",
-      image: "/api/placeholder/350/600",
+      type: "video", // Changed from image to video since videoUrl is provided
+      videoUrl: "https://zrema.s3.ap-south-1.amazonaws.com/videos/short4.mp4",
       altText: "Must have short kurtis from Qazmi",
     },
     {
       id: 5,
       type: "video",
-      videoUrl:
-        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", // Dummy URL
+      videoUrl: "https://zrema.s3.ap-south-1.amazonaws.com/videos/short5.mp4",
       altText: "Kashmiri short kurti from Qazmi",
     },
     {
       id: 6,
       type: "video",
-      videoUrl: "https://example.com/dummy-video-4.mp4", // Dummy URL
+      videoUrl: "https://zrema.s3.ap-south-1.amazonaws.com/videos/short6.mp4",
       altText: "Designer kurti showcase",
+    },
+    {
+      id: 7, // Fixed duplicate ID
+      type: "video",
+      videoUrl: "https://zrema.s3.ap-south-1.amazonaws.com/videos/short7.mp4",
+      altText: "Designer kurti showcase",
+    },
+    {
+      id: 1,
+      type: "video",
+      videoUrl: "https://zrema.s3.ap-south-1.amazonaws.com/videos/short1.mp4",
+      altText: "Two women wearing yellow and pink kurtis",
     },
   ];
 
@@ -110,6 +113,8 @@ const SocialStoriesSection = () => {
 
   // Setup Intersection Observer for autoplay
   useEffect(() => {
+    if (!storiesRef.current) return;
+
     const options = {
       root: null,
       rootMargin: "0px",
@@ -118,14 +123,20 @@ const SocialStoriesSection = () => {
 
     const handleIntersect = (entries) => {
       entries.forEach((entry) => {
-        const videoId = entry.target.dataset.id;
+        // Get video ID from the data attribute
+        const videoId = parseInt(entry.target.dataset.id, 10);
         const videoElement = videoRefs.current[videoId];
 
         if (entry.isIntersecting && videoElement) {
-          videoElement
-            .play()
-            .catch((e) => console.log("Autoplay prevented:", e));
+          // Try to play the video when it's in view
+          videoElement.play().catch((e) => {
+            console.log("Autoplay prevented:", e);
+            // Some browsers require user interaction before autoplay
+            // We can at least make sure the video is ready to play
+            videoElement.load();
+          });
         } else if (videoElement) {
+          // Pause when out of view
           videoElement.pause();
         }
       });
@@ -134,16 +145,17 @@ const SocialStoriesSection = () => {
     const observer = new IntersectionObserver(handleIntersect, options);
 
     // Observe all video containers
-    Object.values(videoRefs.current).forEach((video) => {
-      if (video && video.parentElement) {
-        observer.observe(video.parentElement);
-      }
+    const videoContainers = document.querySelectorAll(
+      '[data-video-container="true"]'
+    );
+    videoContainers.forEach((container) => {
+      observer.observe(container);
     });
 
     return () => {
       observer.disconnect();
     };
-  }, [videoRefs.current]);
+  }, []); // Run once on component mount
 
   // Add listener for scroll navigation
   useEffect(() => {
@@ -202,21 +214,25 @@ const SocialStoriesSection = () => {
                 key={story.id}
                 className="flex-shrink-0 w-64 md:w-72 h-96 rounded-md overflow-hidden relative snap-center"
                 data-id={story.id}
+                data-video-container={story.type === "video" ? "true" : "false"}
               >
                 {story.type === "image" ? (
                   <img
-                    src={story.image}
+                    src={story.image || "/api/placeholder/400/320"}
                     alt={story.altText}
                     className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                   />
                 ) : (
                   <div className="relative w-full h-full bg-black">
                     <video
-                      ref={(el) => (videoRefs.current[story.id] = el)}
+                      ref={(el) => {
+                        if (el) videoRefs.current[story.id] = el;
+                      }}
                       src={story.videoUrl}
                       loop
                       muted={mutedStates[story.id]}
                       playsInline
+                      preload="auto"
                       className="w-full h-full object-cover"
                       data-id={story.id}
                     >

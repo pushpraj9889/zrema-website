@@ -6,46 +6,46 @@ import QazmiCart from "../components/cat"; // adjust path
 export default function HeaderSection() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const categories = [
-    {
-      name: "SHORT KURTIS",
-      image: "https://m.media-amazon.com/images/I/719YFc0XeCL._SY879_.jpg",
+  // const categories = [
+  //   {
+  //     name: "SHORT KURTIS",
+  //     image: "https://m.media-amazon.com/images/I/719YFc0XeCL._SY879_.jpg",
 
-      alt: "Short Kurtis",
-    },
-    {
-      name: "LONG KURTIS",
-      image:
-        "https://qazmi.in/cdn/shop/files/6_e8235f90-583d-4974-a776-807fdf0de8a2.jpg?v=1731756348",
-      alt: "Long Kurtis",
-    },
-    {
-      name: "A-LINE KURTIS",
-      image: "https://m.media-amazon.com/images/I/51GwkRw4uLL._SX679_.jpg",
-      alt: "A-Line Kurtis",
-    },
-    {
-      name: "CHINARKARI",
-      image: "https://m.media-amazon.com/images/I/51OSXJDeVlL._SX679_.jpg",
-      alt: "Chinarkari",
-    },
-    {
-      name: "KAFTANS",
-      image:
-        "https://qazmi.in/cdn/shop/files/6_e8235f90-583d-4974-a776-807fdf0de8a2.jpg?v=1731756348",
-      alt: "Kaftans",
-    },
-    {
-      name: "KURTA SETS",
-      image: "https://m.media-amazon.com/images/I/51OSXJDeVlL._SX679_.jpg",
-      alt: "Kurta Sets",
-    },
-    {
-      name: "SHOP ALL",
-      image: "https://m.media-amazon.com/images/I/719YFc0XeCL._SY879_.jpg",
-      alt: "Shop All",
-    },
-  ];
+  //     alt: "Short Kurtis",
+  //   },
+  //   {
+  //     name: "LONG KURTIS",
+  //     image:
+  //       "https://qazmi.in/cdn/shop/files/6_e8235f90-583d-4974-a776-807fdf0de8a2.jpg?v=1731756348",
+  //     alt: "Long Kurtis",
+  //   },
+  //   {
+  //     name: "A-LINE KURTIS",
+  //     image: "https://m.media-amazon.com/images/I/51GwkRw4uLL._SX679_.jpg",
+  //     alt: "A-Line Kurtis",
+  //   },
+  //   {
+  //     name: "CHINARKARI",
+  //     image: "https://m.media-amazon.com/images/I/51OSXJDeVlL._SX679_.jpg",
+  //     alt: "Chinarkari",
+  //   },
+  //   {
+  //     name: "KAFTANS",
+  //     image:
+  //       "https://qazmi.in/cdn/shop/files/6_e8235f90-583d-4974-a776-807fdf0de8a2.jpg?v=1731756348",
+  //     alt: "Kaftans",
+  //   },
+  //   {
+  //     name: "KURTA SETS",
+  //     image: "https://m.media-amazon.com/images/I/51OSXJDeVlL._SX679_.jpg",
+  //     alt: "Kurta Sets",
+  //   },
+  //   {
+  //     name: "SHOP ALL",
+  //     image: "https://m.media-amazon.com/images/I/719YFc0XeCL._SY879_.jpg",
+  //     alt: "Shop All",
+  //   },
+  // ];
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
@@ -198,7 +198,7 @@ export default function HeaderSection() {
         )}
       </header>
       {/* Category circles */}
-      <section className="py-8 bg-gray-100">
+      {/* <section className="py-8 bg-gray-100">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center gap-4">
             {categories.map((category, index) => (
@@ -219,7 +219,7 @@ export default function HeaderSection() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }

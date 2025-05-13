@@ -11,7 +11,7 @@ export default function App() {
   const location = useLocation();
   const noHeaderRoutes = [
     "/CheckoutPage",
-    "/ProductPage",
+    // "/ProductPage",
     "/QazmiCartPage",
     "/Order",
   ];
@@ -24,7 +24,7 @@ export default function App() {
         <Route path="/" element={<Home />}></Route>
         <Route path="/QazmiCartPage" element={<Viewcart />}></Route>
         <Route path="/CheckoutPage" element={<CheckoutPage />}></Route>
-        <Route path="/ProductPage" element={<ProductPage />}></Route>
+        <Route path="/ProductPage/:id" element={<ProductPage />}></Route>
         <Route path="/Order" element={<Order />}></Route>
       </Routes>
     </>
