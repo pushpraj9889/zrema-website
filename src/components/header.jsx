@@ -2,50 +2,13 @@
 import React, { useState } from "react";
 import { X, Menu, Search, User, ShoppingBag } from "lucide-react";
 import QazmiCart from "../components/cat"; // adjust path
+import { useSelector } from "react-redux";
 
 export default function HeaderSection() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  // const categories = [
-  //   {
-  //     name: "SHORT KURTIS",
-  //     image: "https://m.media-amazon.com/images/I/719YFc0XeCL._SY879_.jpg",
+  const { cart } = useSelector((store) => store?.product || { cart: [] });
 
-  //     alt: "Short Kurtis",
-  //   },
-  //   {
-  //     name: "LONG KURTIS",
-  //     image:
-  //       "https://qazmi.in/cdn/shop/files/6_e8235f90-583d-4974-a776-807fdf0de8a2.jpg?v=1731756348",
-  //     alt: "Long Kurtis",
-  //   },
-  //   {
-  //     name: "A-LINE KURTIS",
-  //     image: "https://m.media-amazon.com/images/I/51GwkRw4uLL._SX679_.jpg",
-  //     alt: "A-Line Kurtis",
-  //   },
-  //   {
-  //     name: "CHINARKARI",
-  //     image: "https://m.media-amazon.com/images/I/51OSXJDeVlL._SX679_.jpg",
-  //     alt: "Chinarkari",
-  //   },
-  //   {
-  //     name: "KAFTANS",
-  //     image:
-  //       "https://qazmi.in/cdn/shop/files/6_e8235f90-583d-4974-a776-807fdf0de8a2.jpg?v=1731756348",
-  //     alt: "Kaftans",
-  //   },
-  //   {
-  //     name: "KURTA SETS",
-  //     image: "https://m.media-amazon.com/images/I/51OSXJDeVlL._SX679_.jpg",
-  //     alt: "Kurta Sets",
-  //   },
-  //   {
-  //     name: "SHOP ALL",
-  //     image: "https://m.media-amazon.com/images/I/719YFc0XeCL._SY879_.jpg",
-  //     alt: "Shop All",
-  //   },
-  // ];
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
@@ -94,7 +57,7 @@ export default function HeaderSection() {
             <button className="text-gray-800 relative" onClick={cardOpen}>
               <ShoppingBag size={24} />
               <span className="absolute -top-2 -right-2 bg-pink-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                1
+                {cart.length}
               </span>
             </button>
             {isCartOpen && (

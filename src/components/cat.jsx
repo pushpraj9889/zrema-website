@@ -153,28 +153,30 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
               </div>
 
               {/* Cart footer with totals and checkout buttons */}
-              <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
-                <div className="flex justify-between text-sm text-gray-600 mb-2">
-                  <p>Total products ({cart?.length})</p>
-                  <p>Rs. {totalAmount.toFixed(2)}</p>
+              {cart.length > 0 && (
+                <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
+                  <div className="flex justify-between text-sm text-gray-600 mb-2">
+                    <p>Total products ({cart?.length})</p>
+                    <p>Rs. {totalAmount.toFixed(2)}</p>
+                  </div>
+                  <div className="flex justify-between text-base font-medium text-gray-900 mb-6">
+                    <p>Total including VAT</p>
+                    <p>Rs. {totalAmount.toFixed(2)}</p>
+                  </div>
+                  <button
+                    className="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-4 rounded-lg mb-3"
+                    onClick={goToCartPage}
+                  >
+                    View cart
+                  </button>
+                  <button
+                    className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-lg"
+                    onClick={goToCheckOut}
+                  >
+                    Checkout
+                  </button>
                 </div>
-                <div className="flex justify-between text-base font-medium text-gray-900 mb-6">
-                  <p>Total including VAT</p>
-                  <p>Rs. {totalAmount.toFixed(2)}</p>
-                </div>
-                <button
-                  className="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-4 rounded-lg mb-3"
-                  onClick={goToCartPage}
-                >
-                  View cart
-                </button>
-                <button
-                  className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-lg"
-                  onClick={goToCheckOut}
-                >
-                  Checkout
-                </button>
-              </div>
+              )}
             </div>
           </div>
         </div>

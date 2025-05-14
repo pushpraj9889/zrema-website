@@ -6,6 +6,13 @@ import CheckoutPage from "./pages/checkoutPage";
 import Viewcart from "./pages/ViewcartPage";
 import ProductPage from "./pages/singleProductPage";
 import Order from "./pages/order/Order";
+import QazmiFooter from "./components/footerSection";
+import PrivacyPolicy from "./pages/privacyPolicy";
+import RefundPolicy from "./pages/refundPolicy";
+import ShippingPolicy from "./pages/shippingPolicy";
+import TermsOfService from "./pages/terms&Conditions";
+import Contact from "./pages/contact";
+import AboutUs from "./pages/AboutUs";
 
 export default function App() {
   const location = useLocation();
@@ -26,7 +33,14 @@ export default function App() {
         <Route path="/CheckoutPage" element={<CheckoutPage />}></Route>
         <Route path="/ProductPage/:id" element={<ProductPage />}></Route>
         <Route path="/Order" element={<Order />}></Route>
+        <Route path="/PrivacyPolicy" element={<PrivacyPolicy />}></Route>
+        <Route path="/RefundPolicy" element={<RefundPolicy />}></Route>
+        <Route path="/ShippingPolicy" element={<ShippingPolicy />}></Route>
+        <Route path="/TermsOfService" element={<TermsOfService />}></Route>
+        <Route path="/Contact" element={<Contact />}></Route>
+        <Route path="/AboutUs" element={<AboutUs />}></Route>
       </Routes>
+      <QazmiFooter />
     </>
   );
 }

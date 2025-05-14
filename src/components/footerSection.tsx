@@ -2,13 +2,13 @@ import React from "react";
 
 export default function QazmiFooter() {
   const footerLinks = [
-    { id: 1, title: "Track/Return Your Order", url: "#track-order" },
-    { id: 2, title: "Privacy Policy", url: "#privacy-policy" },
-    { id: 3, title: "Refund Policy", url: "#refund-policy" },
-    { id: 4, title: "Shipping Policy", url: "#shipping-policy" },
-    { id: 5, title: "Terms & Conditions", url: "#terms" },
-    { id: 6, title: "About Us", url: "#about-us" },
-    { id: 7, title: "Contact Us", url: "#contact-us" },
+    { id: 1, title: " Order History", url: "#track-order" },
+    { id: 2, title: "Privacy Policy", url: "/PrivacyPolicy" },
+    { id: 3, title: "Refund Policy", url: "/RefundPolicy" },
+    { id: 4, title: "Shipping Policy", url: "/ShippingPolicy" },
+    { id: 5, title: "Terms & Conditions", url: "/TermsOfService" },
+    { id: 6, title: "About Us", url: "/AboutUs" },
+    { id: 7, title: "Contact Us", url: "/Contact" },
   ];
 
   return (
@@ -108,7 +108,7 @@ export default function QazmiFooter() {
           </a>
         </div>
         <div className="text-gray-600 text-sm text-center">
-          © 2025 Qazmi, Powered by Shopify
+          © 2025 Qazmi, Powered by Qazmi Owners
         </div>
         <div className="mt-4 md:mt-0">
           <div className="flex space-x-2">
