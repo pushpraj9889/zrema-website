@@ -36,8 +36,8 @@ export default function TermsOfService() {
             <p className="text-gray-700">
               Please read these Terms and Conditions ("Terms", "Terms and
               Conditions") carefully before using the{" "}
-              <span className="font-medium">http://www.Qazmi.in</span> website
-              operated by QAZMI FASHIONS PVT LTD ("us", "we", or "our"). Your
+              <span className="font-medium">http://www.Zrema.in</span> website
+              operated by Zrema FASHIONS PVT LTD ("us", "we", or "our"). Your
               access to and use of the Service is conditioned on your acceptance
               of and compliance with these Terms. These Terms apply to all
               visitors, users and others who access or use the Service.
@@ -127,13 +127,13 @@ export default function TermsOfService() {
             <div className="mt-3 text-gray-600">
               <p>
                 Our Service may contain links to third-party web sites or
-                services that are not owned or controlled by QAZMI FASHIONS PVT
-                LTD. QAZMI FASHIONS PVT LTD has no control over, and assumes no
+                services that are not owned or controlled by zrema FASHIONS PVT
+                LTD. zrema FASHIONS PVT LTD has no control over, and assumes no
                 responsibility for, the content, privacy policies, or practices
                 of any third party web sites or services.
               </p>
               <p className="mt-3">
-                You further acknowledge and agree that QAZMI FASHIONS PVT LTD
+                You further acknowledge and agree that zrema FASHIONS PVT LTD
                 shall not be responsible or liable, directly or indirectly, for
                 any damage or loss caused or alleged to be caused by or in
                 connection with use of or reliance on any such content, goods or
@@ -204,10 +204,10 @@ export default function TermsOfService() {
                 If you have any questions about these Terms, please contact us
                 at:{" "}
                 <a
-                  href="mailto:support@qazmi.in"
+                  href="mailto:support@zrema.in"
                   className="font-medium underline hover:text-pink-800"
                 >
-                  support@qazmi.in
+                  support@zrema.in
                 </a>
               </p>
             </div>
@@ -217,7 +217,7 @@ export default function TermsOfService() {
         {/* Footer */}
         <div className="bg-pink-50 px-6 py-4 border-t border-gray-200">
           <p className="text-sm text-center text-gray-600">
-            © 2025 Qazmi Fashions Pvt Ltd. All rights reserved.
+            © 2025 zrema Fashions Pvt Ltd. All rights reserved.
           </p>
         </div>
       </div>

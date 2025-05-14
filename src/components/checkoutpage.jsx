@@ -51,7 +51,7 @@ const CheckoutPage = () => {
               <i className="fas fa-arrow-left"></i>
             </button>
             <span className="text-gray-800 truncate max-w-md">
-              qazmi.in/checkouts/cn/Z2NwLWFzaWEtc291dGhiYXN0MUQjBKNQ
+              Zrema.in/checkouts/cn/Z2NwLWFzaWEtc291dGhiYXN0MUQjBKNQ
             </span>
           </div>
           <div className="flex items-center">

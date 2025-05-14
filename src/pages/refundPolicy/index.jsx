@@ -10,7 +10,7 @@ export default function RefundPolicy() {
       <div className="px-6 py-8">
         <p className="text-gray-700 mb-4">
           Thanks for purchasing our products at{" "}
-          <span className="font-medium">www.qazmi.in</span> operated by Qazmi
+          <span className="font-medium">www.zrema.in</span> operated by zrema
           Fashions Pvt Ltd.
         </p>
 
@@ -101,17 +101,17 @@ export default function RefundPolicy() {
             refund, feel free to contact us at:
           </p>
           <a
-            href="mailto:support@qazmi.in"
+            href="mailto:support@zrema.in"
             className="mt-2 inline-block text-indigo-600 hover:text-indigo-800 font-medium"
           >
-            support@qazmi.in
+            support@Zrema.in
           </a>
         </div>
       </div>
 
       <div className="bg-gray-50 px-6 py-4 border-t border-gray-200 text-center">
         <p className="text-sm text-gray-600">
-          © 2025 Qazmi Fashions Pvt Ltd. All rights reserved.
+          © 2025 Zrema Fashions Pvt Ltd. All rights reserved.
         </p>
       </div>
     </div>

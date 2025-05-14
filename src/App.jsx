@@ -33,10 +33,10 @@ export default function App() {
         <Route path="/CheckoutPage" element={<CheckoutPage />}></Route>
         <Route path="/ProductPage/:id" element={<ProductPage />}></Route>
         <Route path="/Order" element={<Order />}></Route>
-        <Route path="/PrivacyPolicy" element={<PrivacyPolicy />}></Route>
-        <Route path="/RefundPolicy" element={<RefundPolicy />}></Route>
-        <Route path="/ShippingPolicy" element={<ShippingPolicy />}></Route>
-        <Route path="/TermsOfService" element={<TermsOfService />}></Route>
+        <Route path="/privacy_policy" element={<PrivacyPolicy />}></Route>
+        <Route path="/refund_policy" element={<RefundPolicy />}></Route>
+        <Route path="/shipping_policy" element={<ShippingPolicy />}></Route>
+        <Route path="/T&C" element={<TermsOfService />}></Route>
         <Route path="/Contact" element={<Contact />}></Route>
         <Route path="/AboutUs" element={<AboutUs />}></Route>
       </Routes>

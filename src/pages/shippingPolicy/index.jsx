@@ -35,13 +35,13 @@ export default function ShippingPolicy() {
           <p className="text-gray-700">
             This document sets out the shipping policy that applies to customers
             that make a purchase at{" "}
-            <span className="font-medium">www.Qazmi.in</span>. If you have any
+            <span className="font-medium">www.zrema.in</span>. If you have any
             questions, please contact our customer service team at{" "}
             <a
-              href="mailto:support@qazmi.in"
+              href="mailto:support@zrema.in"
               className="text-pink-600 hover:text-pink-800"
             >
-              Support@qazmi.in
+              Support@zrema.in
             </a>
           </p>
         </div>
@@ -285,10 +285,10 @@ export default function ShippingPolicy() {
                   If your package is lost or damaged during transit, please
                   contact us immediately at{" "}
                   <a
-                    href="mailto:support@qazmi.in"
+                    href="mailto:support@zrema.in"
                     className="text-pink-600 hover:text-pink-800 font-medium"
                   >
-                    Support@Qazmi.in
+                    Support@zrema.in
                   </a>
                 </span>
               </li>
@@ -349,10 +349,10 @@ export default function ShippingPolicy() {
                 For any questions or concerns about our shipping policy, please
                 email us at:{" "}
                 <a
-                  href="mailto:support@qazmi.in"
+                  href="mailto:support@zrema.in"
                   className="font-medium underline hover:text-pink-800"
                 >
-                  Support@Qazmi.in
+                  Support@zrema.in
                 </a>
               </p>
             </div>
@@ -362,7 +362,7 @@ export default function ShippingPolicy() {
         {/* Footer */}
         <div className="bg-pink-50 px-6 py-4 border-t border-gray-200">
           <p className="text-sm text-center text-gray-600">
-            © 2025 Qazmi Fashions Pvt Ltd. All rights reserved.
+            © 2025 zrema Fashions Pvt Ltd. All rights reserved.
           </p>
         </div>
       </div>

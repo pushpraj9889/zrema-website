@@ -17,7 +17,7 @@ export default function Home() {
     {
       name: "LONG KURTIS",
       image:
-        "https://qazmi.in/cdn/shop/files/6_e8235f90-583d-4974-a776-807fdf0de8a2.jpg?v=1731756348",
+        "https://zrema.in/cdn/shop/files/6_e8235f90-583d-4974-a776-807fdf0de8a2.jpg?v=1731756348",
       alt: "Long Kurtis",
     },
     {
@@ -33,7 +33,7 @@ export default function Home() {
     {
       name: "KAFTANS",
       image:
-        "https://qazmi.in/cdn/shop/files/6_e8235f90-583d-4974-a776-807fdf0de8a2.jpg?v=1731756348",
+        "https://zrema.in/cdn/shop/files/6_e8235f90-583d-4974-a776-807fdf0de8a2.jpg?v=1731756348",
       alt: "Kaftans",
     },
     {

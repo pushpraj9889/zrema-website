@@ -3,10 +3,10 @@ import React from "react";
 export default function QazmiFooter() {
   const footerLinks = [
     { id: 1, title: " Order History", url: "#track-order" },
-    { id: 2, title: "Privacy Policy", url: "/PrivacyPolicy" },
-    { id: 3, title: "Refund Policy", url: "/RefundPolicy" },
-    { id: 4, title: "Shipping Policy", url: "/ShippingPolicy" },
-    { id: 5, title: "Terms & Conditions", url: "/TermsOfService" },
+    { id: 2, title: "Privacy Policy", url: "/privacy_policy" },
+    { id: 3, title: "Refund Policy", url: "/refund_policy" },
+    { id: 4, title: "Shipping Policy", url: "/shipping_policy" },
+    { id: 5, title: "Terms & Conditions", url: "/T&C" },
     { id: 6, title: "About Us", url: "/AboutUs" },
     { id: 7, title: "Contact Us", url: "/Contact" },
   ];
@@ -81,7 +81,7 @@ export default function QazmiFooter() {
       {/* Bottom footer with logo and copyright */}
       <div className="max-w-6xl mx-auto border-t border-gray-300 pt-6 flex flex-col md:flex-row items-center justify-between">
         <div className="mb-4 md:mb-0">
-          <a href="/" aria-label="Qazmi Home">
+          <a href="/" aria-label="Zrema Home">
             <svg
               width="64"
               height="40"
@@ -108,7 +108,7 @@ export default function QazmiFooter() {
           </a>
         </div>
         <div className="text-gray-600 text-sm text-center">
-          © 2025 Qazmi, Powered by Qazmi Owners
+          © 2025 Zrema, Powered by Zrema Owners
         </div>
         <div className="mt-4 md:mt-0">
           <div className="flex space-x-2">

@@ -32,13 +32,13 @@ const SocialStoriesSection = () => {
       id: 4,
       type: "video", // Changed from image to video since videoUrl is provided
       videoUrl: "https://zrema.s3.ap-south-1.amazonaws.com/videos/short4.mp4",
-      altText: "Must have short kurtis from Qazmi",
+      altText: "Must have short kurtis from Zrema",
     },
     {
       id: 5,
       type: "video",
       videoUrl: "https://zrema.s3.ap-south-1.amazonaws.com/videos/short5.mp4",
-      altText: "Kashmiri short kurti from Qazmi",
+      altText: "Kashmiri short kurti from Zrema",
     },
     {
       id: 6,
@@ -177,7 +177,7 @@ const SocialStoriesSection = () => {
       <div className="container mx-auto px-4">
         {/* Section Heading */}
         <h2 className="text-3xl md:text-4xl font-serif font-bold mb-8">
-          Social Stories <span className="font-normal">@qazmi3</span>
+          Social Stories <span className="font-normal">@Zrema</span>
         </h2>
 
         {/* Stories Gallery */}

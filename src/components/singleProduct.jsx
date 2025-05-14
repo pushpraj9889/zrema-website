@@ -29,7 +29,7 @@ export default function ProductPage() {
       <nav className="bg-white py-4 border-b">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center">
-            <div className="text-3xl font-bold italic">Qazmi</div>
+            <div className="text-3xl font-bold italic">Zrema</div>
             <div className="flex space-x-4">
               <button className="p-2">
                 <svg

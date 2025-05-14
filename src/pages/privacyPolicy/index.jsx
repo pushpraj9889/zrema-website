@@ -18,7 +18,7 @@ export default function PrivacyPolicy() {
       content: (
         <div>
           <p className="mb-2">
-            Qazmi Fashions Pvt Ltd has designed this policy to be consistent
+            zrema Fashions Pvt Ltd has designed this policy to be consistent
             with the following principles:
           </p>
           <ul className="list-disc pl-6 space-y-1">
@@ -227,7 +227,7 @@ export default function PrivacyPolicy() {
             </li>
             <li>To respond to your requests for customer service</li>
             <li>
-              To protect the rights, property, or personal safety of Qazmi
+              To protect the rights, property, or personal safety of zrema
               Fashions Pvt Ltd, our agents and affiliates, our users, and the
               public
             </li>
@@ -361,7 +361,7 @@ export default function PrivacyPolicy() {
           <p className="mb-2">
             You may unsubscribe from our marketing emails at any time by
             clicking on the "unsubscribe" link at the bottom of each newsletter
-            or by emailing support@qazmi.in with your request.
+            or by emailing support@zrema.in with your request.
           </p>
 
           <h4 className="font-semibold mt-4 mb-2">Account Preferences</h4>
@@ -381,7 +381,7 @@ export default function PrivacyPolicy() {
             appropriate circumstances. You may have the right to object to our
             handling of your information, restrict our processing of your
             information, and to withdraw any consent you have provided. To
-            exercise these rights, please email us at support@qazmi.in with the
+            exercise these rights, please email us at support@zrema.in with the
             nature of your request. You also have the right to go directly to
             the relevant supervisory or legal authority, but we encourage you to
             contact us so that we may resolve your concerns directly as best and
@@ -509,7 +509,7 @@ export default function PrivacyPolicy() {
         <div>
           <p className="mb-2">
             If you have any questions about this Privacy Policy or our privacy
-            practices, you can contact us at: support@qazmi.in
+            practices, you can contact us at: support@zrema.in
           </p>
         </div>
       ),
@@ -528,11 +528,11 @@ export default function PrivacyPolicy() {
           <div className="mb-8">
             <p className="text-gray-700">
               This Privacy Policy ("Policy") explains the information
-              collection, use, and sharing practices of Qazmi Fashions Pvt Ltd
+              collection, use, and sharing practices of zrema Fashions Pvt Ltd
               ("we," "us," and "our"). Unless otherwise stated, this Policy
               describes and governs the information collection, use, and sharing
-              practices of Qazmi Fashions Pvt Ltd with respect to your use of
-              our website www.qazmi.in and the services ("Services") we provide
+              practices of zrema Fashions Pvt Ltd with respect to your use of
+              our website www.zrema.in and the services ("Services") we provide
               and/or host on our servers.
             </p>
             <p className="mt-4 text-gray-700">
@@ -587,7 +587,7 @@ export default function PrivacyPolicy() {
 
         <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
           <p className="text-center text-gray-600 text-sm">
-            © 2025 Qazmi Fashions Pvt Ltd. All rights reserved.
+            © 2025 Zrema Fashions Pvt Ltd. All rights reserved.
           </p>
         </div>
       </div>

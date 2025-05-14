@@ -85,7 +85,7 @@ export default function Viewcart() {
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center">
             <a href="/" className="text-3xl font-serif font-semibold italic">
-              Qazmi
+              Zrema
             </a>
           </div>
 
