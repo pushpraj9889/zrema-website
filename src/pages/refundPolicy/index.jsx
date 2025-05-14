@@ -87,7 +87,7 @@ export default function RefundPolicy() {
 
         <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
           <p className="text-blue-700">
-            We encourage our customers to try the outfit within 14 days of
+            We encourage our customers to try the outfit within 7 days of
             receiving it.
           </p>
         </div>
@@ -104,14 +104,14 @@ export default function RefundPolicy() {
             href="mailto:support@zrema.in"
             className="mt-2 inline-block text-indigo-600 hover:text-indigo-800 font-medium"
           >
-            support@Zrema.in
+            info@zrema.in
           </a>
         </div>
       </div>
 
       <div className="bg-gray-50 px-6 py-4 border-t border-gray-200 text-center">
         <p className="text-sm text-gray-600">
-          © 2025 Zrema Fashions Pvt Ltd. All rights reserved.
+          © 2025 M S A SHAH CREATIONS. All rights reserved.
         </p>
       </div>
     </div>

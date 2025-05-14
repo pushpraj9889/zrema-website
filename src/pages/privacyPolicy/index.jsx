@@ -18,8 +18,8 @@ export default function PrivacyPolicy() {
       content: (
         <div>
           <p className="mb-2">
-            zrema Fashions Pvt Ltd has designed this policy to be consistent
-            with the following principles:
+            M S A SHAH CREATIONS has designed this policy to be consistent with
+            the following principles:
           </p>
           <ul className="list-disc pl-6 space-y-1">
             <li>Privacy policies should be human readable and easy to find.</li>
@@ -509,7 +509,7 @@ export default function PrivacyPolicy() {
         <div>
           <p className="mb-2">
             If you have any questions about this Privacy Policy or our privacy
-            practices, you can contact us at: support@zrema.in
+            practices, you can contact us at:info@zrema.in
           </p>
         </div>
       ),
@@ -528,11 +528,11 @@ export default function PrivacyPolicy() {
           <div className="mb-8">
             <p className="text-gray-700">
               This Privacy Policy ("Policy") explains the information
-              collection, use, and sharing practices of zrema Fashions Pvt Ltd
+              collection, use, and sharing practices of M S A SHAH CREATIONS
               ("we," "us," and "our"). Unless otherwise stated, this Policy
               describes and governs the information collection, use, and sharing
-              practices of zrema Fashions Pvt Ltd with respect to your use of
-              our website www.zrema.in and the services ("Services") we provide
+              practices of M S A SHAH CREATIONS with respect to your use of our
+              website www.zrema.in and the services ("Services") we provide
               and/or host on our servers.
             </p>
             <p className="mt-4 text-gray-700">
@@ -587,7 +587,7 @@ export default function PrivacyPolicy() {
 
         <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
           <p className="text-center text-gray-600 text-sm">
-            © 2025 Zrema Fashions Pvt Ltd. All rights reserved.
+            © 2025 M S A SHAH CREATIONS. All rights reserved.
           </p>
         </div>
       </div>

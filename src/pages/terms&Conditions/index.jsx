@@ -37,7 +37,7 @@ export default function TermsOfService() {
               Please read these Terms and Conditions ("Terms", "Terms and
               Conditions") carefully before using the{" "}
               <span className="font-medium">http://www.Zrema.in</span> website
-              operated by Zrema FASHIONS PVT LTD ("us", "we", or "our"). Your
+              operated by M S A SHAH CREATIONS ("us", "we", or "our"). Your
               access to and use of the Service is conditioned on your acceptance
               of and compliance with these Terms. These Terms apply to all
               visitors, users and others who access or use the Service.
@@ -127,13 +127,13 @@ export default function TermsOfService() {
             <div className="mt-3 text-gray-600">
               <p>
                 Our Service may contain links to third-party web sites or
-                services that are not owned or controlled by zrema FASHIONS PVT
-                LTD. zrema FASHIONS PVT LTD has no control over, and assumes no
-                responsibility for, the content, privacy policies, or practices
-                of any third party web sites or services.
+                services that are not owned or controlled by M S A SHAH
+                CREATIONS . M S A SHAH CREATIONS has no control over, and
+                assumes no responsibility for, the content, privacy policies, or
+                practices of any third party web sites or services.
               </p>
               <p className="mt-3">
-                You further acknowledge and agree that zrema FASHIONS PVT LTD
+                You further acknowledge and agree that M S A SHAH CREATIONS
                 shall not be responsible or liable, directly or indirectly, for
                 any damage or loss caused or alleged to be caused by or in
                 connection with use of or reliance on any such content, goods or
@@ -207,7 +207,7 @@ export default function TermsOfService() {
                   href="mailto:support@zrema.in"
                   className="font-medium underline hover:text-pink-800"
                 >
-                  support@zrema.in
+                  info@zrema.in
                 </a>
               </p>
             </div>
@@ -217,7 +217,7 @@ export default function TermsOfService() {
         {/* Footer */}
         <div className="bg-pink-50 px-6 py-4 border-t border-gray-200">
           <p className="text-sm text-center text-gray-600">
-            © 2025 zrema Fashions Pvt Ltd. All rights reserved.
+            © 2025 M S A SHAH CREATIONS. All rights reserved.
           </p>
         </div>
       </div>

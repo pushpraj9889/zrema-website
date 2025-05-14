@@ -155,7 +155,7 @@ export default function Contact() {
             <div className="bg-black text-white p-6 rounded">
               <h3 className="text-xl font-semibold mb-4">Contact Us</h3>
               <a
-                href="mailto:support@qazmi.in"
+                href="mailto:support@Zrema.in"
                 className="flex items-center bg-white text-black p-3 hover:bg-gray-100 rounded mb-3"
               >
                 <svg
@@ -172,7 +172,7 @@ export default function Contact() {
                     d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                   ></path>
                 </svg>
-                support@qazmi.in
+                info@zrema.in
               </a>
               <a
                 href="https://wa.me/yournumber"
@@ -192,7 +192,7 @@ export default function Contact() {
 
             {/* Qazmi Location */}
             <div className="bg-black text-white p-6 rounded">
-              <h3 className="text-xl font-semibold mb-3">Qazmi</h3>
+              <h3 className="text-xl font-semibold mb-3">Zrema</h3>
               <p className="mb-1">Sector 100, 004</p>
               <p className="mb-3">201303 Noida</p>
               <p className="mb-1">

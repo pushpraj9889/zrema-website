@@ -41,7 +41,7 @@ export default function ShippingPolicy() {
               href="mailto:support@zrema.in"
               className="text-pink-600 hover:text-pink-800"
             >
-              Support@zrema.in
+              info@zrema.in
             </a>
           </p>
         </div>
@@ -288,7 +288,7 @@ export default function ShippingPolicy() {
                     href="mailto:support@zrema.in"
                     className="text-pink-600 hover:text-pink-800 font-medium"
                   >
-                    Support@zrema.in
+                    info@zrema.in
                   </a>
                 </span>
               </li>
@@ -352,7 +352,7 @@ export default function ShippingPolicy() {
                   href="mailto:support@zrema.in"
                   className="font-medium underline hover:text-pink-800"
                 >
-                  Support@zrema.in
+                  info@zrema.in
                 </a>
               </p>
             </div>
@@ -362,7 +362,7 @@ export default function ShippingPolicy() {
         {/* Footer */}
         <div className="bg-pink-50 px-6 py-4 border-t border-gray-200">
           <p className="text-sm text-center text-gray-600">
-            © 2025 zrema Fashions Pvt Ltd. All rights reserved.
+            © 2025 M S A SHAH CREATIONS. All rights reserved.
           </p>
         </div>
       </div>

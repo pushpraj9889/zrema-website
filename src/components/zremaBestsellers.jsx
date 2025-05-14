@@ -81,10 +81,10 @@ export default function QazmiBestsellers() {
     <section className="w-full max-w-7xl mx-auto px-4 py-8 md:py-12">
       <div className="text-center mb-8">
         <h2 className="text-xl md:text-4xl font-bold text-gray-800 mb-2">
-          Discover Qazmi's Timeless Bestsellers
+          Discover Zrema's Timeless Bestsellers
         </h2>
         <p className="text-black-400 text-sm md:text-lg font-bold">
-          Experience the elegance and craftsmanship of Qazmi's most beloved
+          Experience the elegance and craftsmanship of Zrema's most beloved
           pieces
         </p>
       </div>

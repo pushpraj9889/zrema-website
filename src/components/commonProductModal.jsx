@@ -37,7 +37,7 @@ export default function QazmiCartProdcut({ isOpen, setIsOpen, productdata }) {
           <div className="relative w-screen max-w-md">
             <div className="h-full flex flex-col bg-white">
               {/* Cart header */}
-              <div className="flex items-center justify-between px-4 py-6 border-b border-gray-200">
+              <div className="flex items-end justify-end px-4 py-3">
                 <button
                   className="p-2 -m-2 text-gray-400 hover:text-gray-500"
                   onClick={() => setIsOpen(false)}
@@ -45,15 +45,16 @@ export default function QazmiCartProdcut({ isOpen, setIsOpen, productdata }) {
                   <X size={24} />
                 </button>
               </div>
-              <div className="border mt-5">
-                <span className="text-red-500 font-semibold text-base">
+
+              <div>
+                <span className="text-black-500 font-semibold text-base ml-4">
                   {productdata?.name}
                 </span>
 
                 <ImageSlider images={productdata?.images} />
               </div>
-              <div className="flex items-start mb-2">
-                <span className="text-primary line-through mr-2  ">
+              <div className="flex items-start mb-2 ml-2 mt-1">
+                <span className="text-primary line-through mr-2 f ">
                   Rs. {productdata?.mrp?.toFixed(2)}
                 </span>
                 <span className="text-black font-medium">
@@ -61,12 +62,15 @@ export default function QazmiCartProdcut({ isOpen, setIsOpen, productdata }) {
                 </span>
               </div>
               {/* <div> */}
-              <span className="text-black">Fabric</span>
-              <div className="border w-[120] h-10 items-center justify-center flex">
-                <span className="text-black">{productdata?.fabric}</span>
-              </div>
+              <span className="text-black ml-4 mt-2">Fabric</span>
+              {/* <div className="border w-[120] h-10 items-center justify-center flex"> */}
+              <span className="text-black ml-4 border w-[120px] h-[40px] flex items-center justify-center border-pink-400 mt-2">
+                {productdata?.fabric}
+              </span>
+
               {/* </div> */}
-              <sapn>Size</sapn>
+              {/* </div> */}
+              <span className="text-black ml-4 mt-2">Size</span>
               <div className="flex ">
                 {productdata?.size?.map((item, index) => {
                   return (
@@ -88,14 +92,14 @@ export default function QazmiCartProdcut({ isOpen, setIsOpen, productdata }) {
                 })}
               </div>
 
-              <span className="text-black border">
+              <span className="text-black ml-3 mt-3">
                 SKU: {productdata?.description}
               </span>
 
               <button
                 onClick={addtoCart}
                 type="button"
-                class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 shadow-lg shadow-pink-500/50 dark:shadow-lg dark:shadow-pink-800/80 font-medium rounded-lg text-sm px-5 py-4 text-center me-2 mb-2 mt-6 ml-5 mr-8"
+                class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 shadow-lg shadow-pink-500/50 dark:shadow-lg dark:shadow-pink-800/80 font-medium rounded-lg text-sm px-5 py-4 text-center me-2 mb-2 mt-6 ml-3 mr-8"
               >
                 Add to cart
               </button>
@@ -106,12 +110,12 @@ export default function QazmiCartProdcut({ isOpen, setIsOpen, productdata }) {
               >
                 Buy it now
               </button>
-              <div className="border py-4">
-                <sapn className="text-black">
+              <div className="border py-4 ml-4 px-4 w-[400px]">
+                <sapn className="text-black px-4">
                   Guaranteed secure & safe checkout.
                 </sapn>
               </div>
-              <div class="space-y-2 text-sm text-gray-700">
+              <div class="space-y-2 text-sm text-gray-700 ml-4 mt-4 mb-3">
                 <div>
                   <span class="font-semibold">Shipped today?</span>
                   <span class="text-green-600">Order within: 01:57:36</span>

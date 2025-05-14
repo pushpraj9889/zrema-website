@@ -3,30 +3,11 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import AddressBillingFields from "../../components/addressBillingFeilds";
 
-// POST - /order/create
-
-// Auth Token - pass auth token in headers as Bearer
-// Body {
-//   "products" : [
-//     {
-//       "_id" : "6803bbf765e310ba7e95e3d4",
-//       "quantity" : 1
-//     },
-//     {
-//       "_id" : "6804dd4bdc55878c30baca26",
-//       "quantity" : 2
-//     }
-//   ],
-//   "shipping_address" : "Bangalore",
-//   "shipping_pincode" : "753001",
-//   "total_amount" : 1800,
-//   "payment_type" : "cod"    // cod / online
-// }
-
 export default function Order() {
   const [billingAddressOption, setBillingAddressOption] = useState("same");
   const [userDetailsdata, setUserDetails] = useState({});
   const [loading, setLoading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("cod"); // Default to COD
   const { cart = [] } = useSelector((store) => store?.product || { cart: [] });
   console.log("billingAddressOption", billingAddressOption);
 
@@ -34,28 +15,15 @@ export default function Order() {
     (store) => store?.userDetailsReducer || { userDetails: {} }
   );
   const token = userDetails?.token;
-  console.log("gettalfdjklsj", token);
-  // const products = cart.map((item) => ({
-  //   _id: item._id,
-  //   quantity: item.quantity,
-  // }));
-  // console.log("userDetails", userDetails);
-
-  // useSelector((store) => console.log("gettingthe error", products));
-
   // Calculate order totals
   const { subtotal, taxes, total } = useMemo(() => {
     const subtotalValue = cart.reduce(
       (sum, item) => sum + item.mrp * (item.quantity || 1),
       0
     );
-    // const taxesValue = subtotalValue * 0.08; // Assuming 8% tax rate
-    // const totalValue = subtotalValue + taxesValue;
 
     return {
       subtotal: subtotalValue,
-      // taxes: taxesValue,
-      // total: totalValue,
     };
   }, [cart]);
 
@@ -63,7 +31,7 @@ export default function Order() {
     setUserDetails(formData);
   };
   const handlePayment = () => {
-    const data = setLoading(true);
+    setLoading(true);
     setTimeout(async () => {
       try {
         const response = await axios.post(
@@ -73,7 +41,7 @@ export default function Order() {
             shipping_address: userDetails?.address,
             shipping_pincode: userDetails?.pincode,
             total_amount: 1800,
-            payment_type: "cod",
+            payment_type: paymentMethod, // Use the selected payment method
           },
           {
             headers: {
@@ -84,7 +52,14 @@ export default function Order() {
 
         if (response?.data) {
           setLoading(false);
-          // Optional: navigate or show success message
+          // If payment method is online, you could redirect to payment gateway here
+          if (paymentMethod === "online") {
+            // Redirect logic or show payment options would go here
+            alert("Redirecting to payment gateway...");
+          } else {
+            // For COD, just show success
+            alert("Order placed successfully with Cash on Delivery!");
+          }
         }
       } catch (error) {
         console.error("Order creation failed:", error);
@@ -179,7 +154,7 @@ export default function Order() {
             </div>
           </div>
 
-          {/* Payment Method */}
+          {/* Payment Method Selection */}
           <div className="mb-10">
             <h2 className="text-xl font-semibold mb-4 flex items-center">
               <div className="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center mr-2">
@@ -217,71 +192,139 @@ export default function Order() {
                   strokeLinejoin="round"
                 />
               </svg>
-              All transactions are secure and encrypted
+              Choose your preferred payment method
             </p>
 
-            <div className="border border-gray-200 rounded-xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl">
-              <div className="p-6 flex flex-col md:flex-row items-start md:items-center justify-between bg-white gap-4">
-                <div className="flex items-center">
-                  <div className="w-5 h-5 rounded-full border-2 border-indigo-600 flex items-center justify-center mr-4">
+            <div className="border border-gray-200 rounded-xl overflow-hidden shadow-lg mb-6">
+              {/* COD Option */}
+              <div
+                className={`p-5 flex items-center cursor-pointer transition-all duration-200 ${
+                  paymentMethod === "cod"
+                    ? "bg-indigo-50"
+                    : "bg-white hover:bg-gray-50"
+                }`}
+                onClick={() => setPaymentMethod("cod")}
+              >
+                <div
+                  className={`w-5 h-5 rounded-full border-2 ${
+                    paymentMethod === "cod"
+                      ? "border-indigo-600"
+                      : "border-gray-400"
+                  } flex items-center justify-center mr-4 transition-all duration-200`}
+                >
+                  {paymentMethod === "cod" && (
                     <div className="w-3 h-3 bg-indigo-600 rounded-full"></div>
-                  </div>
+                  )}
+                </div>
+                <div className="flex items-center flex-1">
+                  <div className="text-2xl mr-3">💵</div>
                   <div>
                     <div className="text-lg font-semibold text-gray-900">
-                      Razorpay Secure
+                      Cash on Delivery
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      Pay with cash when your order arrives
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Online Payment Option */}
+              <div
+                className={`p-5 flex items-center cursor-pointer transition-all duration-200 border-t border-gray-200 ${
+                  paymentMethod === "online"
+                    ? "bg-indigo-50"
+                    : "bg-white hover:bg-gray-50"
+                }`}
+                onClick={() => setPaymentMethod("online")}
+              >
+                <div
+                  className={`w-5 h-5 rounded-full border-2 ${
+                    paymentMethod === "online"
+                      ? "border-indigo-600"
+                      : "border-gray-400"
+                  } flex items-center justify-center mr-4 transition-all duration-200`}
+                >
+                  {paymentMethod === "online" && (
+                    <div className="w-3 h-3 bg-indigo-600 rounded-full"></div>
+                  )}
+                </div>
+                <div className="flex items-center flex-1">
+                  <div className="text-2xl mr-3">💳</div>
+                  <div>
+                    <div className="text-lg font-semibold text-gray-900">
+                      Online Payment
                     </div>
                     <div className="text-sm text-gray-500">
                       UPI, Cards, Wallets, NetBanking
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 ml-9 md:ml-0">
-                  <img
-                    src="/api/placeholder/40/24"
-                    alt="UPI"
-                    className="h-6 shadow-sm rounded"
-                  />
-                  <img
-                    src="/api/placeholder/40/24"
-                    alt="Visa"
-                    className="h-6 shadow-sm rounded"
-                  />
-                  <img
-                    src="/api/placeholder/40/24"
-                    alt="Mastercard"
-                    className="h-6 shadow-sm rounded"
-                  />
-                  <span className="text-gray-400 text-sm font-medium bg-gray-100 px-2 py-1 rounded">
-                    +17
-                  </span>
-                </div>
-              </div>
-
-              <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-6 text-center border-t border-gray-200">
-                <div className="w-48 h-24 bg-white rounded-lg border border-gray-200 mx-auto mb-6 flex items-center justify-center relative shadow-md">
-                  <div className="absolute top-2 left-2 flex space-x-1">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <div className="w-32 h-3 bg-gray-200 rounded-full mb-2"></div>
-                    <div className="w-24 h-2 bg-gray-100 rounded-full"></div>
-                  </div>
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-indigo-600 bg-indigo-100 rounded-full w-6 h-6 flex items-center justify-center">
-                    →
-                  </div>
-                </div>
-                <p className="text-gray-600 leading-relaxed text-sm">
-                  After clicking{" "}
-                  <strong className="text-indigo-600">
-                    "Complete Payment"
-                  </strong>
-                  , you will be redirected to <br />
-                  Razorpay Secure to complete your purchase securely.
-                </p>
               </div>
             </div>
+
+            {/* Show Razorpay details only when online payment is selected */}
+            {paymentMethod === "online" && (
+              <div className="border border-gray-200 rounded-xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl">
+                <div className="p-6 flex flex-col md:flex-row items-start md:items-center justify-between bg-white gap-4">
+                  <div className="flex items-center">
+                    <div>
+                      <div className="text-lg font-semibold text-gray-900">
+                        Razorpay Secure
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        UPI, Cards, Wallets, NetBanking
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 ml-9 md:ml-0">
+                    <img
+                      src="/api/placeholder/40/24"
+                      alt="UPI"
+                      className="h-6 shadow-sm rounded"
+                    />
+                    <img
+                      src="/api/placeholder/40/24"
+                      alt="Visa"
+                      className="h-6 shadow-sm rounded"
+                    />
+                    <img
+                      src="/api/placeholder/40/24"
+                      alt="Mastercard"
+                      className="h-6 shadow-sm rounded"
+                    />
+                    <span className="text-gray-400 text-sm font-medium bg-gray-100 px-2 py-1 rounded">
+                      +17
+                    </span>
+                  </div>
+                </div>
+
+                <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-6 text-center border-t border-gray-200">
+                  <div className="w-48 h-24 bg-white rounded-lg border border-gray-200 mx-auto mb-6 flex items-center justify-center relative shadow-md">
+                    <div className="absolute top-2 left-2 flex space-x-1">
+                      <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <div className="w-32 h-3 bg-gray-200 rounded-full mb-2"></div>
+                      <div className="w-24 h-2 bg-gray-100 rounded-full"></div>
+                    </div>
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-indigo-600 bg-indigo-100 rounded-full w-6 h-6 flex items-center justify-center">
+                      →
+                    </div>
+                  </div>
+                  <p className="text-gray-600 leading-relaxed text-sm">
+                    After clicking{" "}
+                    <strong className="text-indigo-600">
+                      "Complete Payment"
+                    </strong>
+                    , you will be redirected to <br />
+                    Razorpay Secure to complete your purchase securely.
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Billing Address */}
@@ -376,7 +419,7 @@ export default function Order() {
                   Processing...
                 </>
               ) : (
-                "Complete Payment"
+                `Complete ${paymentMethod === "online" ? "Payment" : "Order"}`
               )}
             </button>
             <div className="mt-3 flex items-center justify-center text-gray-500 text-sm">
@@ -401,28 +444,10 @@ export default function Order() {
                   strokeLinejoin="round"
                 />
               </svg>
-              Your card won't be charged until you review this order on the next
-              page
+              {paymentMethod === "cod"
+                ? "Your order will be confirmed after you complete this step"
+                : "Your card won't be charged until you review this order on the next page"}
             </div>
-          </div>
-
-          {/* Footer Links */}
-          <div className="flex flex-wrap gap-4 text-sm text-indigo-600 justify-center border-t border-gray-100 pt-6">
-            {[
-              "Refund policy",
-              "Shipping policy",
-              "Privacy policy",
-              "Terms of service",
-              "Contact information",
-            ].map((link, idx) => (
-              <a
-                key={idx}
-                href="#"
-                className="hover:underline hover:text-indigo-800 transition-colors duration-200"
-              >
-                {link}
-              </a>
-            ))}
           </div>
         </div>
 
@@ -442,6 +467,21 @@ export default function Order() {
             {userDetails?.landmark}
             {userDetails?.pincode}
           </h2>
+
+          {/* Payment Method Summary */}
+          <div className="mb-6 pb-4 border-b border-gray-200">
+            <h2 className="text-lg font-semibold mb-2">Payment Method</h2>
+            <div className="flex items-center">
+              <div className="text-xl mr-2">
+                {paymentMethod === "cod" ? "💵" : "💳"}
+              </div>
+              <div className="font-medium">
+                {paymentMethod === "cod"
+                  ? "Cash on Delivery"
+                  : "Online Payment"}
+              </div>
+            </div>
+          </div>
 
           {/* Cart Items */}
           <div className="space-y-4 mb-6">
@@ -528,23 +568,6 @@ export default function Order() {
             </div>
             <div className="text-gray-500 text-sm">
               Including ₹{taxes?.toLocaleString("en-IN")} in taxes
-            </div>
-          </div>
-
-          {/* Promo Code */}
-          <div className="mb-6 pt-4 border-t border-gray-200">
-            <label className="block text-gray-700 font-medium mb-2">
-              Promo Code
-            </label>
-            <div className="flex">
-              <input
-                type="text"
-                className="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="Enter code"
-              />
-              <button className="bg-indigo-100 text-indigo-600 font-medium px-4 py-2 rounded-r-lg hover:bg-indigo-200 transition-colors">
-                Apply
-              </button>
             </div>
           </div>
 

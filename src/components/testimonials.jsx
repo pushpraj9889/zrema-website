@@ -6,21 +6,21 @@ export default function QazmiTestimonials() {
     {
       id: 1,
       quote:
-        "Qazmi's Chinarkari kurtis are simply stunning. The intricate details and comfortable fabric make them my go-to choice for both casual and festive occasions.",
+        "Zrema's Chinarkari kurtis are simply stunning. The intricate details and comfortable fabric make them my go-to choice for both casual and festive occasions.",
       author: "Priya S.",
       rating: 5,
     },
     {
       id: 2,
       quote:
-        "I fell in love with Qazmi's A-line kurtis. They offer the perfect blend of style and comfort, making me feel effortlessly chic every time I wear one.",
+        "I fell in love with Zrema's A-line kurtis. They offer the perfect blend of style and comfort, making me feel effortlessly chic every time I wear one.",
       author: "Aisha M.",
       rating: 5,
     },
     {
       id: 3,
       quote:
-        "Qazmi's kaftans are a game-changer! They are not just stylish but also incredibly comfortable. Perfect for when I want to look elegant without compromising on comfort.",
+        "Zrema's kaftans are a game-changer! They are not just stylish but also incredibly comfortable. Perfect for when I want to look elegant without compromising on comfort.",
       author: "Neha R.",
       rating: 5,
     },

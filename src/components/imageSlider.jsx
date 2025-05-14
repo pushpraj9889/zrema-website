@@ -12,7 +12,7 @@ const ImageSlider = ({ images }) => {
   };
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto overflow-hidden  ">
+    <div className="relative w-full max-w-4xl mx-auto overflow-hidden px-5 ">
       <img
         src={images[currentIndex]}
         alt={`Slide ${currentIndex}`}
