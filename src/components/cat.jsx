@@ -164,8 +164,9 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
                     <p>Rs. {totalAmount.toFixed(2)}</p>
                   </div>
                   <button
-                    className="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-4 rounded-lg mb-3"
                     onClick={goToCartPage}
+                    type="button"
+                    class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 shadow-lg shadow-pink-500/50 dark:shadow-lg dark:shadow-pink-800/80 font-medium rounded-lg text-sm px-5 py-4 text-center me-2 mb-2 mt-6 mr-8 w-full"
                   >
                     View cart
                   </button>

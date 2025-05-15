@@ -237,7 +237,7 @@ export default function Viewcart() {
             <div className="lg:w-1/3">
               <div className="bg-white rounded-lg shadow-sm p-6 sticky top-24">
                 {/* Giftcard section */}
-                <div className="mb-6 border border-gray-200 rounded-lg">
+                {/* <div className="mb-6 border border-gray-200 rounded-lg">
                   <button
                     className="w-full flex items-center justify-between p-4"
                     onClick={() => setIsGiftcardOpen(!isGiftcardOpen)}
@@ -269,7 +269,7 @@ export default function Viewcart() {
                       </div>
                     </div>
                   )}
-                </div>
+                </div> */}
 
                 {/* Order summary */}
                 <div className="mb-6">
@@ -304,7 +304,7 @@ export default function Viewcart() {
                 </div>
 
                 {/* Special instructions */}
-                <div className="mt-6 border border-gray-200 rounded-lg">
+                {/* <div className="mt-6 border border-gray-200 rounded-lg">
                   <button
                     className="w-full flex items-center justify-between p-4"
                     onClick={() => setIsInstructionsOpen(!isInstructionsOpen)}
@@ -330,7 +330,7 @@ export default function Viewcart() {
                       />
                     </div>
                   )}
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

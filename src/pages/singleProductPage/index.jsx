@@ -232,31 +232,31 @@ export default function ProductPage() {
           </div>
 
           {/* Product Info */}
-          <div className="w-full lg:w-2/5 xl:w-1/2 mt-8 lg:mt-0">
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+          <div className="w-full lg:w-2/5 xl:w-1/2  lg:mt-0">
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
               {product.name}
             </h1>
 
             {/* Price */}
-            <div className="flex items-baseline mb-6">
-              <p className="text-3xl font-bold text-gray-900">₹{product.mrp}</p>
-              {product.mrp !== product.price && (
+            <div className="flex items-baseline mb-2">
+              <p className="text-xl font-bold text-gray-700">₹{product.mrp}</p>
+              {/* {product.mrp !== product.price && (
                 <p className="ml-4 text-lg text-gray-500 line-through">
                   ₹{product.price}
                 </p>
-              )}
+              )} */}
             </div>
 
             {/* Share Button */}
-            <div className="flex items-center mb-8">
+            {/* <div className="flex items-center mb-8">
               <button className="flex items-center text-gray-500 hover:text-gray-900 transition-colors">
                 <Share2 className="w-5 h-5 mr-2" />
                 <span>Share</span>
               </button>
-            </div>
+            </div> */}
 
             {/* Divider */}
-            <div className="border-t border-gray-200 my-8"></div>
+            <div className="border-t border-gray-200 my-1"></div>
 
             {/* Color Selection */}
             {product.colors && product.colors.length > 0 && (
@@ -334,14 +334,16 @@ export default function ProductPage() {
             {/* Buttons */}
             <div className="space-y-4 mt-8">
               <button
-                className="w-full py-4 bg-green-500 hover:bg-green-600 text-white font-medium rounded-md flex items-center justify-center transition-colors group"
                 onClick={addToCart}
+                type="button"
+                class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 shadow-lg shadow-pink-500/50 dark:shadow-lg dark:shadow-pink-800/80 font-medium rounded-lg text-sm px-5 py-3 text-center me-2 mb-2 mt-6  mr-8 flex items-center justify-center w-full  "
               >
                 <ShoppingBag className="w-5 h-5 mr-2" />
-                <span>Add to cart</span>
+                Add to cart
               </button>
+
               <button
-                className="w-full py-4 border border-gray-300 hover:bg-gray-50 text-gray-900 font-medium rounded-md flex items-center justify-center transition-colors"
+                className="w-full py-3 border border-gray-300 hover:bg-gray-50 text-gray-900 font-medium rounded-md flex items-center justify-center transition-colors"
                 onClick={buyitNow}
               >
                 <span>Buy it now</span>
@@ -351,8 +353,8 @@ export default function ProductPage() {
 
             {/* Description */}
             {product.description && (
-              <div className="mt-12">
-                <h3 className="font-medium text-gray-900 mb-4">Description</h3>
+              <div className="mt-2">
+                <h3 className="font-medium text-gray-900 mb-1">Description</h3>
                 <div className="prose prose-sm text-gray-700">
                   <p>{product.description}</p>
                 </div>
