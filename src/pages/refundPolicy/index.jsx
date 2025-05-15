@@ -60,7 +60,7 @@ export default function RefundPolicy() {
               ></path>
             </svg>
             <span>
-              You are eligible for a full reimbursement within 14 calendar days
+              You are eligible for a full reimbursement within 7 calendar days
               of receiving the product.
             </span>
           </li>
@@ -79,7 +79,7 @@ export default function RefundPolicy() {
               ></path>
             </svg>
             <span>
-              After the 14-day period, products will no longer be eligible for
+              After the 7-day period, products will no longer be eligible for
               Return and Exchange, and you won't be able to receive a refund.
             </span>
           </li>
