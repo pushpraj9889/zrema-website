@@ -32,6 +32,14 @@ const ReturnPolicy = () => {
                   with unboxing video proof. The product should be unused, with
                   original tags and packaging intact.
                 </p>
+                <p className="text-gray-700 mb-4">
+                  We accept return and damage, Replacement products in 7
+                  business day.
+                </p>
+                <p className="text-gray-700 mb-4">
+                  Replacement and damage products will be delivered in 5 to 7
+                  business day.
+                </p>
 
                 <div className="bg-pink-50 p-4 rounded-md border-l-4 border-pink-400 mt-4">
                   <h3 className="font-medium text-pink-700 mb-2">
