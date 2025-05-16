@@ -100,7 +100,7 @@ export default function ShippingPolicy() {
               Order Processing Time
             </h2>
             <p className="mt-3 text-gray-600">
-              Orders are typically processed within{" "}
+              Orders are typically Delivered within{" "}
               <span className="font-medium">3 business days</span> from order
               confirmation.
             </p>
