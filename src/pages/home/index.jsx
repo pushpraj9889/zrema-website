@@ -108,7 +108,7 @@ export default function Home() {
           </button>
         </div>
         <SocialStoriesSection />
-        <QazmiBestsellers />
+        {/* <QazmiBestsellers /> */}
         <BestsellersSection />
         <QazmiTestimonials />
         {/* <QazmiFooter /> */}
