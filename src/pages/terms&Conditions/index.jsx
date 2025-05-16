@@ -30,6 +30,16 @@ export default function TermsOfService() {
           <p className="mt-2 text-pink-100">Last Updated: May 13, 2025</p>
         </div>
 
+        <div>
+          <p className="text-gray-700">
+            All products shown on the website are hand-made and may have slight
+            variations. Prices and availability are subject to change without
+            prior notice. We reserve the right to refuse or cancel orders in
+            case of suspicious activity or pricing errors. Customers are
+            responsible for providing accurate shipping details.
+          </p>
+        </div>
+
         {/* Introduction */}
         <div className="px-6 pt-6 pb-2">
           <div className="bg-pink-50 border-l-4 border-pink-500 rounded-lg p-5">

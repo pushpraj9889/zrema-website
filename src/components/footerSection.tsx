@@ -9,6 +9,7 @@ export default function QazmiFooter() {
     { id: 5, title: "Terms & Conditions", url: "/T&C" },
     { id: 6, title: "About Us", url: "/AboutUs" },
     { id: 7, title: "Contact Us", url: "/Contact" },
+    { id: 8, title: "Return Policy", url: "/return_policy" },
   ];
 
   return (
@@ -54,6 +55,14 @@ export default function QazmiFooter() {
               className="text-gray-700 hover:text-pink-500 text-sm"
             >
               {footerLinks[4]?.title}
+            </a>
+          </div>
+          <div>
+            <a
+              href={footerLinks[7].url}
+              className="text-gray-700 hover:text-pink-500 text-sm"
+            >
+              {footerLinks[7]?.title}
             </a>
           </div>
         </div>
@@ -108,7 +117,7 @@ export default function QazmiFooter() {
           </a>
         </div>
         <div className="text-gray-600 text-sm text-center">
-          © 2025 Zrema, Powered by Zrema Owners
+          © 2025 Zrema, M S A SHAH CREATIONS
         </div>
         <div className="mt-4 md:mt-0">
           <div className="flex space-x-2">

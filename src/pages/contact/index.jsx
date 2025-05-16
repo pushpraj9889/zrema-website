@@ -194,6 +194,10 @@ export default function Contact() {
             <div className="bg-black text-white p-6 rounded">
               <h3 className="text-xl font-semibold mb-3">Zrema</h3>
               <p className="mb-1">Sector 100, 004</p>
+              <p>
+                Phone: +91 79820 33215 We’re available Monday to Saturday, 10 AM
+                – 6 PM.
+              </p>
               <p className="mb-3">201303 Noida</p>
               <p className="mb-1">
                 India{" "}

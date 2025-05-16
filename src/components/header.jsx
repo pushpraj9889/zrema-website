@@ -70,37 +70,37 @@ export default function HeaderSection() {
         <nav className="hidden lg:block mt-4">
           <ul className="flex justify-center space-x-8">
             <li>
-              <a href="#" className="text-gray-800 font-medium">
+              <a href="/Collections" className="text-gray-800 font-medium">
                 SHORT KURTIS
               </a>
             </li>
             <li>
-              <a href="#" className="text-gray-800 font-medium">
+              <a href="/Collections" className="text-gray-800 font-medium">
                 LONG KURTIS
               </a>
             </li>
             <li>
-              <a href="#" className="text-gray-800 font-medium">
+              <a href="/Collections" className="text-gray-800 font-medium">
                 A-LINE KURTIS
               </a>
             </li>
             <li>
-              <a href="#" className="text-gray-800 font-medium">
+              <a href="/Collections" className="text-gray-800 font-medium">
                 CHINARKARI
               </a>
             </li>
             <li>
-              <a href="#" className="text-gray-800 font-medium">
+              <a href="/Collections" className="text-gray-800 font-medium">
                 KAFTANS
               </a>
             </li>
             <li>
-              <a href="#" className="text-gray-800 font-medium">
+              <a href="/Collections" className="text-gray-800 font-medium">
                 KURTA SETS
               </a>
             </li>
             <li>
-              <a href="#" className="text-gray-800 font-medium">
+              <a href="/Contact" className="text-gray-800 font-medium">
                 CONTACT
               </a>
             </li>
@@ -117,37 +117,55 @@ export default function HeaderSection() {
           <div className="lg:hidden absolute top-20 left-0 w-full z-50 bg-white shadow-lg">
             <ul className="py-2">
               <li>
-                <a href="#" className="block px-4 py-2 text-gray-800">
+                <a
+                  href="/Collections"
+                  className="block px-4 py-2 text-gray-800"
+                >
                   SHORT KURTIS
                 </a>
               </li>
               <li>
-                <a href="#" className="block px-4 py-2 text-gray-800">
+                <a
+                  href="/Collections"
+                  className="block px-4 py-2 text-gray-800"
+                >
                   LONG KURTIS
                 </a>
               </li>
               <li>
-                <a href="#" className="block px-4 py-2 text-gray-800">
+                <a
+                  href="/Collections"
+                  className="block px-4 py-2 text-gray-800"
+                >
                   A-LINE KURTIS
                 </a>
               </li>
               <li>
-                <a href="#" className="block px-4 py-2 text-gray-800">
+                <a
+                  href="/Collections"
+                  className="block px-4 py-2 text-gray-800"
+                >
                   CHINARKARI
                 </a>
               </li>
               <li>
-                <a href="#" className="block px-4 py-2 text-gray-800">
+                <a
+                  href="/Collections"
+                  className="block px-4 py-2 text-gray-800"
+                >
                   KAFTANS
                 </a>
               </li>
               <li>
-                <a href="#" className="block px-4 py-2 text-gray-800">
+                <a
+                  href="/Collections"
+                  className="block px-4 py-2 text-gray-800"
+                >
                   KURTA SETS
                 </a>
               </li>
               <li>
-                <a href="#" className="block px-4 py-2 text-gray-800">
+                <a href="/Contact" className="block px-4 py-2 text-gray-800">
                   CONTACT
                 </a>
               </li>

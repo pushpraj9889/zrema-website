@@ -13,6 +13,8 @@ import ShippingPolicy from "./pages/shippingPolicy";
 import TermsOfService from "./pages/terms&Conditions";
 import Contact from "./pages/contact";
 import AboutUs from "./pages/AboutUs";
+import Collections from "./pages/collections";
+import ReturnPolicy from "./pages/returnPolicy";
 
 export default function App() {
   const location = useLocation();
@@ -39,6 +41,8 @@ export default function App() {
         <Route path="/T&C" element={<TermsOfService />}></Route>
         <Route path="/Contact" element={<Contact />}></Route>
         <Route path="/AboutUs" element={<AboutUs />}></Route>
+        <Route path="/Collections" element={<Collections />}></Route>
+        <Route path="/return_policy" element={<ReturnPolicy />}></Route>
       </Routes>
       <QazmiFooter />
     </>
