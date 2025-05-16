@@ -52,6 +52,9 @@ export default function Home() {
   const onClick = () => {
     navigate("/Collections");
   };
+  const viewAllclick = () => {
+    navigate("/Collections");
+  };
   return (
     <div>
       <section className="py-8 bg-gray-100">
@@ -103,7 +106,10 @@ export default function Home() {
       <div>
         <Bestsellersection />
         <div className="flex items-center justify-center ">
-          <button className="text-center text-white text-lg mx-auto bg-primary px-8 py-4 rounded-[30px]">
+          <button
+            className="text-center text-white text-lg mx-auto bg-primary px-8 py-4 rounded-[30px]"
+            onClick={viewAllclick}
+          >
             View All
           </button>
         </div>

@@ -124,7 +124,7 @@ export default function HeaderSection() {
                   SHORT KURTIS
                 </a>
               </li>
-              <li>
+              {/* <li>
                 <a
                   href="/Collections"
                   className="block px-4 py-2 text-gray-800"
@@ -163,17 +163,17 @@ export default function HeaderSection() {
                 >
                   KURTA SETS
                 </a>
-              </li>
+              </li> */}
               <li>
                 <a href="/Contact" className="block px-4 py-2 text-gray-800">
                   CONTACT
                 </a>
               </li>
-              <li>
+              {/* <li>
                 <a href="#" className="block px-4 py-2 text-red-500">
                   SALE
                 </a>
-              </li>
+              </li> */}
             </ul>
           </div>
         )}

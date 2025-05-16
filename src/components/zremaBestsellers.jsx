@@ -76,6 +76,9 @@ export default function QazmiBestsellers() {
       };
     }
   }, [products]); // Re-check when products load
+  const viewAllClick = () => {
+    navigate("/Collections");
+  };
 
   return (
     <section className="w-full max-w-7xl mx-auto px-4 py-8 md:py-12">
@@ -192,7 +195,10 @@ export default function QazmiBestsellers() {
       {/* Scroll indicators - visual dots for mobile */}
       {/* "View All" button */}
       <div className="text-center mt-1">
-        <button className="px-8 py-3 bg-pink-500 text-white rounded-full font-medium hover:bg-pink-600 transition-colors">
+        <button
+          className="px-8 py-3 bg-pink-500 text-white rounded-full font-medium hover:bg-pink-600 transition-colors"
+          onClick={viewAllClick}
+        >
           View All Bestsellers
         </button>
       </div>
