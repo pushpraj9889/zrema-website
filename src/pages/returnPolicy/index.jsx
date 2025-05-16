@@ -108,7 +108,7 @@ const ReturnPolicy = () => {
                   us at:
                 </p>
                 <p className="text-pink-600 font-bold mt-2">
-                  nfo@zrema.in | +91 79820 33215
+                  info@zrema.in | +91 79820 33215
                 </p>
               </div>
             </div>
