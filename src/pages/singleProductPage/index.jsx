@@ -31,14 +31,7 @@ export default function ProductPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.post(
-        `https://api.zrema.in/product/update/${id}`,
-        {
-          name: "Chikenkari Kurti",
-          mrp: 675,
-          description: "Beautiful kurti with floral designs",
-        }
-      );
+      const response = await axios.post(`https://api.zrema.in/product/${id}`);
 
       if (response?.data) {
         setProduct(response.data);
