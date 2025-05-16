@@ -66,6 +66,63 @@ export default function RefundPolicy() {
           </li>
           <li className="flex items-start">
             <svg
+              className="h-5 w-5 text-indigo-500 mr-2 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+            <span>
+              We accept return and damage, Replacement products in 7 business
+              day.
+            </span>
+          </li>
+          <li className="flex items-start">
+            <svg
+              className="h-5 w-5 text-indigo-500 mr-2 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+            <span>
+              If any case your refund is approved your amount will be credited
+              within 5 to 7 business day to the original payment method.
+            </span>
+          </li>
+          <li className="flex items-start">
+            <svg
+              className="h-5 w-5 text-indigo-500 mr-2 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+            <span>
+              Replacement and damage products will be delivered in 5 to 7
+              business day.
+            </span>
+          </li>
+          <li className="flex items-start">
+            <svg
               className="h-5 w-5 text-red-500 mr-2 mt-0.5"
               fill="none"
               stroke="currentColor"
