@@ -24,7 +24,8 @@ export default function Home() {
     },
     {
       name: "CHINARKARI",
-      image: "https://m.media-amazon.com/images/I/51OSXJDeVlL._SX679",
+      image:
+        "https://zrema.s3.ap-south-1.amazonaws.com/images/5538ea514c51770a7f9e3771af7d2752.jpg",
       alt: "Chinarkari",
       link: "/Collections/CHINARKARI",
     },

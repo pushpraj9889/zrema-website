@@ -13,6 +13,7 @@ import { addTocartAction } from "../../redux/actions";
 import QazmiCart from "../../components/cat";
 import { useDispatch } from "react-redux";
 import axios from "axios";
+import SizeChart from "../../components/sizecart";
 
 export default function ProductPage() {
   const { id } = useParams();
@@ -26,6 +27,7 @@ export default function ProductPage() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showSizeChart, setShowSizeChart] = useState(false);
 
   const getProductById = async () => {
     setIsLoading(true);
@@ -68,7 +70,8 @@ export default function ProductPage() {
     setIsCartOpen(true);
   };
   const buyitNow = () => {
-    dispatch(addTocartAction(productToAdd));
+    console.log("buyitnow");
+    dispatch(addTocartAction(product));
     navigate("/CheckoutPage");
   };
 
@@ -291,11 +294,31 @@ export default function ProductPage() {
               <div className="mb-8">
                 <div className="flex justify-between items-center mb-3">
                   <h3 className="font-medium text-gray-900">Size</h3>
-                  <button className="flex items-center text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                  <button
+                    className="flex items-center text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                    onClick={() => setShowSizeChart(true)}
+                  >
                     <Ruler className="w-4 h-4 mr-1" />
                     <span>Size guide</span>
                   </button>
                 </div>
+                {/* {showSizeChart && (
+                  <SizeChart
+                    showSizeChart={showSizeChart}
+                    setShowSizeChart={setShowSizeChart}
+                  />
+                )} */}
+                {showSizeChart && (
+                  <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
+                    <div className="relative w-full max-w-4xl mx-auto bg-white p-4 rounded-md shadow-lg">
+                      {/* ...existing SizeChart content... */}
+                      <SizeChart
+                        showSizeChart={showSizeChart}
+                        setShowSizeChart={setShowSizeChart}
+                      />
+                    </div>
+                  </div>
+                )}
                 <div className="flex flex-wrap gap-3">
                   {product.size.map((size) => (
                     <button
@@ -325,6 +348,16 @@ export default function ProductPage() {
             )}
 
             {/* Buttons */}
+
+            {/* Description */}
+            {product.description && (
+              <div className="mt-2">
+                <h3 className="font-medium text-gray-900 mb-1">Description</h3>
+                <div className="prose prose-sm text-gray-700">
+                  <p>{product.description}</p>
+                </div>
+              </div>
+            )}
             <div className="space-y-4 mt-8">
               <button
                 onClick={addToCart}
@@ -343,16 +376,6 @@ export default function ProductPage() {
                 <ArrowRight className="w-5 h-5 ml-2" />
               </button>
             </div>
-
-            {/* Description */}
-            {product.description && (
-              <div className="mt-2">
-                <h3 className="font-medium text-gray-900 mb-1">Description</h3>
-                <div className="prose prose-sm text-gray-700">
-                  <p>{product.description}</p>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>

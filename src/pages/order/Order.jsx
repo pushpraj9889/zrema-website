@@ -2,6 +2,7 @@ import React, { useState, useMemo } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import AddressBillingFields from "../../components/addressBillingFeilds";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Order() {
   const [billingAddressOption, setBillingAddressOption] = useState("same");
@@ -58,7 +59,10 @@ export default function Order() {
             alert("Redirecting to payment gateway...");
           } else {
             // For COD, just show success
-            alert("Order placed successfully with Cash on Delivery!");
+            toast("Order placed successfully with Cash on Delivery!");
+            // toast("Order placed successfully with Cash on Delivery!");
+
+            // alert("Order placed successfully with Cash on Delivery!");
           }
         }
       } catch (error) {
@@ -141,7 +145,7 @@ export default function Order() {
                 <div className="absolute bottom-0 left-0 w-full h-1 bg-indigo-600 rounded-b-xl"></div>
               </div>
 
-              <div className="bg-white border border-gray-200 rounded-xl p-5 text-center shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer opacity-70 hover:opacity-100">
+              {/* <div className="bg-white border border-gray-200 rounded-xl p-5 text-center shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer opacity-70 hover:opacity-100">
                 <div className="text-gray-500 text-4xl mb-2">✈️</div>
                 <h3 className="font-bold text-gray-700 mb-1">
                   Express Shipping
@@ -149,8 +153,8 @@ export default function Order() {
                 <p className="text-gray-500 text-sm">
                   Delivered in 1-2 business days
                 </p>
-                <p className="text-indigo-600 font-bold mt-2">+$12.99</p>
-              </div>
+                <p className="text-indigo-600 font-bold mt-2">rs :400</p>
+              </div> */}
             </div>
           </div>
 
@@ -394,6 +398,22 @@ export default function Order() {
                   : "bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600"
               } text-white py-4 px-6 rounded-xl font-semibold shadow-lg transition-all duration-300 flex items-center justify-center`}
             >
+              <Toaster
+                toastOptions={{
+                  style: {
+                    background: "#4338ca", // Indigo background color
+                    color: "#ffffff", // White text color
+                    padding: "16px",
+                    borderRadius: "10px",
+                  },
+                  success: {
+                    iconTheme: {
+                      primary: "#10b981", // Green check icon
+                      secondary: "#ffffff", // White background for icon
+                    },
+                  },
+                }}
+              />
               {loading ? (
                 <>
                   <svg

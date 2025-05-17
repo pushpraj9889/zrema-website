@@ -80,66 +80,6 @@ export default function Viewcart() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center">
-            <a href="/" className="text-3xl font-serif font-semibold italic">
-              Zrema
-            </a>
-          </div>
-
-          <div className="flex items-center space-x-4">
-            <button className="hidden md:block p-2">
-              <Search size={20} />
-            </button>
-            <button className="hidden md:block p-2">
-              <User size={20} />
-            </button>
-            <div
-              className="relative"
-              onClick={bagClick}
-              // onClick={cardOpen}
-            >
-              <ShoppingBag size={20} />
-              <span className="absolute -top-1 -right-1 bg-pink-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                3
-              </span>
-            </div>
-            {isCartOpen && (
-              <QazmiCart isOpen={isCartOpen} setIsOpen={setIsCartOpen} />
-            )}
-          </div>
-        </div>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden md:block border-t border-gray-200">
-          <div className="container mx-auto">
-            <ul className="flex justify-center space-x-8 py-4">
-              {categories.map((category, index) => (
-                <li key={index}>
-                  <a
-                    href="#"
-                    className={`text-gray-800 hover:text-pink-600 font-medium text-sm ${
-                      category === "SALE" ? "text-red-500" : ""
-                    }`}
-                  >
-                    {category}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </nav>
-
-        {/* Mobile Navigation (simplified for cart page) */}
-        <nav className="md:hidden border-t border-gray-200">
-          <div className="container mx-auto">
-            <div className="py-3 px-4">
-              <h1 className="text-lg font-medium">Your Shopping Cart</h1>
-            </div>
-          </div>
-        </nav>
-      </header>
 
       {/* Main content */}
       <main className="flex-1">

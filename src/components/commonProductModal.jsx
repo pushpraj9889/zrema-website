@@ -22,6 +22,11 @@ export default function QazmiCartProdcut({ isOpen, setIsOpen, productdata }) {
     dispatch(addTocartAction(productdata));
     setIsCartOpen(true);
   };
+  const buyitNow = () => {
+    console.log("buyitnow");
+    dispatch(addTocartAction(productdata));
+    navigate("/CheckoutPage");
+  };
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden ">
@@ -107,6 +112,7 @@ export default function QazmiCartProdcut({ isOpen, setIsOpen, productdata }) {
               <button
                 type="button "
                 class="border-2 border-black mb-2 mt-2 ml-5 mr-8 text-black py-2 rounded"
+                onClick={buyitNow}
               >
                 Buy it now
               </button>

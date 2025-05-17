@@ -263,7 +263,10 @@ export default function HeaderSection() {
               </a>
             </li>
             <li>
-              <a href="/Collections" className="text-gray-800 font-medium">
+              <a
+                href="/Collections/Chikankari"
+                className="text-gray-800 font-medium"
+              >
                 CHINARKARI
               </a>
             </li>
@@ -321,7 +324,7 @@ export default function HeaderSection() {
               </li>
               <li>
                 <a
-                  href="/Collections"
+                  href="/Collections/Chikankari"
                   className="block px-4 py-2 text-gray-800"
                 >
                   CHINARKARI

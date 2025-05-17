@@ -9,17 +9,27 @@ const Collections = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const navigate = useNavigate();
-  const { subcategory } = useParams();
+  const { subcategory, category } = useParams();
   const [loading, setLoading] = useState(true);
+  console.log("kjdsjkdfsf", category, subcategory);
 
   const bestSellerCall = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(
-        `https://api.zrema.in/product/all?subcategory=${encodeURIComponent(
+
+      let url = "https://api.zrema.in/product/all";
+
+      if (subcategory === "Chikankari") {
+        url = `https://api.zrema.in/product/all?category=${encodeURIComponent(
           subcategory
-        )}`
-      );
+        )}`;
+      } else if (subcategory) {
+        url = `https://api.zrema.in/product/all?subcategory=${encodeURIComponent(
+          subcategory
+        )}`;
+      }
+
+      const response = await axios.get(url);
       setProducts(response.data);
     } catch (error) {
       console.error("Error fetching products:", error);

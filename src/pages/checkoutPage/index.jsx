@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/images/LOGO.jpg";
-import { BadgeIcon } from "lucide-react";
+import {
+  BadgeIcon,
+  BandageIcon,
+  ShoppingBag,
+  ShoppingBagIcon,
+} from "lucide-react";
 import { UserDetailsAction } from "../../redux/actions";
 
 const CheckoutPage = () => {
@@ -23,6 +28,7 @@ const CheckoutPage = () => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const logoClick = () => {};
 
   // Calculate totals
   const subtotal = cart.reduce(
@@ -107,12 +113,29 @@ const CheckoutPage = () => {
       <header className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-2 flex items-center justify-between">
           <div className="flex items-center">
-            <button className="mr-4 text-gray-500" onClick={() => navigate(-1)}>
-              <i className="fas fa-arrow-left"></i>
-            </button>
-            <img src={logo} alt="Logo" className="h-10 w-auto" />
+            {/* <button className="mr-4 text-gray-500" onClick={() => navigate(-1)}>
+    <i className="fas fa-arrow-left"></i>
+  </button> */}
+            <a
+              href="/"
+              className="flex items-center font-serif text-3xl text-gray-800 font-bold italic"
+            >
+              <img
+                src={logo}
+                alt="Logo"
+                className="h-10 w-auto cursor-pointer"
+                onClick={logoClick}
+              />
+            </a>
           </div>
-          <BadgeIcon className="h-8 w-8 cursor-pointer" onClick={bagclick} />
+          <button className="text-gray-800 relative" onClick={bagclick}>
+            <ShoppingBagIcon size={24} />
+            {/* <span className="absolute -top-2 -right-2 bg-pink-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+              {cart.length}
+            </span> */}
+          </button>
+
+          {/* <BandageIcon className="h-8 w-8 cursor-pointer" onClick={bagclick} /> */}
         </div>
       </header>
 

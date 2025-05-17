@@ -2,7 +2,7 @@ import React from "react";
 
 export default function QazmiFooter() {
   const footerLinks = [
-    { id: 1, title: " Order History", url: "#track-order" },
+    { id: 1, title: " Order History", url: "/OrderHistroy" },
     { id: 2, title: "Privacy Policy", url: "/privacy_policy" },
     { id: 3, title: "Refund Policy", url: "/refund_policy" },
     { id: 4, title: "Shipping Policy", url: "/shipping_policy" },

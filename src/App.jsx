@@ -15,13 +15,14 @@ import Contact from "./pages/contact";
 import AboutUs from "./pages/AboutUs";
 import Collections from "./pages/collections";
 import ReturnPolicy from "./pages/returnPolicy";
+import OrderHistroy from "./pages/orderHistory";
 
 export default function App() {
   const location = useLocation();
   const noHeaderRoutes = [
     "/CheckoutPage",
     // "/ProductPage",
-    "/QazmiCartPage",
+    // "/QazmiCartPage",
     "/Order",
   ];
   const shouldShowHeader = !noHeaderRoutes.includes(location.pathname);
@@ -45,8 +46,12 @@ export default function App() {
           path="/Collections/:subcategory"
           element={<Collections />}
         ></Route>
+        <Route path="/Collections/:category" element={<Collections />}></Route>
+
+        <Route path="/Collections" element={<Collections />} />
 
         <Route path="/return_policy" element={<ReturnPolicy />}></Route>
+        <Route path="/OrderHistroy" element={<OrderHistroy />}></Route>
       </Routes>
       <QazmiFooter />
     </>

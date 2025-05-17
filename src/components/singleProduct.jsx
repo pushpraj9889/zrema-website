@@ -22,6 +22,11 @@ export default function ProductPage() {
     ],
     thumbnails: ["/api/placeholder/80/100", "/api/placeholder/80/100"],
   };
+  const buyitNow = () => {
+    console.log("buyitnow");
+    dispatch(addTocartAction(product));
+    navigate("/CheckoutPage");
+  };
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -225,7 +230,10 @@ export default function ProductPage() {
               <button className="w-full py-4 bg-green-400 hover:bg-green-500 text-white font-medium rounded transition">
                 Add to cart
               </button>
-              <button className="w-full py-4 border border-gray-300 hover:border-gray-400 font-medium rounded transition">
+              <button
+                className="w-full py-4 border border-gray-300 hover:border-gray-400 font-medium rounded transition"
+                onClick={buyitNow}
+              >
                 Buy it now
               </button>
             </div>
