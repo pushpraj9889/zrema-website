@@ -13,14 +13,14 @@ export default function QazmiTestimonials() {
     {
       id: 2,
       quote:
-        "I fell in love with Zrema's A-line kurtis. They offer the perfect blend of style and comfort, making me feel effortlessly chic every time I wear one.",
+        "I fell in love with Zrema's kashmiri kurti. They offer the perfect blend of style and comfort, making me feel effortlessly chic every time I wear one.",
       author: "Aisha M.",
       rating: 5,
     },
     {
       id: 3,
       quote:
-        "Zrema's kaftans are a game-changer! They are not just stylish but also incredibly comfortable. Perfect for when I want to look elegant without compromising on comfort.",
+        "Zrema's short kurti are a game-changer! They are not just stylish but also incredibly comfortable. Perfect for when I want to look elegant without compromising on comfort.",
       author: "Neha R.",
       rating: 5,
     },

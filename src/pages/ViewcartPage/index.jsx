@@ -70,9 +70,8 @@ export default function Viewcart() {
   const categories = [
     "SHORT KURTIS",
     "LONG KURTIS",
-    "A-LINE KURTIS",
+    // "A-LINE KURTIS",
     "CHINARKARI",
-    "KAFTANS",
     "KURTA SETS",
     "CONTACT",
     "SALE",

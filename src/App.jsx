@@ -41,7 +41,11 @@ export default function App() {
         <Route path="/T&C" element={<TermsOfService />}></Route>
         <Route path="/Contact" element={<Contact />}></Route>
         <Route path="/AboutUs" element={<AboutUs />}></Route>
-        <Route path="/Collections" element={<Collections />}></Route>
+        <Route
+          path="/Collections/:subcategory"
+          element={<Collections />}
+        ></Route>
+
         <Route path="/return_policy" element={<ReturnPolicy />}></Route>
       </Routes>
       <QazmiFooter />

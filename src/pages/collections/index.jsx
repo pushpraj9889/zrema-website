@@ -1,24 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { ArrowUp, ShoppingBasket } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-
-// import QazmiCartProdcut from "./commonProductModal";
-import { get } from "../../Services/apicallMethode";
+import { useNavigate, useParams } from "react-router-dom";
 import QazmiCartProdcut from "../../components/commonProductModal";
+import axios from "axios";
 
 const Collections = () => {
   const [products, setProducts] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const navigate = useNavigate();
+  const { subcategory } = useParams();
+  const [loading, setLoading] = useState(true);
 
   const bestSellerCall = async () => {
     try {
-      const responsedata = await get("/product/all");
-      console.log("responsedata", responsedata);
-      setProducts(responsedata);
+      setLoading(true);
+      const response = await axios.get(
+        `https://api.zrema.in/product/all?subcategory=${encodeURIComponent(
+          subcategory
+        )}`
+      );
+      setProducts(response.data);
     } catch (error) {
-      console.log("getting error", error);
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -44,7 +50,7 @@ const Collections = () => {
       <div className="container mx-auto px-4">
         {/* Section Title */}
         <h2 className="text-xl sm:text-4xl md:text-4xl font-serif text-center mb-8 font-black">
-          Discover Bestsellers
+          Discover {subcategory}
         </h2>
 
         {/* Products Grid Container */}

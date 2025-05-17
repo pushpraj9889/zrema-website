@@ -19,6 +19,7 @@ const BestsellersSection = () => {
   const [products, setProducts] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const navigate = useNavigate();
+  const [selectedProduct, setSelectedProduct] = useState(null);
   // More products to demonstrate scrolling
   // console.log("fdsggsjsgjdk", products);
   console.log("gettingProductLog", products);
@@ -173,19 +174,22 @@ const BestsellersSection = () => {
                         onClick={() => viewPagePree(product._id)}
                       />
                     </div>
-                    <div className="absolute bottom-190 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="absolute bottom-250 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button
-                        className="bg-green-600 text-white p-2 rounded-full shadow-md hover:bg-green-800"
-                        aria-label="Add to bag"
-                        onClick={() => setIsCartOpen(true)}
+                        className="bg-pink-600 hover:bg-green-700 text-white p-3 rounded-full shadow-lg transition duration-300 ease-in-out"
+                        aria-label="Add to cart"
+                        onClick={() => {
+                          setIsCartOpen(true);
+                          setSelectedProduct(product); // Ensure only one product modal is open
+                        }}
                       >
-                        <ShoppingBasket />
+                        <ShoppingBasket size={20} />
                       </button>
-                      {isCartOpen && (
+                      {isCartOpen && selectedProduct && (
                         <QazmiCartProdcut
                           isOpen={isCartOpen}
                           setIsOpen={setIsCartOpen}
-                          productdata={product}
+                          productdata={selectedProduct}
                         />
                       )}
                     </div>

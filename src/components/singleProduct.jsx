@@ -90,9 +90,9 @@ export default function ProductPage() {
           <ul className="flex justify-center space-x-6">
             <li className="font-medium">SHORT KURTIS</li>
             <li className="font-medium">LONG KURTIS</li>
-            <li className="font-medium">A-LINE KURTIS</li>
+            {/* <li className="font-medium">A-LINE KURTIS</li> */}
             <li className="font-medium">CHINARKARI</li>
-            <li className="font-medium">KAFTANS</li>
+            {/* <li className="font-medium">KAFTANS</li> */}
             <li className="font-medium">KURTA SETS</li>
             <li className="font-medium">CONTACT</li>
             <li className="font-medium bg-red-500 text-white px-2">SALE</li>

@@ -24,8 +24,8 @@ export default function QazmiBestsellers() {
   }, []);
 
   const navigate = useNavigate();
-  const viewProduct = () => {
-    navigate("./ProductPage");
+  const viewPagePree = (id) => {
+    navigate(`/ProductPage/${id}`);
   };
 
   // Check if scrolling is possible
@@ -95,21 +95,17 @@ export default function QazmiBestsellers() {
       {/* Category buttons - horizontally scrollable on all devices */}
       <div className="overflow-x-auto pb-6 mb-6">
         <div className="flex space-x-3 min-w-max md:justify-center">
-          {[
-            "A-LINE KURTIS",
-            "CHINARKARI",
-            "KAFTANS",
-            "KURTA SETS",
-            "LONG KURTIS",
-            "SHORT KURTIS",
-          ].map((category) => (
-            <button
-              key={category}
-              className="px-6 py-3 bg-pink-500 text-white rounded-full font-medium hover:bg-pink-600 transition-colors whitespace-nowrap"
-            >
-              {category}
-            </button>
-          ))}
+          {["CHINARKARI", "KURTA SETS", "LONG KURTIS", "SHORT KURTIS"].map(
+            (category) => (
+              <button
+                key={category}
+                onClick={() => navigate(`/Collections/${category}`)}
+                className="px-6 py-3 bg-pink-500 text-white rounded-full font-medium hover:bg-pink-600 transition-colors whitespace-nowrap"
+              >
+                {category}
+              </button>
+            )
+          )}
         </div>
       </div>
 
@@ -160,7 +156,7 @@ export default function QazmiBestsellers() {
                 <div className="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <button
                     className="bg-white text-gray-800 px-4 py-2 rounded-full font-medium transform -translate-y-2 group-hover:translate-y-0 transition-all"
-                    onClick={viewProduct}
+                    onClick={() => viewPagePree(product._id)}
                   >
                     Quick View
                   </button>
