@@ -229,7 +229,7 @@ export default function ProductPage() {
 
           {/* Product Info */}
           <div className="w-full lg:w-2/5 xl:w-1/2  lg:mt-0">
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+            <h1 className="text-[18px] sm:text-3xl font-bold text-gray-900 mb-2">
               {product.name}
             </h1>
 
@@ -325,7 +325,7 @@ export default function ProductPage() {
                       key={size}
                       className={`min-w-12 h-12 px-4 flex items-center justify-center rounded-md transition-all ${
                         selectedSize === size
-                          ? "bg-green-500 text-white"
+                          ? "bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:outline-none"
                           : "bg-gray-100 text-gray-800 hover:bg-gray-200"
                       }`}
                       onClick={() => setSelectedSize(size)}

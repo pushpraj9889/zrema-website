@@ -79,7 +79,7 @@ const Collections = () => {
               <div className="relative">
                 <img
                   src={product.images && product.images[0]}
-                  className="w-full h-[200px] sm:h-[250px] object-cover cursor-pointer"
+                  className="w-full h-[255px] sm:h-[320px] object-cover cursor-pointer"
                   alt={product.name}
                   onClick={() => viewProductPage(product._id)}
                 />
