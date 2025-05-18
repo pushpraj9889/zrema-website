@@ -137,16 +137,22 @@ export default function QazmiFooter() {
                 <path d="M12 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" />
               </svg>
             </a>
-            <div className="w-10 h-10 rounded-full bg-blue-400 flex items-center justify-center text-white">
-              <svg
-                width="20"
-                height="20"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
-              </svg>
-            </div>
+            <a
+              href="https://www.facebook.com/people/Zrema/61563987748616/?rdid=qi0MT2AV7QDc73WD&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F18wb7APyaU%2F"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div className="w-10 h-10 rounded-full bg-blue-400 flex items-center justify-center text-white">
+                <svg
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
+                </svg>
+              </div>
+            </a>
           </div>
         </div>
       </div>
