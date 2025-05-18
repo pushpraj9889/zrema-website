@@ -65,6 +65,9 @@ export default function Viewcart() {
   const checkoutclick = () => {
     navigate("/CheckoutPage");
   };
+  const continueShopping = () => {
+    navigate("/");
+  };
 
   // Navigation categories
   const categories = [
@@ -85,7 +88,7 @@ export default function Viewcart() {
       <main className="flex-1">
         <div className="container mx-auto px-4 py-6">
           {/* Continue shopping link */}
-          <div className="mb-6">
+          <div className="mb-6" onClick={continueShopping}>
             <a
               href="#"
               className="flex items-center text-pink-600 hover:text-pink-700 text-sm"
@@ -133,7 +136,7 @@ export default function Viewcart() {
                       </div>
 
                       <p className="mt-1 text-sm text-gray-500">
-                        {item.color} / {item.material} / {item.size}
+                        {item.fabric} / {item.selectedSize}
                       </p>
                     </div>
 

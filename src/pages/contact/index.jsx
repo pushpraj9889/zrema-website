@@ -112,7 +112,7 @@ export default function Contact() {
           {/* Right Column - Account Info and Contact Details */}
           <div className="md:w-1/3 space-y-6">
             {/* Account Details */}
-            <div className="bg-black text-white p-6 rounded">
+            {/* <div className="bg-black text-white p-6 rounded">
               <h3 className="text-xl font-semibold mb-3">Account details</h3>
               <p className="mb-4">
                 <a
@@ -149,10 +149,10 @@ export default function Contact() {
               >
                 Create an account
               </a>
-            </div>
+            </div> */}
 
             {/* Contact Us */}
-            <div className="bg-black text-white p-6 rounded">
+            <div className="bg-black text-white p-6 rounded mt-10">
               <h3 className="text-xl font-semibold mb-4">Contact Us</h3>
               <a
                 href="mailto:support@Zrema.in"

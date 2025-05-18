@@ -366,6 +366,9 @@ const CheckoutPage = () => {
                         ₹{item.mrp.toLocaleString("en-IN")}
                       </span>
                     </div>
+                    <div>
+                      <span>{item.selectedSize}</span>
+                    </div>
                   </div>
                 ))
               ) : (

@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import AddressBillingFields from "../../components/addressBillingFeilds";
 import toast, { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function Order() {
   const [billingAddressOption, setBillingAddressOption] = useState("same");
@@ -10,6 +11,7 @@ export default function Order() {
   const [loading, setLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("cod"); // Default to COD
   const { cart = [] } = useSelector((store) => store?.product || { cart: [] });
+  const navigate = useNavigate();
   console.log("billingAddressOption", billingAddressOption);
 
   const { userDetails = {} } = useSelector(
@@ -60,6 +62,9 @@ export default function Order() {
           } else {
             // For COD, just show success
             toast("Order placed successfully with Cash on Delivery!");
+            setTimeout(() => {
+              navigate("/OrderHistroy");
+            }, 1000);
             // toast("Order placed successfully with Cash on Delivery!");
 
             // alert("Order placed successfully with Cash on Delivery!");

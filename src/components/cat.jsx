@@ -45,6 +45,9 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
   };
 
   if (!isOpen) return null;
+  const continueShopping = () => {
+    setIsOpen(false);
+  };
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
@@ -71,7 +74,10 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
               </div>
 
               {/* Continue shopping link */}
-              <div className="px-4 py-3 border-b border-gray-200">
+              <div
+                className="px-4 py-3 border-b border-gray-200"
+                onClick={continueShopping}
+              >
                 <a
                   href="#"
                   className="flex items-center text-pink-600 hover:text-pink-700"
@@ -114,7 +120,8 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
                             </p>
                           </div>
                           <p className="mt-1 text-sm text-gray-500">
-                            {item.color} / {item.material} / {item.size}
+                            {/* {item.color} / {item.material} /  */}
+                            {item.fabric}/ {item.selectedSize}
                           </p>
                         </div>
 

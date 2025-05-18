@@ -4,6 +4,7 @@ import QazmiCart from "../components/cat"; // adjust path
 import { useSelector } from "react-redux";
 import axios from "axios";
 import useDebounce from "../utils/debounce";
+import ShippingBanner from "./shippingBanner";
 
 export default function HeaderSection() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -99,9 +100,10 @@ export default function HeaderSection() {
   return (
     <div className="flex flex-col bg-gray-50">
       {/* Free shipping banner */}
-      <div className="bg-pink-600 text-white text-center py-2 px-4">
+      {/* <div className="bg-pink-600 text-white text-center py-2 px-4">
         <p className="font-medium">Get Free Shipping on All Order!</p>
-      </div>
+      </div> */}
+      <ShippingBanner />
 
       {/* Header */}
       <header className="bg-white shadow-sm py-4 relative">

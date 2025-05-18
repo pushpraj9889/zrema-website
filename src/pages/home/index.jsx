@@ -27,14 +27,14 @@ export default function Home() {
       image:
         "https://zrema.s3.ap-south-1.amazonaws.com/images/5538ea514c51770a7f9e3771af7d2752.jpg",
       alt: "Chinarkari",
-      link: "/Collections/CHINARKARI",
+      link: "/Collections/Chikankari",
     },
     {
       name: "KASHMIRI SHORT KURTIS",
       image:
         "https://zrema.s3.ap-south-1.amazonaws.com/images/5ef70dfc752e4a8bf058eb9d36ee7330.jpg",
       alt: "Kaftans",
-      link: "/Collections/KAFTANS",
+      link: "/Collections/Kashmiri Short Kurti",
     },
     {
       name: "KURTA SETS",
@@ -117,7 +117,7 @@ export default function Home() {
         <div className="flex items-center justify-center">
           <a
             href="/Collections"
-            className="text-center text-white text-lg mx-auto bg-primary px-8 py-4 rounded-[30px]"
+            className="text-center text-white text-lg mx-auto bg-primary px-7 py-2 rounded-[30px]"
           >
             View All
           </a>
