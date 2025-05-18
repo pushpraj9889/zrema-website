@@ -76,25 +76,20 @@ export default function QazmiCartProdcut({ isOpen, setIsOpen, productdata }) {
               {/* </div> */}
               {/* </div> */}
               <span className="text-black ml-4 mt-2">Size</span>
-              <div className="flex ">
-                {productdata?.size?.map((item, index) => {
-                  return (
-                    <div
-                      onClick={() => onClick(index)}
-                      className="border ml-3 px-4 py-2"
-                    >
-                      <span
-                        className={`${
-                          selectIndex === index
-                            ? " text-red-400"
-                            : "text-green-500"
-                        }`}
-                      >
-                        {item}
-                      </span>
-                    </div>
-                  );
-                })}
+              <div className="flex flex-wrap gap-3">
+                {productdata?.size?.map((item, index) => (
+                  <button
+                    key={index}
+                    onClick={() => onClick(index)}
+                    className={`min-w-12 h-12 px-4 ml-4  mt-2 flex items-center justify-center rounded-md transition-all ${
+                      selectIndex === index
+                        ? "bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br text-white"
+                        : "bg-gray-100 text-gray-800 hover:bg-gray-200"
+                    }`}
+                  >
+                    {item}
+                  </button>
+                ))}
               </div>
 
               <span className="text-black ml-3 mt-3">
