@@ -6,7 +6,7 @@ const ShippingBanner = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setShowFirstMessage((prev) => !prev);
-    }, 8000); // change every 3 seconds
+    }, 6000); // change every 3 seconds
 
     return () => clearInterval(interval);
   }, []);
