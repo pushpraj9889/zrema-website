@@ -109,9 +109,9 @@ export default function HeaderSection() {
       <header className="bg-white shadow-sm py-4 relative">
         <div className="container mx-auto px-4 flex justify-between items-center">
           {/* Mobile menu button */}
-          <div className="block lg:hidden">
+          <div className="block lg:hidden mt-2">
             <button onClick={toggleMobileMenu} className="text-gray-800">
-              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {mobileMenuOpen ? <X size={22} /> : <Menu size={24} />}
             </button>
           </div>
 
