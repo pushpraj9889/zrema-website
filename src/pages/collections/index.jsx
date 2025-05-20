@@ -3,6 +3,7 @@ import { ArrowUp, ShoppingBasket } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import QazmiCartProdcut from "../../components/commonProductModal";
 import axios from "axios";
+import calculateMrp from "../../utils/commonFunctions";
 
 const Collections = () => {
   const [products, setProducts] = useState([]);
@@ -101,12 +102,16 @@ const Collections = () => {
                 <h3 className="text-sm font-normal text-center font-Lato line-clamp-2 h-10">
                   {product.name}
                 </h3>
-                <div className="flex justify-center items-center mt-2">
-                  <span className="text-primary line-through mr-2 text-xs sm:text-sm">
-                    Rs. {product.mrp?.toFixed(2)}
+                <div className="flex justify-center items-center mt-1">
+                  <span className="text-primary line-through mr-2 text-xs sm:text-s">
+                    Rs. {Number(product.mrp).toFixed(2)}
                   </span>
-                  <span className="text-black font-medium text-sm">
-                    Rs. {product.mrp?.toFixed(2)}
+                  <span className="text-black font-medium text-xs sm:text-s">
+                    Rs.{" "}
+                    {calculateMrp(
+                      Number(product.mrp),
+                      Number(product.discount)
+                    ).toFixed(2)}
                   </span>
                 </div>
               </div>

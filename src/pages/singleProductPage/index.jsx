@@ -229,7 +229,7 @@ export default function ProductPage() {
 
           {/* Product Info */}
           <div className="w-full lg:w-2/5 xl:w-1/2  lg:mt-0">
-            <h1 className="text-[18px] sm:text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-[18px] sm:text-xl font-bold text-gray-700 mb-2">
               {product.name}
             </h1>
 

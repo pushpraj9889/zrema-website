@@ -204,67 +204,6 @@ const CheckoutPage = () => {
             </div>
 
             {/* Payment Section */}
-            <div className="mb-8">
-              <h2 className="text-xl font-medium mb-4">Payment</h2>
-              <p className="text-gray-600 mb-4">
-                All transactions are secure and encrypted.
-              </p>
-
-              {/* Payment Option */}
-              <div className="border border-gray-300 rounded-md mb-4">
-                <div className="p-4 flex items-center justify-between">
-                  <div className="flex-1">
-                    <div className="font-medium">
-                      Razorpay Secure (UPI, Cards, Wallets, NetBanking)
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <img
-                      src="/api/placeholder/32/20"
-                      alt="UPI"
-                      className="h-5"
-                    />
-                    <img
-                      src="/api/placeholder/32/20"
-                      alt="Visa"
-                      className="h-5"
-                    />
-                    <img
-                      src="/api/placeholder/32/20"
-                      alt="Mastercard"
-                      className="h-5"
-                    />
-                    <img
-                      src="/api/placeholder/32/20"
-                      alt="Bank"
-                      className="h-5"
-                    />
-                    <span className="text-gray-500 text-sm">+17</span>
-                  </div>
-                </div>
-
-                {/* Payment Information */}
-                <div className="p-6 bg-gray-50 border-t border-gray-200 flex flex-col items-center">
-                  <div className="w-32 h-16 border border-gray-300 bg-white mb-6 flex items-center justify-center relative">
-                    <div className="absolute top-0 left-0 w-6 h-1 border-b border-gray-300 flex justify-between">
-                      <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-                      <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-                      <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-                    </div>
-                    <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                      <i className="fas fa-arrow-right text-gray-400"></i>
-                    </div>
-                  </div>
-                  <p className="text-center text-gray-700">
-                    After clicking "Pay now", you will be redirected to
-                    <br />
-                    Razorpay Secure (UPI, Cards, Wallets, NetBanking) to
-                    <br />
-                    complete your purchase securely.
-                  </p>
-                </div>
-              </div>
-            </div>
 
             {/* Billing Address Section */}
             <div className="mb-8">

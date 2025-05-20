@@ -58,7 +58,15 @@ export default function Order() {
           // If payment method is online, you could redirect to payment gateway here
           if (paymentMethod === "online") {
             // Redirect logic or show payment options would go here
-            alert("Redirecting to payment gateway...");
+            // alert("Redirecting to payment gateway...");
+            // navigate(response.data.paymentLink);
+            window.open(response.data.paymentLink, "_blank");
+
+            // 682a18114ee7e4c43be3fdd5z
+
+            // 682a18f24ee7e4c43be3fde6
+
+            // window.location.href = response.data.paymentLink;
           } else {
             // For COD, just show success
             toast("Order placed successfully with Cash on Delivery!");
@@ -127,48 +135,10 @@ export default function Order() {
           </div>
 
           {/* Shipping Method */}
-          <div className="mb-10">
-            <h2 className="text-xl font-semibold mb-4 flex items-center">
-              <div className="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center mr-2">
-                <div className="text-indigo-600 font-bold text-sm">1</div>
-              </div>
-              Shipping Method
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-white border-2 border-indigo-600 rounded-xl p-5 text-center relative shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer group">
-                <div className="absolute -top-2 -right-2 bg-indigo-600 text-white px-3 py-1 rounded-full text-xs font-bold">
-                  SELECTED
-                </div>
-                <div className="text-indigo-600 text-4xl mb-2">🚚</div>
-                <h3 className="font-bold text-gray-900 mb-1">
-                  Free Standard Shipping
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Delivered in 3-5 business days
-                </p>
-                <div className="absolute bottom-0 left-0 w-full h-1 bg-indigo-600 rounded-b-xl"></div>
-              </div>
-
-              {/* <div className="bg-white border border-gray-200 rounded-xl p-5 text-center shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer opacity-70 hover:opacity-100">
-                <div className="text-gray-500 text-4xl mb-2">✈️</div>
-                <h3 className="font-bold text-gray-700 mb-1">
-                  Express Shipping
-                </h3>
-                <p className="text-gray-500 text-sm">
-                  Delivered in 1-2 business days
-                </p>
-                <p className="text-indigo-600 font-bold mt-2">rs :400</p>
-              </div> */}
-            </div>
-          </div>
 
           {/* Payment Method Selection */}
           <div className="mb-10">
             <h2 className="text-xl font-semibold mb-4 flex items-center">
-              <div className="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center mr-2">
-                <div className="text-indigo-600 font-bold text-sm">2</div>
-              </div>
               Payment Method
             </h2>
 
@@ -271,77 +241,11 @@ export default function Order() {
                 </div>
               </div>
             </div>
-
-            {/* Show Razorpay details only when online payment is selected */}
-            {paymentMethod === "online" && (
-              <div className="border border-gray-200 rounded-xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl">
-                <div className="p-6 flex flex-col md:flex-row items-start md:items-center justify-between bg-white gap-4">
-                  <div className="flex items-center">
-                    <div>
-                      <div className="text-lg font-semibold text-gray-900">
-                        Razorpay Secure
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        UPI, Cards, Wallets, NetBanking
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 ml-9 md:ml-0">
-                    <img
-                      src="/api/placeholder/40/24"
-                      alt="UPI"
-                      className="h-6 shadow-sm rounded"
-                    />
-                    <img
-                      src="/api/placeholder/40/24"
-                      alt="Visa"
-                      className="h-6 shadow-sm rounded"
-                    />
-                    <img
-                      src="/api/placeholder/40/24"
-                      alt="Mastercard"
-                      className="h-6 shadow-sm rounded"
-                    />
-                    <span className="text-gray-400 text-sm font-medium bg-gray-100 px-2 py-1 rounded">
-                      +17
-                    </span>
-                  </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-6 text-center border-t border-gray-200">
-                  <div className="w-48 h-24 bg-white rounded-lg border border-gray-200 mx-auto mb-6 flex items-center justify-center relative shadow-md">
-                    <div className="absolute top-2 left-2 flex space-x-1">
-                      <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <div className="w-32 h-3 bg-gray-200 rounded-full mb-2"></div>
-                      <div className="w-24 h-2 bg-gray-100 rounded-full"></div>
-                    </div>
-                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-indigo-600 bg-indigo-100 rounded-full w-6 h-6 flex items-center justify-center">
-                      →
-                    </div>
-                  </div>
-                  <p className="text-gray-600 leading-relaxed text-sm">
-                    After clicking{" "}
-                    <strong className="text-indigo-600">
-                      "Complete Payment"
-                    </strong>
-                    , you will be redirected to <br />
-                    Razorpay Secure to complete your purchase securely.
-                  </p>
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Billing Address */}
           <div className="mb-10">
             <h2 className="text-xl font-semibold mb-4 flex items-center">
-              <div className="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center mr-2">
-                <div className="text-indigo-600 font-bold text-sm">3</div>
-              </div>
               Billing Address
             </h2>
 
@@ -481,8 +385,11 @@ export default function Order() {
           <h2 className="text-xl font-semibold mb-6 pb-4 border-b border-gray-200">
             Order Summary
           </h2>
-          <h6 className="text-xl font-semibold mb-6 pb-4 border-b border-gray-200">
-            Name: {userDetails?.first_name} Mobile:{userDetails.phone_number}
+          <h6 className="text-[18px] font-normal  border-gray-200">
+            Name: {userDetails?.first_name}
+          </h6>
+          <h6 className="text-[18px] font-normal mb-6 pb-4 border-b border-gray-200">
+            Mobile:{userDetails.phone_number}
           </h6>
           <h2 className="text-xl font-semibold mb-6 pb-4 border-b border-gray-200">
             Address:

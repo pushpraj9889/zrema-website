@@ -16,6 +16,7 @@ import AboutUs from "./pages/AboutUs";
 import Collections from "./pages/collections";
 import ReturnPolicy from "./pages/returnPolicy";
 import OrderHistroy from "./pages/orderHistory";
+import OrderStatus from "./pages/orderStatus";
 
 export default function App() {
   const location = useLocation();
@@ -52,6 +53,7 @@ export default function App() {
 
         <Route path="/return_policy" element={<ReturnPolicy />}></Route>
         <Route path="/OrderHistroy" element={<OrderHistroy />}></Route>
+        <Route path="/order-status" element={<OrderStatus />}></Route>
       </Routes>
       <QazmiFooter />
     </>

@@ -11,6 +11,7 @@ import axios from "axios";
 import { get } from "../Services/apicallMethode";
 import QazmiCart from "./commonProductModal";
 import QazmiCartProdcut from "./commonProductModal";
+import calculateMrp from "../utils/commonFunctions";
 
 const BestsellersSection = () => {
   const scrollContainerRef = useRef(null);
@@ -139,10 +140,14 @@ const BestsellersSection = () => {
                   </h3>
                   <div className="flex justify-center items-center mt-1">
                     <span className="text-primary line-through mr-2 text-xs sm:text-s">
-                      Rs. {product.mrp?.toFixed(2)}
+                      Rs. {Number(product.mrp).toFixed(2)}
                     </span>
                     <span className="text-black font-medium text-xs sm:text-s">
-                      Rs. {product.mrp?.toFixed(2)}
+                      Rs.{" "}
+                      {calculateMrp(
+                        Number(product.mrp),
+                        Number(product.discount)
+                      ).toFixed(2)}
                     </span>
                   </div>
                 </div>
@@ -197,12 +202,16 @@ const BestsellersSection = () => {
                       <h3 className="text-sm font-normal text-center font-Lato">
                         {product.name.slice(0, 30)}
                       </h3>
-                      <div className="flex justify-center items-center mb-2">
-                        <span className="text-primary line-through mr-2">
-                          Rs. {product.mrp?.toFixed(2)}
+                      <div className="flex justify-center items-center mt-1">
+                        <span className="text-primary line-through mr-2 text-xs sm:text-s">
+                          Rs. {Number(product.mrp).toFixed(2)}
                         </span>
-                        <span className="text-black font-medium">
-                          Rs. {product.mrp?.toFixed(2)}
+                        <span className="text-black font-medium text-xs sm:text-s">
+                          Rs.{" "}
+                          {calculateMrp(
+                            Number(product.mrp),
+                            Number(product.discount)
+                          ).toFixed(2)}
                         </span>
                       </div>
                     </div>

@@ -1,166 +1,259 @@
 import { useState } from "react";
-import { X, ChevronDown, ChevronUp, ArrowLeft } from "lucide-react";
+import {
+  X,
+  ChevronDown,
+  ChevronUp,
+  ArrowLeft,
+  Clock,
+  CheckCircle,
+  ShoppingBag,
+  Heart,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import QazmiFooter from "./footerSection";
-import ImageSlider from "./imageSlider";
 import { useDispatch } from "react-redux";
 import { addTocartAction } from "../redux/actions";
 import QazmiCart from "./cat";
+import calculateMrp from "../utils/commonFunctions";
 
 export default function QazmiCartProdcut({ isOpen, setIsOpen, productdata }) {
   const dispatch = useDispatch();
-  console.log("productdata", productdata);
   const [selectIndex, setSelectIndex] = useState(0);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  // Add a new state to track the current image index
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const navigate = useNavigate();
+
   if (!isOpen) return null;
+
   const onClick = (index) => {
     setSelectIndex(index);
+  };
+
+  // Add a function to handle image selection
+  const handleImageSelect = (index) => {
+    setCurrentImageIndex(index);
   };
 
   const addtoCart = () => {
     dispatch(addTocartAction(productdata));
     setIsCartOpen(true);
   };
+
   const buyitNow = () => {
-    console.log("buyitnow");
     dispatch(addTocartAction(productdata));
     navigate("/CheckoutPage");
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden ">
+    <div className="fixed inset-0 z-50 overflow-hidden backdrop-blur-sm">
       <div className="absolute inset-0 overflow-hidden">
-        {/* Overlay */}
+        {/* Overlay with improved opacity */}
         <div
-          className="absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+          className="absolute inset-0 bg-gray-800 bg-opacity-60 transition-opacity"
           onClick={() => setIsOpen(false)}
         ></div>
 
-        {/* Cart panel */}
-        <div className="absolute inset-y-0 right-0 max-w-full flex max-h-screen overflow-y-auto overflow-x-hidden  bg-white">
-          <div className="relative w-screen max-w-md">
-            <div className="h-full flex flex-col bg-white">
-              {/* Cart header */}
-              <div className="flex items-end justify-end px-4 py-3">
+        {/* Cart panel with improved design */}
+        <div className="absolute inset-y-0 right-0 max-w-full flex">
+          <div className="relative w-screen max-w-md md:max-w-lg">
+            <div className="h-full flex flex-col bg-white shadow-xl overflow-y-auto">
+              {/* Cart header with gradient */}
+              <div className="bg-gradient-to-r from-pink-400 to-pink-600 px-4 py-4 flex items-center justify-between">
                 <button
-                  className="p-2 -m-2 text-gray-400 hover:text-gray-500"
+                  className="p-1 rounded-full bg-white/20 text-white hover:bg-white/30 transition-all"
                   onClick={() => setIsOpen(false)}
                 >
-                  <X size={24} />
+                  <ArrowLeft size={20} />
+                </button>
+                <h2 className="text-lg font-medium text-white">
+                  Product Details
+                </h2>
+                <button
+                  className="p-1 rounded-full bg-white/20 text-white hover:bg-white/30 transition-all"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <X size={20} />
                 </button>
               </div>
 
-              <div>
-                <span className="text-black-500 font-semibold text-base ml-4">
+              <div className="px-4 py-3">
+                <h3 className="text-lg md:text-xl font-bold text-gray-900">
                   {productdata?.name}
-                </span>
+                </h3>
 
-                <ImageSlider images={productdata?.images} />
-              </div>
-              <div className="flex items-start mb-2 ml-2 mt-1">
-                <span className="text-primary line-through mr-2 f ">
-                  Rs. {productdata?.mrp?.toFixed(2)}
-                </span>
-                <span className="text-black font-medium">
-                  Rs. {productdata?.mrp?.toFixed(2)}
-                </span>
-              </div>
-              {/* <div> */}
-              <span className="text-black ml-4 mt-2">Fabric</span>
-              {/* <div className="border w-[120] h-10 items-center justify-center flex"> */}
-              <span className="text-black ml-4 border w-[120px] h-[40px] flex items-center justify-center border-pink-400 mt-2">
-                {productdata?.fabric}
-              </span>
+                {/* Image slider container */}
+                <div className="mt-3 bg-gray-50 rounded-lg">
+                  {/* Main image - now shows the currently selected image */}
+                  <div className="aspect-square w-full bg-pink-50 flex items-center justify-center rounded-lg overflow-hidden">
+                    {productdata?.images && productdata.images.length > 0 ? (
+                      <img
+                        src={productdata.images[currentImageIndex]}
+                        alt={`${productdata?.name} - Image ${
+                          currentImageIndex + 1
+                        }`}
+                        className="object-cover w-full h-full"
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center h-full w-full">
+                        <ShoppingBag className="h-16 w-16 text-pink-300" />
+                      </div>
+                    )}
+                  </div>
 
-              {/* </div> */}
-              {/* </div> */}
-              <span className="text-black ml-4 mt-2">Size</span>
-              <div className="flex flex-wrap gap-3">
-                {productdata?.size?.map((item, index) => (
+                  {/* Image thumbnails - now with onClick handlers */}
+                  <div className="flex gap-2 mt-2 overflow-x-auto pb-2">
+                    {productdata?.images?.slice(0, 4).map((image, idx) => (
+                      <div
+                        key={idx}
+                        onClick={() => handleImageSelect(idx)}
+                        className={`w-16 h-16 rounded-md overflow-hidden flex-shrink-0 border-2 cursor-pointer ${
+                          idx === currentImageIndex
+                            ? "border-pink-500"
+                            : "border-transparent"
+                        } hover:border-pink-300 transition-all`}
+                      >
+                        <img
+                          src={image}
+                          alt={`Thumbnail ${idx}`}
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Price section */}
+                <div className="flex items-center mt-4">
+                  <span className="text-pink-500 line-through text-sm mr-2">
+                    Rs. {Number(productdata.mrp).toFixed(2)}
+                  </span>
+                  <span className="text-gray-900 font-bold text-xl">
+                    Rs.{" "}
+                    {calculateMrp(
+                      Number(productdata.mrp),
+                      Number(productdata.discount)
+                    ).toFixed(2)}
+                  </span>
+
+                  <span className="ml-2 px-2 py-1 bg-pink-100 text-pink-700 text-xs font-medium rounded-full">
+                    Save {productdata.discount} %
+                  </span>
+                </div>
+
+                {/* Fabric section */}
+                <div className="mt-6">
+                  <h4 className="text-sm font-medium text-gray-900 mb-2">
+                    Fabric
+                  </h4>
+                  <div className="inline-block border border-pink-300 rounded-md px-4 py-2 text-sm bg-pink-50 text-pink-700">
+                    {productdata?.fabric || "Premium Cotton"}
+                  </div>
+                </div>
+
+                {/* Size section */}
+                <div className="mt-6">
+                  <h4 className="text-sm font-medium text-gray-900 mb-2">
+                    Size
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {productdata?.size?.map((item, index) => (
+                      <button
+                        key={index}
+                        onClick={() => onClick(index)}
+                        className={`h-10 min-w-10 px-3 flex items-center justify-center rounded-md transition-all ${
+                          selectIndex === index
+                            ? "bg-pink-500 text-white shadow-md shadow-pink-200"
+                            : "bg-gray-100 text-gray-800 hover:bg-pink-100"
+                        }`}
+                      >
+                        {item}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* SKU */}
+                <div className="mt-6 py-2 px-4 bg-gray-50 rounded-md">
+                  <p className="text-xs text-gray-500">
+                    SKU: {productdata?.description || "N/A"}
+                  </p>
+                </div>
+
+                {/* Action buttons */}
+                <div className="mt-6 space-y-3">
                   <button
-                    key={index}
-                    onClick={() => onClick(index)}
-                    className={`min-w-12 h-12 px-4 ml-4  mt-2 flex items-center justify-center rounded-md transition-all ${
-                      selectIndex === index
-                        ? "bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br text-white"
-                        : "bg-gray-100 text-gray-800 hover:bg-gray-200"
-                    }`}
+                    onClick={addtoCart}
+                    type="button"
+                    className="w-full bg-gradient-to-r from-pink-400 to-pink-600 hover:from-pink-500 hover:to-pink-700 text-white font-medium rounded-lg py-3 flex items-center justify-center transition-all shadow-md shadow-pink-200"
                   >
-                    {item}
+                    <ShoppingBag className="mr-2 h-5 w-5" />
+                    Add to cart
                   </button>
-                ))}
-              </div>
 
-              <span className="text-black ml-3 mt-3">
-                SKU: {productdata?.description}
-              </span>
-
-              <button
-                onClick={addtoCart}
-                type="button"
-                class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 shadow-lg shadow-pink-500/50 dark:shadow-lg dark:shadow-pink-800/80 font-medium rounded-lg text-sm px-5 py-4 text-center me-2 mb-2 mt-6 ml-3 mr-8"
-              >
-                Add to cart
-              </button>
-
-              <button
-                type="button "
-                class="border-2 border-black mb-2 mt-2 ml-5 mr-8 text-black py-2 rounded"
-                onClick={buyitNow}
-              >
-                Buy it now
-              </button>
-              <div className="border py-4 ml-4 px-4 w-[400px]">
-                <sapn className="text-black px-4">
-                  Guaranteed secure & safe checkout.
-                </sapn>
-              </div>
-              <div class="space-y-2 text-sm text-gray-700 ml-4 mt-4 mb-3">
-                <div>
-                  <span class="font-semibold">Shipped today?</span>
-                  <span class="text-green-600">Order within: 01:57:36</span>
-                </div>
-                <div class="flex items-center">
-                  <svg
-                    class="w-4 h-4 text-green-600 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
+                  <button
+                    type="button"
+                    className="w-full border-2 border-pink-500 text-pink-600 hover:bg-pink-50 py-3 rounded-lg font-medium transition-all flex items-center justify-center"
+                    onClick={buyitNow}
                   >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M5 13l4 4L19 7"
-                    ></path>
-                  </svg>
-                  <span>Assured Quality</span>
+                    <Heart className="mr-2 h-5 w-5" />
+                    Buy it now
+                  </button>
                 </div>
-                <div class="flex items-center">
-                  <svg
-                    class="w-4 h-4 text-green-600 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M5 13l4 4L19 7"
-                    ></path>
-                  </svg>
-                  <span>100% Purchase Protection</span>
-                </div>
-              </div>
-              {isCartOpen && (
-                <QazmiCart isOpen={isCartOpen} setIsOpen={setIsCartOpen} />
-              )}
 
-              {/* Cart footer with totals and checkout buttons */}
+                {/* Payment info */}
+                {/* <div className="mt-6 px-4 py-3 bg-gradient-to-r from-pink-50 to-pink-100 rounded-lg border border-pink-200">
+                  <p className="text-sm text-pink-700 font-medium text-center">
+                    Guaranteed secure & safe checkout
+                  </p>
+                  <div className="flex justify-center mt-2 space-x-2">
+                    <div className="w-10 h-6 bg-gray-200 rounded"></div>
+                    <div className="w-10 h-6 bg-gray-200 rounded"></div>
+                    <div className="w-10 h-6 bg-gray-200 rounded"></div>
+                    <div className="w-10 h-6 bg-gray-200 rounded"></div>
+                  </div>
+                </div> */}
+
+                {/* Delivery info */}
+                <div className="mt-6 space-y-3">
+                  <div className="flex items-center justify-between bg-green-50 px-4 py-3 rounded-lg">
+                    <div className="flex items-center">
+                      <Clock className="h-5 w-5 text-green-500 mr-2" />
+                      <span className="text-sm font-medium">
+                        Shipped today?
+                      </span>
+                    </div>
+                    <span className="text-green-600 text-sm font-medium">
+                      Order within: 01:57:36
+                    </span>
+                  </div>
+
+                  <div className="space-y-2 bg-gray-50 px-4 py-3 rounded-lg">
+                    <div className="flex items-center">
+                      <CheckCircle className="h-4 w-4 text-pink-500 mr-2" />
+                      <span className="text-sm text-gray-700">
+                        Assured Quality
+                      </span>
+                    </div>
+                    <div className="flex items-center">
+                      <CheckCircle className="h-4 w-4 text-pink-500 mr-2" />
+                      <span className="text-sm text-gray-700">
+                        100% Purchase Protection
+                      </span>
+                    </div>
+                    <div className="flex items-center">
+                      <CheckCircle className="h-4 w-4 text-pink-500 mr-2" />
+                      <span className="text-sm text-gray-700">
+                        Free Delivery on orders above Rs. 599
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Cart modal */}
+                {isCartOpen && (
+                  <QazmiCart isOpen={isCartOpen} setIsOpen={setIsCartOpen} />
+                )}
+              </div>
             </div>
           </div>
         </div>

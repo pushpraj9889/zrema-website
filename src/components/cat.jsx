@@ -1,5 +1,15 @@
 import { useState } from "react";
-import { X, ChevronDown, ChevronUp, ArrowLeft } from "lucide-react";
+import {
+  X,
+  ChevronDown,
+  ChevronUp,
+  ArrowLeft,
+  ShoppingBag,
+  CreditCard,
+  Shield,
+  Gift,
+  ChevronRight,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import QazmiFooter from "./footerSection";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,10 +18,10 @@ import {
   incrementQuantity,
   decreaseQuantity,
 } from "../redux/actions";
+import calculateMrp from "../utils/commonFunctions";
 
 export default function QazmiCart({ isOpen, setIsOpen }) {
   const { cart } = useSelector((store) => store?.product || { cart: [] });
-  console.log("geettingafjkds", cart);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -20,6 +30,11 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
     (total, item) => total + item.mrp * item.quantity,
     0
   );
+
+  // Calculate discount amount (assuming 15% discount)
+  const discountPercentage = 15;
+  const discountAmount = (totalAmount * discountPercentage) / 100;
+  const finalAmount = totalAmount - discountAmount;
 
   const handleIncrementQuantity = (productId) => {
     dispatch(incrementQuantity(productId));
@@ -45,42 +60,54 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
   };
 
   if (!isOpen) return null;
+
   const continueShopping = () => {
     setIsOpen(false);
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden">
+    <div className="fixed inset-0 z-50 overflow-hidden backdrop-blur-sm">
       <div className="absolute inset-0 overflow-hidden">
-        {/* Overlay */}
+        {/* Overlay with improved opacity */}
         <div
-          className="absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+          className="absolute inset-0 bg-gray-800 bg-opacity-60 transition-opacity"
           onClick={() => setIsOpen(false)}
         ></div>
 
-        {/* Cart panel */}
+        {/* Cart panel with premium design */}
         <div className="absolute inset-y-0 right-0 max-w-full flex">
           <div className="relative w-screen max-w-md">
             <div className="h-full flex flex-col bg-white shadow-xl">
-              {/* Cart header */}
-              <div className="flex items-center justify-between px-4 py-6 border-b border-gray-200">
-                <h2 className="text-xl font-medium text-gray-900">Cart</h2>
-                <button
-                  className="p-2 -m-2 text-gray-400 hover:text-gray-500"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <X size={24} />
-                </button>
+              {/* Premium Cart header with gradient */}
+              <div className="bg-gradient-to-r from-pink-400 to-pink-600 px-6 py-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-bold text-white">
+                    Your Shopping Bag
+                  </h2>
+                  <button
+                    className="p-2 rounded-full bg-white/20 text-white hover:bg-white/30 transition-all"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+                <p className="text-pink-100 text-sm mt-1">
+                  {cart.length === 0
+                    ? "Your bag is empty"
+                    : `${cart.length} item${
+                        cart.length > 1 ? "s" : ""
+                      } in your bag`}
+                </p>
               </div>
 
               {/* Continue shopping link */}
               <div
-                className="px-4 py-3 border-b border-gray-200"
+                className="px-6 py-3 border-b border-gray-100 bg-pink-50"
                 onClick={continueShopping}
               >
                 <a
                   href="#"
-                  className="flex items-center text-pink-600 hover:text-pink-700"
+                  className="flex items-center text-pink-600 hover:text-pink-700 font-medium text-sm"
                 >
                   <ArrowLeft size={16} className="mr-1" />
                   Continue shopping
@@ -88,101 +115,172 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
               </div>
 
               {/* Cart items */}
-              <div className="flex-1 overflow-y-auto p-4">
+              <div className="flex-1 overflow-y-auto">
                 {cart.length === 0 ? (
-                  <div className="py-6 text-center">
-                    <p className="text-gray-500">Your cart is empty</p>
+                  <div className="py-12 px-6 text-center">
+                    <div className="mx-auto w-16 h-16 rounded-full bg-pink-50 flex items-center justify-center mb-4">
+                      <ShoppingBag className="h-8 w-8 text-pink-400" />
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-1">
+                      Your cart is empty
+                    </h3>
+                    <p className="text-gray-500 text-sm mb-6">
+                      Looks like you haven't added any items to your bag yet.
+                    </p>
+                    <button
+                      onClick={continueShopping}
+                      className="bg-pink-500 hover:bg-pink-600 text-white font-medium py-2 px-4 rounded-lg text-sm transition-colors"
+                    >
+                      Start Shopping
+                    </button>
                   </div>
                 ) : (
-                  cart?.map((item) => (
-                    <div
-                      key={item._id}
-                      className="py-4 flex border-b border-gray-200 last:border-b-0"
-                    >
-                      {/* Product image */}
-                      <div className="flex-shrink-0 w-24 h-30 border border-gray-200 rounded-md overflow-hidden">
-                        <img
-                          src={item?.images[0]}
-                          alt={"Product image"}
-                          className="w-full h-full object-center object-cover"
-                        />
-                      </div>
+                  <div className="divide-y divide-gray-100 px-6">
+                    {cart?.map((item) => (
+                      <div key={item._id} className="py-5 flex">
+                        {/* Product image with improved styling */}
+                        <div className="flex-shrink-0 w-24 h-28 border border-gray-100 rounded-lg overflow-hidden shadow-sm">
+                          <img
+                            src={item?.images[0]}
+                            alt={item.name}
+                            className="w-full h-full object-center object-cover"
+                          />
+                        </div>
 
-                      {/* Product details */}
-                      <div className="ml-4 flex-1 flex flex-col">
-                        <div>
-                          <div className="flex justify-between">
-                            <h3 className="text-sm font-medium text-gray-900">
-                              {item.name.slice(0, 40)}
-                            </h3>
-                            <p className="ml-4 text-sm font-medium text-gray-900">
-                              Rs. {(item?.mrp * item?.quantity).toFixed(2)}
+                        {/* Product details with improved typography */}
+                        <div className="ml-4 flex-1 flex flex-col">
+                          <div>
+                            <div className="flex justify-between">
+                              <h3 className="text-sm font-medium text-gray-900 leading-tight">
+                                {item.name.slice(0, 40)}
+                                {item.name.length > 40 ? "..." : ""}
+                              </h3>
+                              <div className="flex">
+                                <p className="ml-4 text-sm  text-pink-500">
+                                  ₹{" "}
+                                  {(
+                                    calculateMrp(item.mrp, item.discount) *
+                                    item.quantity
+                                  ).toFixed(2)}
+                                </p>
+                              </div>
+                            </div>
+                            <p className="mt-1 text-xs text-gray-500">
+                              {item.fabric || "Premium Fabric"} /{" "}
+                              {item.selectedSize ||
+                                item.size?.[0] ||
+                                "Standard"}
                             </p>
                           </div>
-                          <p className="mt-1 text-sm text-gray-500">
-                            {/* {item.color} / {item.material} /  */}
-                            {item.fabric}/ {item.selectedSize}
-                          </p>
-                        </div>
 
-                        {/* Quantity controls and remove button */}
-                        <div className="flex-1 flex items-end justify-between">
-                          <div className="flex items-center border border-gray-300 rounded">
+                          {/* Quantity controls and remove button with improved styling */}
+                          <div className="flex-1 flex items-end justify-between mt-2">
+                            <div className="flex items-center border border-gray-200 rounded-md overflow-hidden shadow-sm">
+                              <button
+                                className="px-2 py-1 text-gray-500 hover:bg-gray-50 transition-colors"
+                                onClick={() =>
+                                  handleDecrementQuantity(item._id)
+                                }
+                              >
+                                <ChevronDown size={16} />
+                              </button>
+                              <span className="px-3 py-1 text-black font-medium bg-gray-50">
+                                {item.quantity}
+                              </span>
+                              <button
+                                className="px-2 py-1 text-gray-500 hover:bg-gray-50 transition-colors"
+                                onClick={() =>
+                                  handleIncrementQuantity(item._id)
+                                }
+                              >
+                                <ChevronUp size={16} />
+                              </button>
+                            </div>
+
                             <button
-                              className="px-2 py-1 text-gray-600"
-                              onClick={() => handleDecrementQuantity(item._id)}
+                              className="text-xs font-medium text-pink-500 hover:text-pink-700 flex items-center transition-colors"
+                              onClick={() => removeItem(item._id)}
                             >
-                              <ChevronDown size={16} />
-                            </button>
-                            <span className="px-2 py-1 text-black">
-                              {item.quantity}
-                            </span>
-                            <button
-                              className="px-2 py-1 text-gray-600"
-                              onClick={() => handleIncrementQuantity(item._id)}
-                            >
-                              <ChevronUp size={16} />
+                              <X size={14} className="mr-1" />
+                              Remove
                             </button>
                           </div>
-
-                          <button
-                            className="text-sm font-medium text-pink-600 hover:text-pink-500 flex items-center"
-                            onClick={() => removeItem(item._id)}
-                          >
-                            <X size={16} className="mr-1" />
-                            Remove
-                          </button>
                         </div>
                       </div>
-                    </div>
-                  ))
+                    ))}
+                  </div>
                 )}
               </div>
 
-              {/* Cart footer with totals and checkout buttons */}
+              {/* Enhanced Cart footer with totals and checkout buttons */}
               {cart.length > 0 && (
-                <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
-                  <div className="flex justify-between text-sm text-gray-600 mb-2">
-                    <p>Total products ({cart?.length})</p>
-                    <p>Rs. {totalAmount.toFixed(2)}</p>
+                <div className="bg-white border-t border-gray-100 pt-4 pb-6 px-6 shadow-inner">
+                  {/* Order summary */}
+                  <h3 className="text-sm font-semibold text-gray-900 mb-3">
+                    Order Summary
+                  </h3>
+
+                  <div className="space-y-2 text-sm mb-4">
+                    <div className="flex justify-between text-gray-600">
+                      <p>
+                        Subtotal ({cart?.length} item
+                        {cart.length > 1 ? "s" : ""})
+                      </p>
+                      <p>₹ {totalAmount.toFixed(2)}</p>
+                    </div>
+
+                    <div className="flex justify-between text-gray-600">
+                      <p>Discount ({discountPercentage}%)</p>
+                      <p className="text-green-600">
+                        - ₹ {discountAmount.toFixed(2)}
+                      </p>
+                    </div>
+
+                    <div className="flex justify-between text-gray-600">
+                      <p>Shipping</p>
+                      <p>Free</p>
+                    </div>
+
+                    <div className="border-t border-dashed border-gray-200 pt-2 mt-2">
+                      <div className="flex justify-between font-bold text-gray-900">
+                        <p>Total</p>
+                        <p>₹ {finalAmount.toFixed(2)}</p>
+                      </div>
+                      <p className="text-xs text-green-600 mt-1">
+                        You save ₹ {discountAmount.toFixed(2)} on this order
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex justify-between text-base font-medium text-gray-900 mb-6">
-                    <p>Total including VAT</p>
-                    <p>Rs. {totalAmount.toFixed(2)}</p>
+
+                  {/* Benefits callouts */}
+                  <div className="bg-pink-50 rounded-lg p-3 mb-4">
+                    <div className="flex items-center text-xs text-pink-700 mb-2">
+                      <Shield size={14} className="mr-2 text-pink-500" />
+                      <span>Secured checkout with encryption</span>
+                    </div>
+                    <div className="flex items-center text-xs text-pink-700">
+                      <Gift size={14} className="mr-2 text-pink-500" />
+                      <span>Free gifts with purchase over ₹999</span>
+                    </div>
                   </div>
-                  <button
-                    onClick={goToCartPage}
-                    type="button"
-                    class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 shadow-lg shadow-pink-500/50 dark:shadow-lg dark:shadow-pink-800/80 font-medium rounded-lg text-sm px-5 py-4 text-center me-2 mb-2 mt-6 mr-8 w-full"
-                  >
-                    View cart
-                  </button>
-                  <button
-                    className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-lg"
-                    onClick={goToCheckOut}
-                  >
-                    Checkout
-                  </button>
+
+                  {/* Action buttons */}
+                  <div className="grid grid-cols-1 gap-3">
+                    <button
+                      onClick={goToCheckOut}
+                      className="w-full bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-medium py-3 px-4 rounded-lg shadow-md shadow-pink-200 transition-all flex items-center justify-center"
+                    >
+                      <CreditCard size={18} className="mr-2" />
+                      Checkout Now
+                    </button>
+
+                    <button
+                      onClick={goToCartPage}
+                      className="w-full border border-pink-200 bg-white text-pink-600 hover:bg-pink-50 font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
+                    >
+                      View Full Cart <ChevronRight size={16} className="ml-1" />
+                    </button>
+                  </div>
                 </div>
               )}
             </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { get } from "../Services/apicallMethode";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import calculateMrp from "../utils/commonFunctions";
 
 export default function QazmiBestsellers() {
   const [products, setProducts] = useState([]);
@@ -95,17 +96,20 @@ export default function QazmiBestsellers() {
       {/* Category buttons - horizontally scrollable on all devices */}
       <div className="overflow-x-auto pb-6 mb-6">
         <div className="flex space-x-3 min-w-max md:justify-center">
-          {["CHINARKARI", "KURTA SETS", "LONG KURTIS", "SHORT KURTIS"].map(
-            (category) => (
-              <button
-                key={category}
-                onClick={() => navigate(`/Collections/${category}`)}
-                className="px-6 py-3 bg-pink-500 text-white rounded-full font-medium hover:bg-pink-600 transition-colors whitespace-nowrap"
-              >
-                {category}
-              </button>
-            )
-          )}
+          {[
+            "KURTA SETS",
+            "LONG KURTIS",
+            "SHORT KURTIS",
+            "Kashmiri Short  Kurti",
+          ].map((category) => (
+            <button
+              key={category}
+              onClick={() => navigate(`/Collections/${category}`)}
+              className="px-6 py-3 bg-pink-500 text-white rounded-full font-medium hover:bg-pink-600 transition-colors whitespace-nowrap"
+            >
+              {category.toLocaleUpperCase()}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -166,12 +170,16 @@ export default function QazmiBestsellers() {
                 <h3 className="font-medium text-gray-800 truncate">
                   {product.name}
                 </h3>
-                <div className="flex items-center mt-1">
-                  <span className="text-gray-500 line-through mr-2">
-                    Rs. {product.mrp.toFixed(2)}
+                <div className="flex justify-center items-center mt-1">
+                  <span className="text-primary line-through mr-2 text-xs sm:text-s">
+                    Rs. {Number(product.mrp).toFixed(2)}
                   </span>
-                  <span className="text-lg font-bold text-pink-600">
-                    Rs. {product.mrp.toFixed(2)}
+                  <span className="text-black font-medium text-xs sm:text-s">
+                    Rs.{" "}
+                    {calculateMrp(
+                      Number(product.mrp),
+                      Number(product.discount)
+                    ).toFixed(2)}
                   </span>
                 </div>
                 <div className="flex mt-3 space-x-2">
