@@ -11,7 +11,7 @@ import {
   MapPin,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export default function OrderStatus() {
   const [transactionData, settransactionData] = useState({});
@@ -19,6 +19,7 @@ export default function OrderStatus() {
   const [isSharing, setIsSharing] = useState(false);
   const [searchParams] = useSearchParams();
   const orderId = searchParams.get("order_id");
+  const navigate = useNavigate();
 
   console.log("transactionData", transactionData);
 
@@ -478,6 +479,15 @@ View details: ${window.location.href}`;
                 </button>
               </div>
             </div>
+            <button
+              onClick={() => {
+                navigate("/OrderHistroy");
+              }}
+              className="group relative flex-1 bg-gradient-to-r from-pink-500 via-pink-600 to-rose-500 hover:from-pink-600 hover:via-pink-700 hover:to-rose-600 text-white py-3 px-6 rounded-2xl font-semibold transition-all duration-300 ease-out transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl hover:shadow-pink-500/30 flex items-center justify-center text-sm overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:-translate-x-full hover:before:translate-x-full before:transition-transform before:duration-700"
+            >
+              <FileText className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:rotate-12" />
+              View Order History
+            </button>
           </div>
         </div>
 
