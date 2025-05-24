@@ -575,14 +575,16 @@ export default function Order() {
                   )}
                 </div>
 
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600 text-sm sm:text-base">
-                    Coupon Discount
-                  </span>
-                  <span className="font-medium text-sm sm:text-base">
-                    ₹{promoCode[0]?.discount}
-                  </span>
-                </div>
+                {totalAmount > 450 && (
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600 text-sm sm:text-base">
+                      Coupon Discount
+                    </span>
+                    <span className="font-medium text-sm sm:text-base">
+                      ₹{promoCode[0]?.discount}
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* Total */}
@@ -592,7 +594,7 @@ export default function Order() {
                   <div className="text-right">
                     <div className="text-gray-500 text-xs">INR</div>
                     <div className="text-xl font-bold text-pink-600">
-                      ₹{totalAmount - promoCode[0]?.discount}
+                      ₹{totalAmount}
                     </div>
                   </div>
                 </div>
