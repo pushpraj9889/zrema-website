@@ -60,7 +60,7 @@ export const productReducer = (state = initialState, action) => {
 };
 
 export const userDetailsReducer = (state = initialState, action) => {
-  // console.log("useraddressdetails", action.payload);
+  console.log("useraddressdetailsreducer", action.payload);
   const { type, payload } = action;
 
   switch (type) {

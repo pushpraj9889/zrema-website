@@ -32,17 +32,37 @@ export const decreaseQuantity = (productId) => {
   };
 };
 
-export const UserDetailsAction = (userDetails) => {
-  console.log("usedetailsvalue", userDetails);
+// export const UserDetailsAction = (userDetails) => {
+//   console.log("usedetailsvalue", userDetails);
+//   return async (dispatch, getState) => {
+//     try {
+//       const response = await post("user/register", userDetails);
+//       console.log("responseview", response);
+//       if (response) {
+//         dispatch({ type: "USER_DETAILS", payload: response });
+//       }
+//     } catch (error) {
+//       console.log("kfdjsdfkljkfds", error);
+//     }
+//   };
+// };
+
+export const UserDetailsAction = (userDetails, skipApi = false) => {
   return async (dispatch, getState) => {
     try {
+      if (skipApi) {
+        // Directly dispatch without API call
+        dispatch({ type: "USER_DETAILS", payload: userDetails });
+        // return;
+      }
+
+      // Otherwise, proceed with the API call
       const response = await post("user/register", userDetails);
-      console.log("responseview", response);
       if (response) {
         dispatch({ type: "USER_DETAILS", payload: response });
       }
     } catch (error) {
-      console.log("kfdjsdfkljkfds", error);
+      console.log("Error in UserDetailsAction:", error);
     }
   };
 };

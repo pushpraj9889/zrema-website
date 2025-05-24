@@ -9,37 +9,58 @@ import {
   ShoppingBagIcon,
 } from "lucide-react";
 import { UserDetailsAction } from "../../redux/actions";
+import { useEffect } from "react";
+import calculateMrp from "../../utils/commonFunctions";
 
 const CheckoutPage = () => {
   const [emailNews, setEmailNews] = useState(true);
   const [saveInfo, setSaveInfo] = useState(false);
   const [billingAddressOption, setBillingAddressOption] = useState("same");
   const { cart } = useSelector((store) => store?.product || { cart: [] });
+  const userFilledDetails = useSelector(
+    (store) => store?.userDetailsReducer?.userDetails
+  );
+
   const [userDetails, setUserDetails] = useState({
-    first_name: "",
-    last_name: "",
-    phone_number: "",
-    address: "",
-    pincode: "",
-    city: "",
-    state: "",
-    landmark: "",
+    first_name: userFilledDetails?.first_name,
+    last_name: userFilledDetails?.last_name,
+    email: userFilledDetails?.email,
+    phone_number: userFilledDetails?.phone_number,
+    address: userFilledDetails?.address,
+    pincode: userFilledDetails?.pincode,
+    city: userFilledDetails?.city,
+    state: userFilledDetails?.state,
+    landmark: userFilledDetails?.landmark,
   });
+  console.log("userFilledDetails", userDetails);
+
   const [errors, setErrors] = useState({});
+  const [totalAmount, setTotalAmount] = useState(0);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const logoClick = () => {};
+  useEffect(() => {
+    if (cart?.length > 0) {
+      const total = cart.reduce((acc, item) => {
+        return acc + calculateMrp(item.mrp, item.discount) * item.quantity;
+      }, 0);
+      setTotalAmount(total.toFixed(2));
+    } else {
+      setTotalAmount(0);
+    }
+  }, [cart]);
+  console.log("totalAmount", totalAmount);
 
   // Calculate totals
-  const subtotal = cart.reduce(
-    (sum, item) => sum + item.mrp * item.quantity,
-    0
-  );
+  // const subtotal = cart.reduce(
+  //   (sum, item) => sum + item.mrp * item.quantity,
+  //   0
+  // );
   const taxes = 0;
-  const total = subtotal + taxes;
+  // const total = subtotal + taxes;
 
   const bagclick = () => {
-    navigate("/QazmiCartPage");
+    navigate("/ZremaCartPage");
   };
 
   // Handle input changes for all form fields
@@ -64,6 +85,7 @@ const CheckoutPage = () => {
     const requiredFields = [
       "first_name",
       "last_name",
+      "email",
       "phone_number",
       "address",
       "pincode",
@@ -76,6 +98,14 @@ const CheckoutPage = () => {
         newErrors[field] = `${field.replace("_", " ")} is required`;
       }
     });
+
+    // Email validation
+    if (
+      userDetails.email &&
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userDetails.email)
+    ) {
+      newErrors.email = "Please enter a valid email address";
+    }
 
     // Phone number validation
     if (
@@ -96,7 +126,7 @@ const CheckoutPage = () => {
 
   const proceedOrderPress = () => {
     if (validateUserDetails()) {
-      dispatch(UserDetailsAction(userDetails));
+      dispatch(UserDetailsAction(userDetails, false));
       navigate("/Order");
     } else {
       // Scroll to first error
@@ -191,6 +221,24 @@ const CheckoutPage = () => {
                     </p>
                   )}
                 </div>
+              </div>
+
+              {/* Email */}
+              <div className="mb-4">
+                <input
+                  type="email"
+                  placeholder="Email"
+                  className={`w-full border ${
+                    errors.email ? "border-red-500" : "border-gray-300"
+                  } rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-blue-500`}
+                  value={userDetails.email}
+                  onChange={(e) => handleInputChange("email", e.target.value)}
+                />
+                {errors.email && (
+                  <p className="text-red-500 text-sm mt-1 error-message">
+                    {errors.email}
+                  </p>
+                )}
               </div>
 
               {/* Phone */}
@@ -363,7 +411,7 @@ const CheckoutPage = () => {
                     </div>
                     <div className="ml-4 text-right">
                       <span className="font-medium">
-                        ₹{item.mrp.toLocaleString("en-IN")}
+                        ₹{calculateMrp(item.mrp, item.discount)}
                       </span>
                     </div>
                     <div>
@@ -384,9 +432,7 @@ const CheckoutPage = () => {
                 <span className="text-gray-700">
                   Subtotal · {cart.length} item{cart.length !== 1 ? "s" : ""}
                 </span>
-                <span className="font-medium">
-                  ₹{subtotal.toLocaleString("en-IN")}
-                </span>
+                <span className="font-medium">₹{totalAmount}</span>
               </div>
               <div className="flex justify-between items-center">
                 <div className="flex items-center">
@@ -407,9 +453,7 @@ const CheckoutPage = () => {
                 <span className="text-lg font-medium">Total</span>
                 <div className="text-right">
                   <div className="text-gray-500 text-sm">INR</div>
-                  <div className="text-xl font-bold">
-                    ₹{total.toLocaleString("en-IN")}
-                  </div>
+                  <div className="text-xl font-bold">₹{totalAmount}</div>
                 </div>
               </div>
               <div className="text-gray-500 text-sm">

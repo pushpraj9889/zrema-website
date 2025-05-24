@@ -1,6 +1,6 @@
 // calculateMrp.js
 const calculateMrp = (mrp, discount) => {
-  const finalPrice = mrp - (mrp * discount) / 100;
+  const finalPrice = Math.round(mrp - mrp * (discount / 100));
   return finalPrice;
 };
 

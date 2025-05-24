@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ChevronLeft,
   ChevronUp,
@@ -18,6 +18,8 @@ import {
 } from "../../redux/actions";
 import QazmiCart from "../../components/cat";
 import { useNavigate } from "react-router-dom";
+import calculateMrp from "../../utils/commonFunctions";
+import { get } from "../../Services/apicallMethode";
 
 export default function Viewcart() {
   const { cart } = useSelector((store) => store?.product || { cart: [] });
@@ -25,26 +27,50 @@ export default function Viewcart() {
   const navigate = useNavigate();
   // State for cart items
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [totalAmount, setTotalAmount] = useState(0);
+
+  useEffect(() => {
+    if (cart?.length > 0) {
+      const total = cart.reduce((acc, item) => {
+        return acc + calculateMrp(item.mrp, item.discount) * item.quantity;
+      }, 0);
+      setTotalAmount(total.toFixed(2));
+    } else {
+      setTotalAmount(0);
+    }
+  }, [cart]);
 
   const cardOpen = () => {
     setIsCartOpen(!isCartOpen);
   };
 
   // State for dropdown accordions
-  const [isGiftcardOpen, setIsGiftcardOpen] = useState(false);
+  const [isGiftcardOpen, setIsGiftcardOpen] = useState(true);
   const [isInstructionsOpen, setIsInstructionsOpen] = useState(false);
 
   // State for promo code
-  const [promoCode, setPromoCode] = useState("");
+  const [promoCode, setPromoCode] = useState([]);
 
   // State for special instructions
   const [specialInstructions, setSpecialInstructions] = useState("");
 
   // Calculate total
-  const totalAmount = cart.reduce(
-    (total, item) => total + item.mrp * item.quantity,
-    0
-  );
+  // const totalAmount = cart.reduce(
+  //   (total, item) => total + item.mrp * item.quantity,
+  //   0
+  // );
+  const getCouponCodeApi = async () => {
+    try {
+      const response = await get("coupon/all");
+      // console.log("gjkdsgjk", response[]);
+      setPromoCode(response);
+    } catch (error) {
+      console.log("ksjfdjkdfs", error);
+    }
+  };
+  useEffect(() => {
+    getCouponCodeApi();
+  }, []);
 
   const handleIncrementQuantity = (productId) => {
     console.log("getting productid", productId);
@@ -178,10 +204,10 @@ export default function Viewcart() {
             <div className="lg:w-1/3">
               <div className="bg-white rounded-lg shadow-sm p-6 sticky top-24">
                 {/* Giftcard section */}
-                {/* <div className="mb-6 border border-gray-200 rounded-lg">
+                <div className="mb-6 border border-gray-200 rounded-lg">
                   <button
                     className="w-full flex items-center justify-between p-4"
-                    onClick={() => setIsGiftcardOpen(!isGiftcardOpen)}
+                    onClick={() => setIsGiftcardOpen(true)}
                   >
                     <span className="font-medium">
                       Giftcard or discount code
@@ -199,7 +225,7 @@ export default function Viewcart() {
                       <div className="flex">
                         <input
                           type="text"
-                          value={promoCode}
+                          value={promoCode[0]?.code}
                           onChange={(e) => setPromoCode(e.target.value)}
                           placeholder="Add your code here"
                           className="flex-1 p-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
@@ -210,7 +236,7 @@ export default function Viewcart() {
                       </div>
                     </div>
                   )}
-                </div> */}
+                </div>
 
                 {/* Order summary */}
                 <div className="mb-6">
@@ -219,13 +245,15 @@ export default function Viewcart() {
                       Total products ({cart.length})
                     </span>
                     <span className="font-medium">
-                      Rs. {totalAmount.toFixed(2)}
+                      {" "}
+                      Rs. {totalAmount - promoCode[0]?.discount}
                     </span>
                   </div>
                   <div className="flex justify-between py-2 border-b border-gray-200">
                     <span className="text-gray-600">Total including VAT</span>
                     <span className="font-medium">
-                      Rs. {totalAmount.toFixed(2)}
+                      {" "}
+                      Rs. {totalAmount - promoCode[0]?.discount}
                     </span>
                   </div>
                 </div>
@@ -283,7 +311,7 @@ export default function Viewcart() {
         <div className="flex items-center justify-between mb-2">
           <span className="font-medium">Total:</span>
           <span className="font-bold text-lg">
-            Rs. {totalAmount.toFixed(2)}
+            Rs. {totalAmount - promoCode[0]?.discount}
           </span>
         </div>
         <button

@@ -14,6 +14,7 @@ import QazmiCart from "../../components/cat";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import SizeChart from "../../components/sizecart";
+import calculateMrp from "../../utils/commonFunctions";
 
 export default function ProductPage() {
   const { id } = useParams();
@@ -235,7 +236,9 @@ export default function ProductPage() {
 
             {/* Price */}
             <div className="flex items-baseline mb-2">
-              <p className="text-xl font-bold text-gray-700">₹{product.mrp}</p>
+              <p className="text-xl font-bold text-gray-700">
+                ₹{calculateMrp(product.mrp, product.discount)}
+              </p>
               {/* {product.mrp !== product.price && (
                 <p className="ml-4 text-lg text-gray-500 line-through">
                   ₹{product.price}

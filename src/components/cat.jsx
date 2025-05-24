@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   X,
   ChevronDown,
@@ -24,17 +24,32 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
   const { cart } = useSelector((store) => store?.product || { cart: [] });
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [totalAmount, setTotalAmount] = useState(0);
+
+  useEffect(() => {
+    if (cart?.length > 0) {
+      const total = cart.reduce((acc, item) => {
+        return acc + calculateMrp(item.mrp, item.discount) * item.quantity;
+      }, 0);
+      setTotalAmount(total.toFixed(2));
+    } else {
+      setTotalAmount(0);
+    }
+  }, [cart]);
+  console.log("totalAmount", totalAmount);
 
   // Calculate total amount
-  const totalAmount = cart.reduce(
-    (total, item) => total + item.mrp * item.quantity,
-    0
-  );
+  // const totalAmount = cart.reduce(
+  //   (total, item) => total + item.mrp * item.quantity,
+  //   0
+  // );
+
+  // console.log("jksdfjkjkfds", totalAmount);
 
   // Calculate discount amount (assuming 15% discount)
   const discountPercentage = 15;
   const discountAmount = (totalAmount * discountPercentage) / 100;
-  const finalAmount = totalAmount - discountAmount;
+  const finalAmount = totalAmount - 0;
 
   const handleIncrementQuantity = (productId) => {
     dispatch(incrementQuantity(productId));
@@ -51,7 +66,7 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
 
   const goToCartPage = () => {
     setIsOpen(false); // Close the cart panel
-    navigate("/QazmiCartPage"); // Navigate to the cart page
+    navigate("/ZremaCartPage"); // Navigate to the cart page
   };
 
   const goToCheckOut = () => {
@@ -136,78 +151,80 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
                   </div>
                 ) : (
                   <div className="divide-y divide-gray-100 px-6">
-                    {cart?.map((item) => (
-                      <div key={item._id} className="py-5 flex">
-                        {/* Product image with improved styling */}
-                        <div className="flex-shrink-0 w-24 h-28 border border-gray-100 rounded-lg overflow-hidden shadow-sm">
-                          <img
-                            src={item?.images[0]}
-                            alt={item.name}
-                            className="w-full h-full object-center object-cover"
-                          />
-                        </div>
+                    {cart?.map((item) => {
+                      return (
+                        <div key={item._id} className="py-5 flex">
+                          {/* Product image with improved styling */}
+                          <div className="flex-shrink-0 w-24 h-28 border border-gray-100 rounded-lg overflow-hidden shadow-sm">
+                            <img
+                              src={item?.images[0]}
+                              alt={item.name}
+                              className="w-full h-full object-center object-cover"
+                            />
+                          </div>
 
-                        {/* Product details with improved typography */}
-                        <div className="ml-4 flex-1 flex flex-col">
-                          <div>
-                            <div className="flex justify-between">
-                              <h3 className="text-sm font-medium text-gray-900 leading-tight">
-                                {item.name.slice(0, 40)}
-                                {item.name.length > 40 ? "..." : ""}
-                              </h3>
-                              <div className="flex">
-                                <p className="ml-4 text-sm  text-pink-500">
-                                  ₹{" "}
-                                  {(
-                                    calculateMrp(item.mrp, item.discount) *
-                                    item.quantity
-                                  ).toFixed(2)}
-                                </p>
+                          {/* Product details with improved typography */}
+                          <div className="ml-4 flex-1 flex flex-col">
+                            <div>
+                              <div className="flex justify-between">
+                                <h3 className="text-sm font-medium text-gray-900 leading-tight">
+                                  {item.name.slice(0, 40)}
+                                  {item.name.length > 40 ? "..." : ""}
+                                </h3>
+                                <div className="flex">
+                                  <p className="ml-4 text-sm text-pink-500">
+                                    ₹{" "}
+                                    {(
+                                      calculateMrp(item.mrp, item.discount) *
+                                      item.quantity
+                                    ).toFixed(2)}
+                                  </p>
+                                </div>
                               </div>
-                            </div>
-                            <p className="mt-1 text-xs text-gray-500">
-                              {item.fabric || "Premium Fabric"} /{" "}
-                              {item.selectedSize ||
-                                item.size?.[0] ||
-                                "Standard"}
-                            </p>
-                          </div>
-
-                          {/* Quantity controls and remove button with improved styling */}
-                          <div className="flex-1 flex items-end justify-between mt-2">
-                            <div className="flex items-center border border-gray-200 rounded-md overflow-hidden shadow-sm">
-                              <button
-                                className="px-2 py-1 text-gray-500 hover:bg-gray-50 transition-colors"
-                                onClick={() =>
-                                  handleDecrementQuantity(item._id)
-                                }
-                              >
-                                <ChevronDown size={16} />
-                              </button>
-                              <span className="px-3 py-1 text-black font-medium bg-gray-50">
-                                {item.quantity}
-                              </span>
-                              <button
-                                className="px-2 py-1 text-gray-500 hover:bg-gray-50 transition-colors"
-                                onClick={() =>
-                                  handleIncrementQuantity(item._id)
-                                }
-                              >
-                                <ChevronUp size={16} />
-                              </button>
+                              <p className="mt-1 text-xs text-gray-500">
+                                {item.fabric || "Premium Fabric"} /{" "}
+                                {item.selectedSize ||
+                                  item.size?.[0] ||
+                                  "Standard"}
+                              </p>
                             </div>
 
-                            <button
-                              className="text-xs font-medium text-pink-500 hover:text-pink-700 flex items-center transition-colors"
-                              onClick={() => removeItem(item._id)}
-                            >
-                              <X size={14} className="mr-1" />
-                              Remove
-                            </button>
+                            {/* Quantity controls and remove button */}
+                            <div className="flex-1 flex items-end justify-between mt-2">
+                              <div className="flex items-center border border-gray-200 rounded-md overflow-hidden shadow-sm">
+                                <button
+                                  className="px-2 py-1 text-gray-500 hover:bg-gray-50 transition-colors"
+                                  onClick={() =>
+                                    handleDecrementQuantity(item._id)
+                                  }
+                                >
+                                  <ChevronDown size={16} />
+                                </button>
+                                <span className="px-3 py-1 text-black font-medium bg-gray-50">
+                                  {item.quantity}
+                                </span>
+                                <button
+                                  className="px-2 py-1 text-gray-500 hover:bg-gray-50 transition-colors"
+                                  onClick={() =>
+                                    handleIncrementQuantity(item._id)
+                                  }
+                                >
+                                  <ChevronUp size={16} />
+                                </button>
+                              </div>
+
+                              <button
+                                className="text-xs font-medium text-pink-500 hover:text-pink-700 flex items-center transition-colors"
+                                onClick={() => removeItem(item._id)}
+                              >
+                                <X size={14} className="mr-1" />
+                                Remove
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -226,15 +243,15 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
                         Subtotal ({cart?.length} item
                         {cart.length > 1 ? "s" : ""})
                       </p>
-                      <p>₹ {totalAmount.toFixed(2)}</p>
+                      <p>₹ {totalAmount}</p>
                     </div>
 
-                    <div className="flex justify-between text-gray-600">
+                    {/* <div className="flex justify-between text-gray-600">
                       <p>Discount ({discountPercentage}%)</p>
                       <p className="text-green-600">
                         - ₹ {discountAmount.toFixed(2)}
                       </p>
-                    </div>
+                    </div> */}
 
                     <div className="flex justify-between text-gray-600">
                       <p>Shipping</p>
@@ -244,10 +261,10 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
                     <div className="border-t border-dashed border-gray-200 pt-2 mt-2">
                       <div className="flex justify-between font-bold text-gray-900">
                         <p>Total</p>
-                        <p>₹ {finalAmount.toFixed(2)}</p>
+                        {/* <p>₹ {totalAmount?.toFixed(2)}</p> */}
                       </div>
                       <p className="text-xs text-green-600 mt-1">
-                        You save ₹ {discountAmount.toFixed(2)} on this order
+                        {/* You save ₹ {discountAmount.toFixed(2)} on this order */}
                       </p>
                     </div>
                   </div>

@@ -173,10 +173,26 @@ export default function QazmiCartProdcut({ isOpen, setIsOpen, productdata }) {
                 </div>
 
                 {/* SKU */}
-                <div className="mt-6 py-2 px-4 bg-gray-50 rounded-md">
-                  <p className="text-xs text-gray-500">
-                    SKU: {productdata?.description || "N/A"}
+                <div className="mt-6 py-2 px-4 bg-gray-50 rounded-md text-sm text-gray-700">
+                  <p className="text-xs text-black-900 font-semibold mb-2">
+                    Product Highlights:
                   </p>
+                  <div>
+                    <ul className="list-none space-y-1">
+                      {productdata?.description
+                        ?.split("\n")
+                        ?.filter((line) => /^[🤎🧵👗🌿🎉🪡]/.test(line.trim()))
+                        ?.map((line, index) => {
+                          const [emoji, ...rest] = line.trim().split(" ");
+                          return (
+                            <li key={index} className="flex items-start gap-2">
+                              <span>{emoji}</span>
+                              <span>{rest.join(" ")}</span>
+                            </li>
+                          );
+                        })}
+                    </ul>
+                  </div>
                 </div>
 
                 {/* Action buttons */}

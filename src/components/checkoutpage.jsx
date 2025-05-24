@@ -207,7 +207,7 @@ const CheckoutPage = () => {
 
             {/* Billing Address Section */}
             <div className="mb-8">
-              <h2 className="text-xl font-medium mb-4">Billing address</h2>
+              {/* <h2 className="text-xl font-medium mb-4">Billing address</h2> */}
               <div className="border border-gray-300 rounded-md overflow-hidden">
                 <div
                   className={`p-4 flex items-center border-b border-gray-200 ${

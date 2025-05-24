@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { UserDetailsAction } from "../redux/actions";
+import { useDispatch } from "react-redux";
 
 const AddressBillingFields = ({ onFormDataChange, initialData = {} }) => {
   const [userDetails, setUserDetails] = useState({
@@ -14,6 +16,12 @@ const AddressBillingFields = ({ onFormDataChange, initialData = {} }) => {
 
   const [saveInfo, setSaveInfo] = useState(false);
   const [errors, setErrors] = useState({});
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (saveInfo) {
+      dispatch(UserDetailsAction(userDetails, false));
+    }
+  }, [saveInfo]);
 
   // Handle input changes for all form fields
   const handleInputChange = (field, value) => {
@@ -24,7 +32,7 @@ const AddressBillingFields = ({ onFormDataChange, initialData = {} }) => {
 
     setUserDetails(updatedUserDetails);
 
-    // Clear error when user starts typing
+    // Clear field error on input
     if (errors[field]) {
       setErrors({
         ...errors,
@@ -32,7 +40,7 @@ const AddressBillingFields = ({ onFormDataChange, initialData = {} }) => {
       });
     }
 
-    // Notify parent component about the data change
+    // Notify parent and redux
     if (onFormDataChange) {
       onFormDataChange(updatedUserDetails);
     }
@@ -77,11 +85,11 @@ const AddressBillingFields = ({ onFormDataChange, initialData = {} }) => {
   return (
     <div className="billing-address-container">
       {/* Billing Details Section Header */}
-      <div className="mb-8">
+      {/* <div className="mb-8">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-medium">Billing Details</h2>
         </div>
-      </div>
+      </div> */}
 
       {/* Personal Information */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -228,18 +236,23 @@ const AddressBillingFields = ({ onFormDataChange, initialData = {} }) => {
         </div>
       </div>
 
-      <div className="flex items-center mb-4">
-        <input
-          type="checkbox"
-          id="save-info"
-          checked={saveInfo}
-          onChange={() => setSaveInfo(!saveInfo)}
-          className="w-5 h-5 text-blue-600 border-gray-300 rounded"
-        />
-        <label htmlFor="save-info" className="ml-2 text-gray-700">
-          Save this information for next time
-        </label>
-      </div>
+      <button
+        onClick={() => {
+          const updatedValue = !saveInfo;
+          setSaveInfo(updatedValue);
+          if (!saveInfo) {
+            // Means we're toggling to true
+            dispatch(UserDetailsAction(userDetails, true));
+          }
+        }}
+        className={`px-6 py-2 text-white font-semibold rounded-lg shadow-md transition-all duration-300 ${
+          saveInfo
+            ? "bg-green-600 hover:bg-green-700"
+            : "bg-pink-600 hover:bg-pink-700"
+        }`}
+      >
+        {saveInfo ? "Address Saved" : "Update Address"}
+      </button>
 
       {/* General error message if any field is missing */}
       {Object.keys(errors).length > 0 && (
