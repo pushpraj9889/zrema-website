@@ -8,6 +8,7 @@ import {
   Download,
   Share2,
   FileText,
+  MapPin,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -18,6 +19,8 @@ export default function OrderStatus() {
   const [isSharing, setIsSharing] = useState(false);
   const [searchParams] = useSearchParams();
   const orderId = searchParams.get("order_id");
+
+  console.log("transactionData", transactionData);
 
   useEffect(() => {
     if (orderId) {
@@ -56,6 +59,24 @@ Transaction Details:
 - Merchant Order ID: ${transactionData.merchantOrderId || "N/A"}
 - Date: ${date}
 - Time: ${time}
+
+Shipping Information:
+- Address: ${transactionData.details?.shipping_address || "N/A"}
+- Pincode: ${transactionData.details?.shipping_pincode || "N/A"}
+
+Product Details:
+${
+  transactionData.details?.products
+    ?.map(
+      (product, index) =>
+        `- ${product.name || "Product"} (${
+          product.product_code || "N/A"
+        })\n  Description: ${product.description || "N/A"}\n  MRP: ₹${
+          product.mrp || "N/A"
+        }`
+    )
+    .join("\n") || "No products found"
+}
 
 =====================================
 Transaction processed securely
@@ -102,7 +123,7 @@ Thank you for your payment!
 
     // Set canvas size for A4-like proportions
     canvas.width = 600;
-    canvas.height = 800;
+    canvas.height = 900; // Increased height for more content
 
     // Fill background
     ctx.fillStyle = "#ffffff";
@@ -130,18 +151,51 @@ Thank you for your payment!
 
     const details = [
       `Status: ${transactionData.status || "Completed"}`,
-      `Amount: ${transactionData.amount || "N/A"}`,
+      `Amount: ₹${transactionData.amount || "N/A"}`,
       `Transaction ID: ${transactionData.transactionId || "N/A"}`,
       `Merchant Order ID: ${transactionData.merchantOrderId || "N/A"}`,
       `Date: ${new Date().toLocaleDateString()}`,
       `Time: ${new Date().toLocaleTimeString()}`,
+      ``,
+      `Shipping Information:`,
+      `Address: ${transactionData.details?.shipping_address || "N/A"}`,
+      `Pincode: ${transactionData.details?.shipping_pincode || "N/A"}`,
     ];
 
     let yPosition = 140;
     details.forEach((detail) => {
+      if (detail === "Shipping Information:") {
+        ctx.font = "bold 16px Arial";
+      } else if (detail === "") {
+        yPosition += 10; // Add space
+        return;
+      } else {
+        ctx.font = "16px Arial";
+      }
       ctx.fillText(detail, 80, yPosition);
       yPosition += 30;
     });
+
+    // Product details
+    if (transactionData.details?.products?.length > 0) {
+      ctx.font = "bold 16px Arial";
+      ctx.fillText("Product Details:", 80, yPosition);
+      yPosition += 30;
+
+      ctx.font = "14px Arial";
+      transactionData.details.products.forEach((product) => {
+        ctx.fillText(`• ${product.name || "Product"}`, 100, yPosition);
+        yPosition += 20;
+        ctx.fillText(
+          `  Code: ${product.product_code || "N/A"}`,
+          100,
+          yPosition
+        );
+        yPosition += 20;
+        ctx.fillText(`  MRP: ₹${product.mrp || "N/A"}`, 100, yPosition);
+        yPosition += 30;
+      });
+    }
 
     // Footer
     ctx.textAlign = "center";
@@ -149,12 +203,12 @@ Thank you for your payment!
     ctx.fillText(
       "Transaction processed securely",
       canvas.width / 2,
-      yPosition + 60
+      yPosition + 40
     );
     ctx.fillText(
       "Thank you for your payment!",
       canvas.width / 2,
-      yPosition + 90
+      yPosition + 70
     );
 
     return canvas;
@@ -198,150 +252,6 @@ Thank you for your payment!
     }
   };
 
-  // Alternative: Create a printable version
-  const handlePrintReceipt = () => {
-    const printWindow = window.open("", "_blank");
-    const printContent = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>Payment Receipt</title>
-        <style>
-          body {
-            font-family: Arial, sans-serif;
-            padding: 40px;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.6;
-          }
-          .header {
-            text-align: center;
-            border-bottom: 3px solid #333;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-          }
-          .header h1 {
-            margin: 0;
-            font-size: 28px;
-            color: #333;
-          }
-          .details {
-            margin: 30px 0;
-          }
-          .detail-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
-          }
-          .label {
-            font-weight: bold;
-            color: #555;
-          }
-          .value {
-            color: #333;
-            font-family: 'Courier New', monospace;
-          }
-          .footer {
-            text-align: center;
-            margin-top: 50px;
-            padding-top: 20px;
-            border-top: 2px solid #333;
-            color: #666;
-            font-size: 14px;
-          }
-          .amount-section {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            margin: 20px 0;
-          }
-          .amount {
-            font-size: 36px;
-            font-weight: bold;
-            color: #2c5530;
-          }
-          @media print {
-            body { padding: 20px; }
-            .no-print { display: none; }
-          }
-        </style>
-      </head>
-      <body>
-        <div class="header">
-          <h1>PAYMENT RECEIPT</h1>
-          <p>Transaction Confirmation</p>
-        </div>
-        
-        <div class="amount-section">
-          <div style="color: #666; font-size: 14px; margin-bottom: 8px;">AMOUNT PAID</div>
-          <div class="amount">${transactionData.amount || "N/A"}</div>
-        </div>
-        
-        <div class="details">
-          <div class="detail-row">
-            <span class="label">Status:</span>
-            <span class="value">${transactionData.status || "Completed"}</span>
-          </div>
-          <div class="detail-row">
-            <span class="label">Transaction ID:</span>
-            <span class="value">${transactionData.transactionId || "N/A"}</span>
-          </div>
-          <div class="detail-row">
-            <span class="label">Merchant Order ID:</span>
-            <span class="value">${
-              transactionData.merchantOrderId || "N/A"
-            }</span>
-          </div>
-          <div class="detail-row">
-            <span class="label">Date:</span>
-            <span class="value">${new Date().toLocaleDateString()}</span>
-          </div>
-          <div class="detail-row">
-            <span class="label">Time:</span>
-            <span class="value">${new Date().toLocaleTimeString()}</span>
-          </div>
-        </div>
-        
-        <div class="footer">
-          <p><strong>Transaction processed securely</strong></p>
-          <p>Thank you for your payment!</p>
-          <p style="margin-top: 20px; font-size: 12px;">
-            This is an electronic receipt. Please keep it for your records.
-          </p>
-        </div>
-        
-        <div class="no-print" style="text-align: center; margin-top: 30px;">
-          <button onclick="window.print()" style="
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-          ">Print Receipt</button>
-          <button onclick="window.close()" style="
-            background: #6c757d;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-left: 10px;
-          ">Close</button>
-        </div>
-      </body>
-      </html>
-    `;
-
-    printWindow.document.write(printContent);
-    printWindow.document.close();
-    printWindow.focus();
-  };
-
   // Share functionality
   const handleShare = async () => {
     setIsSharing(true);
@@ -350,7 +260,9 @@ Thank you for your payment!
       title: "Payment Receipt",
       text: `Payment successful! Transaction ID: ${
         transactionData.transactionId || "N/A"
-      }, Amount: ${transactionData.amount || "N/A"}`,
+      }, Amount: ₹${transactionData.amount || "N/A"}, Shipping to: ${
+        transactionData.details?.shipping_address || "N/A"
+      } - ${transactionData.details?.shipping_pincode || "N/A"}`,
       url: window.location.href,
     };
 
@@ -364,11 +276,29 @@ Thank you for your payment!
         await navigator.share(shareData);
       } else {
         // Fallback: Copy to clipboard
-        const shareText = `Payment Successful!\n\nTransaction ID: ${
-          transactionData.transactionId || "N/A"
-        }\nAmount: ${transactionData.amount || "N/A"}\nStatus: ${
-          transactionData.status || "Completed"
-        }\n\nView details: ${window.location.href}`;
+        const shareText = `Payment Successful!
+
+Transaction Details:
+• Transaction ID: ${transactionData.transactionId || "N/A"}
+• Amount: ₹${transactionData.amount || "N/A"}
+• Status: ${transactionData.status || "Completed"}
+
+Shipping Information:
+• Address: ${transactionData.details?.shipping_address || "N/A"}
+• Pincode: ${transactionData.details?.shipping_pincode || "N/A"}
+
+${
+  transactionData.details?.products?.length > 0
+    ? `Products:\n${transactionData.details.products
+        .map(
+          (product) =>
+            `• ${product.name || "Product"} (₹${product.mrp || "N/A"})`
+        )
+        .join("\n")}`
+    : ""
+}
+
+View details: ${window.location.href}`;
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
           await navigator.clipboard.writeText(shareText);
@@ -408,7 +338,9 @@ Thank you for your payment!
             <h1 className="text-2xl font-bold text-white mb-2">
               Payment Successful
             </h1>
-            <p className="text-pink-100">Transaction completed successfully</p>
+            <p className="text-pink-100">
+              Transaction {transactionData?.status?.toLowerCase()}
+            </p>
           </div>
 
           {/* Transaction Details */}
@@ -422,7 +354,7 @@ Thank you for your payment!
                 </span>
               </div>
               <div className="text-4xl font-bold text-gray-800">
-                {transactionData.amount}
+                ₹{transactionData.amount}
               </div>
             </div>
 
@@ -439,32 +371,28 @@ Thank you for your payment!
               </span>
             </div>
 
-            {/* Transaction Details */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+            {/* Shipping Information */}
+            {(transactionData.details?.shipping_address ||
+              transactionData.details?.shipping_pincode) && (
+              <div className="flex items-center justify-between p-4 bg-blue-50 rounded-xl">
                 <div className="flex items-center">
-                  <Hash className="w-5 h-5 text-pink-500 mr-3" />
-                  <span className="text-sm font-medium text-gray-600">
-                    Transaction ID
-                  </span>
+                  <MapPin className="w-5 h-5 text-pink-500 mr-3" />
+                  <div>
+                    <span className="text-sm font-medium text-gray-600 block">
+                      Shipping Address
+                    </span>
+                    <span className="text-sm text-gray-800">
+                      {transactionData.details?.shipping_address}
+                    </span>
+                    {transactionData.details?.shipping_pincode && (
+                      <span className="text-sm text-gray-600 block">
+                        PIN: {transactionData.details.shipping_pincode}
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <span className="text-sm text-gray-800 font-mono">
-                  {transactionData.transactionId}
-                </span>
               </div>
-
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                <div className="flex items-center">
-                  <Receipt className="w-5 h-5 text-pink-500 mr-3" />
-                  <span className="text-sm font-medium text-gray-600">
-                    Merchant Order ID
-                  </span>
-                </div>
-                <span className="text-sm text-gray-800 font-mono">
-                  {transactionData.merchantOrderId}
-                </span>
-              </div>
-            </div>
+            )}
 
             {/* Full Details (Expandable) */}
             <details className="group">
@@ -494,6 +422,28 @@ Thank you for your payment!
                     {transactionData.merchantOrderId}
                   </span>
                 </div>
+
+                {/* Product Details */}
+                {transactionData.details?.products?.length > 0 && (
+                  <div className="pt-2 border-t border-gray-200">
+                    <span className="font-medium text-gray-500 text-xs block mb-2">
+                      Products:
+                    </span>
+                    {transactionData.details.products.map((product, index) => (
+                      <div
+                        key={index}
+                        className="mb-2 p-2 bg-white rounded border"
+                      >
+                        <div className="text-xs font-medium text-gray-700">
+                          {product.name}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          Code: {product.product_code} | MRP: ₹{product.mrp}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </details>
 
@@ -502,21 +452,12 @@ Thank you for your payment!
               {/* Primary Action Buttons */}
               <div className="flex gap-3">
                 <button
-                  onClick={handleDownloadReceipt}
+                  onClick={handleDownloadPDF}
                   disabled={isDownloading}
-                  className="flex-1 bg-gradient-to-r from-pink-500 to-rose-500 text-white py-3 px-4 rounded-xl font-semibold hover:from-pink-600 hover:to-rose-600 transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                  className="flex-1 bg-pink-500 border border-pink-300 text-white py-2 px-4 rounded-xl font-medium disabled:cursor-not-allowed flex items-center justify-center text-sm"
                 >
-                  {isDownloading ? (
-                    <div className="flex items-center">
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Downloading...
-                    </div>
-                  ) : (
-                    <div className="flex items-center">
-                      <Download className="w-4 h-4 mr-2" />
-                      Download Receipt
-                    </div>
-                  )}
+                  <FileText className="w-4 h-4 mr-2" />
+                  {isDownloading ? "Downloading..." : "Download Receipt"}
                 </button>
                 <button
                   onClick={handleShare}
@@ -534,25 +475,6 @@ Thank you for your payment!
                       Share
                     </div>
                   )}
-                </button>
-              </div>
-
-              {/* Secondary Download Buttons */}
-              <div className="flex gap-3">
-                <button
-                  onClick={handleDownloadPDF}
-                  disabled={isDownloading}
-                  className="flex-1 bg-blue-100 border border-blue-300 text-blue-700 py-2 px-4 rounded-xl font-medium hover:bg-blue-200 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center text-sm"
-                >
-                  <FileText className="w-4 h-4 mr-2" />
-                  Download as Image
-                </button>
-                <button
-                  onClick={handlePrintReceipt}
-                  className="flex-1 bg-gray-100 border border-gray-300 text-gray-700 py-2 px-4 rounded-xl font-medium hover:bg-gray-200 transition-all duration-200 flex items-center justify-center text-sm"
-                >
-                  <Receipt className="w-4 h-4 mr-2" />
-                  Print Receipt
                 </button>
               </div>
             </div>
