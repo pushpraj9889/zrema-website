@@ -21,9 +21,9 @@ const BestsellersSection = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const navigate = useNavigate();
   const [selectedProduct, setSelectedProduct] = useState(null);
-  // More products to demonstrate scrolling
-  // console.log("fdsggsjsgjdk", products);
+
   console.log("gettingProductLog", products);
+
   const bestSellerCall = async () => {
     try {
       const responsedata = await get("/product/all");
@@ -36,6 +36,41 @@ const BestsellersSection = () => {
 
   useEffect(() => {
     bestSellerCall();
+  }, []);
+
+  // Function to prevent right-click context menu
+  const handleContextMenu = (e) => {
+    e.preventDefault();
+    return false;
+  };
+
+  // Function to prevent drag start
+  const handleDragStart = (e) => {
+    e.preventDefault();
+    return false;
+  };
+
+  // Function to prevent keyboard shortcuts for saving images
+  const handleKeyDown = (e) => {
+    // Prevent Ctrl+S, Ctrl+A, F12, etc.
+    if (
+      (e.ctrlKey && (e.keyCode === 83 || e.keyCode === 65)) || // Ctrl+S, Ctrl+A
+      e.keyCode === 123 || // F12
+      (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
+      (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
+      (e.ctrlKey && e.keyCode === 85) // Ctrl+U
+    ) {
+      e.preventDefault();
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    // Add global event listeners to prevent keyboard shortcuts
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   const checkScrollability = () => {
@@ -55,7 +90,7 @@ const BestsellersSection = () => {
         left: -container.clientWidth / 2,
         behavior: "smooth",
       });
-      setTimeout(checkScrollability, 500); // Check after animation
+      setTimeout(checkScrollability, 500);
     }
   };
 
@@ -66,7 +101,7 @@ const BestsellersSection = () => {
         left: container.clientWidth / 2,
         behavior: "smooth",
       });
-      setTimeout(checkScrollability, 500); // Check after animation
+      setTimeout(checkScrollability, 500);
     }
   };
 
@@ -74,14 +109,11 @@ const BestsellersSection = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Add listener to update scroll buttons on horizontal scroll
   React.useEffect(() => {
     const container = scrollContainerRef.current;
     if (container) {
       container.addEventListener("scroll", checkScrollability);
-      checkScrollability(); // Initial check
-
-      // Check on window resize too
+      checkScrollability();
       window.addEventListener("resize", checkScrollability);
 
       return () => {
@@ -90,6 +122,7 @@ const BestsellersSection = () => {
       };
     }
   }, []);
+
   const viewPagePree = (id) => {
     navigate(`/ProductPage/${id}`);
   };
@@ -97,14 +130,11 @@ const BestsellersSection = () => {
   return (
     <section className="py-8 bg-gray-50">
       <div className="container mx-auto">
-        {/* Section Title */}
-        <h2 className="text-xl sm:text-4xl md:text-4xl font-serif text-center mb-8  font-black">
+        <h2 className="text-xl sm:text-4xl md:text-4xl font-serif text-center mb-8 font-black">
           Discover Bestsellers
         </h2>
 
-        {/* Products Container with Scroll */}
         <div className="relative">
-          {/* Left and Right Arrows */}
           {canScrollLeft && (
             <button
               onClick={scrollLeft}
@@ -123,19 +153,30 @@ const BestsellersSection = () => {
             </button>
           )}
 
-          {/* Scrollable Product Container */}
           <div>
             {/* For small screens - Grid view */}
             <div className="grid grid-cols-2 gap-1 sm:hidden px-2">
               {products.slice(0, 8)?.map((product) => (
-                <div key={product.id} className="bg-white  p-2">
+                <div key={product.id} className="bg-white p-2">
                   <img
                     src={product.images[0]}
-                    className="w-full h-[235px] object-cover"
+                    className="w-full h-[235px] object-cover pointer-events-none select-none"
                     alt={product.name}
                     onClick={() => viewPagePree(product._id)}
+                    onContextMenu={handleContextMenu}
+                    onDragStart={handleDragStart}
+                    draggable={false}
+                    style={{
+                      userSelect: "none",
+                      WebkitUserSelect: "none",
+                      MozUserSelect: "none",
+                      msUserSelect: "none",
+                      WebkitTouchCallout: "none",
+                      WebkitUserDrag: "none",
+                      KhtmlUserSelect: "none",
+                    }}
                   />
-                  <h3 className=" text-xs sm:text-s mt-2 text-center font-Lato">
+                  <h3 className="text-xs sm:text-s mt-2 text-center font-Lato">
                     {product.name.slice(0, 30)}
                   </h3>
                   <div className="flex justify-center items-center mt-1">
@@ -148,6 +189,9 @@ const BestsellersSection = () => {
                         Number(product.mrp),
                         Number(product.discount)
                       ).toFixed(2)}
+                    </span>
+                    <span className="bg-pink-100 text-pink-600 text-xs px-2 py-0.5 rounded">
+                      {product.discount}% OFF
                     </span>
                   </div>
                 </div>
@@ -163,9 +207,7 @@ const BestsellersSection = () => {
               {products?.map((product) => (
                 <div
                   key={product.id}
-                  className="snap-start flex-shrink-0 mx-2 
-                   w-[90%] sm:w-[33.33%] lg:w-[25%] 
-                   max-w-[320px]"
+                  className="snap-start flex-shrink-0 mx-2 w-[90%] sm:w-[33.33%] lg:w-[25%] max-w-[320px]"
                 >
                   <div className="bg-white rounded overflow-hidden shadow-sm relative h-[500px] group">
                     <div className="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 text-sm z-[2]">
@@ -174,18 +216,36 @@ const BestsellersSection = () => {
                     <div className="relative z-0">
                       <img
                         src={product.images[0]}
-                        className="w-full h-[430px] object-cover"
+                        className="w-full h-[430px] object-cover pointer-events-none select-none"
                         alt={product.name}
                         onClick={() => viewPagePree(product._id)}
+                        onContextMenu={handleContextMenu}
+                        onDragStart={handleDragStart}
+                        draggable={false}
+                        style={{
+                          userSelect: "none",
+                          WebkitUserSelect: "none",
+                          MozUserSelect: "none",
+                          msUserSelect: "none",
+                          WebkitTouchCallout: "none",
+                          WebkitUserDrag: "none",
+                          KhtmlUserSelect: "none",
+                        }}
+                      />
+                      {/* Invisible overlay to prevent right-click */}
+                      <div
+                        className="absolute inset-0 z-[1] cursor-pointer"
+                        onClick={() => viewPagePree(product._id)}
+                        onContextMenu={handleContextMenu}
                       />
                     </div>
-                    <div className="absolute bottom-250 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="absolute bottom-250 right-3 opacity-0 group-hover:opacity-100 transition-opacity z-[3]">
                       <button
-                        className="bg-pink-600 hover:bg-green-700 text-white p-3 rounded-full shadow-lg transition duration-300 ease-in-out"
+                        className="bg-pink-600 hover:bg-pink-700 text-white p-3 rounded-full shadow-lg transition duration-300 ease-in-out"
                         aria-label="Add to cart"
                         onClick={() => {
                           setIsCartOpen(true);
-                          setSelectedProduct(product); // Ensure only one product modal is open
+                          setSelectedProduct(product);
                         }}
                       >
                         <ShoppingBasket size={20} />
@@ -213,6 +273,9 @@ const BestsellersSection = () => {
                             Number(product.discount)
                           ).toFixed(2)}
                         </span>
+                        <span className="bg-pink-100 text-pink-600 text-xs px-2 py-0.5 rounded">
+                          {product.discount}% OFF
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -223,7 +286,6 @@ const BestsellersSection = () => {
         </div>
       </div>
 
-      {/* Scroll to top button */}
       <div className="fixed bottom-6 right-6 z-50">
         <button
           onClick={scrollToTop}
@@ -233,10 +295,34 @@ const BestsellersSection = () => {
         </button>
       </div>
 
-      {/* CSS for hiding scrollbar */}
+      {/* Enhanced CSS for hiding scrollbar and preventing image downloads */}
       <style jsx>{`
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
+        }
+
+        /* Additional protection styles */
+        img {
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+          -webkit-user-drag: none;
+          -webkit-touch-callout: none;
+          pointer-events: none;
+        }
+
+        /* Disable image context menu on mobile */
+        img::-webkit-image-inner-element {
+          -webkit-touch-callout: none;
+        }
+
+        /* Disable text selection */
+        .select-none {
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
         }
       `}</style>
     </section>

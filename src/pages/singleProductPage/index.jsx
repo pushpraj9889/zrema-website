@@ -30,6 +30,41 @@ export default function ProductPage() {
   const [error, setError] = useState(null);
   const [showSizeChart, setShowSizeChart] = useState(false);
 
+  // Function to prevent right-click context menu
+  const handleContextMenu = (e) => {
+    e.preventDefault();
+    return false;
+  };
+
+  // Function to prevent drag start
+  const handleDragStart = (e) => {
+    e.preventDefault();
+    return false;
+  };
+
+  // Function to prevent keyboard shortcuts for saving images
+  const handleKeyDown = (e) => {
+    // Prevent Ctrl+S, Ctrl+A, F12, etc.
+    if (
+      (e.ctrlKey && (e.keyCode === 83 || e.keyCode === 65)) || // Ctrl+S, Ctrl+A
+      e.keyCode === 123 || // F12
+      (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
+      (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
+      (e.ctrlKey && e.keyCode === 85) // Ctrl+U
+    ) {
+      e.preventDefault();
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    // Add global event listeners to prevent keyboard shortcuts
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   const getProductById = async () => {
     setIsLoading(true);
     setError(null);
@@ -70,6 +105,7 @@ export default function ProductPage() {
     dispatch(addTocartAction(productToAdd));
     setIsCartOpen(true);
   };
+
   const buyitNow = () => {
     console.log("buyitnow");
     dispatch(addTocartAction(product));
@@ -161,21 +197,40 @@ export default function ProductPage() {
                 {product.images && product.images.length > 1 && (
                   <div className="hidden lg:flex flex-col gap-4 max-h-[500px] overflow-y-auto pr-2 scrollbar-thin">
                     {product.images.map((image, index) => (
-                      <button
-                        key={`thumb-${index}`}
-                        className={`w-20 h-20 rounded-md overflow-hidden border-2 transition-all ${
-                          currentImage === index
-                            ? "border-green-500"
-                            : "border-transparent hover:border-gray-300"
-                        }`}
-                        onClick={() => setCurrentImage(index)}
-                      >
-                        <img
-                          src={image}
-                          alt={`${product.name} thumbnail ${index + 1}`}
-                          className="w-full h-full object-cover"
+                      <div key={`thumb-${index}`} className="relative">
+                        <button
+                          className={`w-20 h-20 rounded-md overflow-hidden border-2 transition-all ${
+                            currentImage === index
+                              ? "border-green-500"
+                              : "border-transparent hover:border-gray-300"
+                          }`}
+                          onClick={() => setCurrentImage(index)}
+                        >
+                          <img
+                            src={image}
+                            alt={`${product.name} thumbnail ${index + 1}`}
+                            className="w-full h-full object-cover pointer-events-none select-none"
+                            onContextMenu={handleContextMenu}
+                            onDragStart={handleDragStart}
+                            draggable={false}
+                            style={{
+                              userSelect: "none",
+                              WebkitUserSelect: "none",
+                              MozUserSelect: "none",
+                              msUserSelect: "none",
+                              WebkitTouchCallout: "none",
+                              WebkitUserDrag: "none",
+                              KhtmlUserSelect: "none",
+                            }}
+                          />
+                        </button>
+                        {/* Invisible overlay for thumbnails */}
+                        <div
+                          className="absolute inset-0 z-[1] cursor-pointer"
+                          onClick={() => setCurrentImage(index)}
+                          onContextMenu={handleContextMenu}
                         />
-                      </button>
+                      </div>
                     ))}
                   </div>
                 )}
@@ -183,11 +238,30 @@ export default function ProductPage() {
                 {/* Main Image */}
                 <div className="relative rounded-lg overflow-hidden bg-gray-100 w-full">
                   {product.images && product.images.length > 0 ? (
-                    <img
-                      src={product.images[currentImage]}
-                      alt={product.name}
-                      className="w-full h-full object-contain aspect-square"
-                    />
+                    <div className="relative">
+                      <img
+                        src={product.images[currentImage]}
+                        alt={product.name}
+                        className="w-full h-full object-contain aspect-square pointer-events-none select-none"
+                        onContextMenu={handleContextMenu}
+                        onDragStart={handleDragStart}
+                        draggable={false}
+                        style={{
+                          userSelect: "none",
+                          WebkitUserSelect: "none",
+                          MozUserSelect: "none",
+                          msUserSelect: "none",
+                          WebkitTouchCallout: "none",
+                          WebkitUserDrag: "none",
+                          KhtmlUserSelect: "none",
+                        }}
+                      />
+                      {/* Invisible overlay for main image */}
+                      <div
+                        className="absolute inset-0 z-[1]"
+                        onContextMenu={handleContextMenu}
+                      />
+                    </div>
                   ) : (
                     <div className="flex items-center justify-center h-96 bg-gray-100">
                       <p className="text-gray-500">No image available</p>
@@ -196,7 +270,7 @@ export default function ProductPage() {
 
                   {/* Sale badge */}
                   {product.onSale && (
-                    <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 text-sm font-medium rounded-md">
+                    <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 text-sm font-medium rounded-md z-[2]">
                       Sale
                     </div>
                   )}
@@ -207,21 +281,40 @@ export default function ProductPage() {
               {product.images && product.images.length > 1 && (
                 <div className="flex gap-2 mt-4 overflow-x-auto lg:hidden pb-2">
                   {product.images.map((image, index) => (
-                    <button
-                      key={`mobile-thumb-${index}`}
-                      className={`w-20 h-20 rounded-md overflow-hidden flex-shrink-0 border-2 ${
-                        currentImage === index
-                          ? "border-green-500"
-                          : "border-transparent"
-                      }`}
-                      onClick={() => setCurrentImage(index)}
-                    >
-                      <img
-                        src={image}
-                        alt={`${product.name} view ${index + 1}`}
-                        className="w-full h-full object-cover"
+                    <div key={`mobile-thumb-${index}`} className="relative">
+                      <button
+                        className={`w-20 h-20 rounded-md overflow-hidden flex-shrink-0 border-2 ${
+                          currentImage === index
+                            ? "border-green-500"
+                            : "border-transparent"
+                        }`}
+                        onClick={() => setCurrentImage(index)}
+                      >
+                        <img
+                          src={image}
+                          alt={`${product.name} view ${index + 1}`}
+                          className="w-full h-full object-cover pointer-events-none select-none"
+                          onContextMenu={handleContextMenu}
+                          onDragStart={handleDragStart}
+                          draggable={false}
+                          style={{
+                            userSelect: "none",
+                            WebkitUserSelect: "none",
+                            MozUserSelect: "none",
+                            msUserSelect: "none",
+                            WebkitTouchCallout: "none",
+                            WebkitUserDrag: "none",
+                            KhtmlUserSelect: "none",
+                          }}
+                        />
+                      </button>
+                      {/* Invisible overlay for mobile thumbnails */}
+                      <div
+                        className="absolute inset-0 z-[1] cursor-pointer"
+                        onClick={() => setCurrentImage(index)}
+                        onContextMenu={handleContextMenu}
                       />
-                    </button>
+                    </div>
                   ))}
                 </div>
               )}
@@ -239,20 +332,7 @@ export default function ProductPage() {
               <p className="text-xl font-bold text-gray-700">
                 ₹{calculateMrp(product.mrp, product.discount)}
               </p>
-              {/* {product.mrp !== product.price && (
-                <p className="ml-4 text-lg text-gray-500 line-through">
-                  ₹{product.price}
-                </p>
-              )} */}
             </div>
-
-            {/* Share Button */}
-            {/* <div className="flex items-center mb-8">
-              <button className="flex items-center text-gray-500 hover:text-gray-900 transition-colors">
-                <Share2 className="w-5 h-5 mr-2" />
-                <span>Share</span>
-              </button>
-            </div> */}
 
             {/* Divider */}
             <div className="border-t border-gray-200 my-1"></div>
@@ -305,16 +385,9 @@ export default function ProductPage() {
                     <span>Size guide</span>
                   </button>
                 </div>
-                {/* {showSizeChart && (
-                  <SizeChart
-                    showSizeChart={showSizeChart}
-                    setShowSizeChart={setShowSizeChart}
-                  />
-                )} */}
                 {showSizeChart && (
                   <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
                     <div className="relative w-full max-w-4xl mx-auto bg-white p-4 rounded-md shadow-lg">
-                      {/* ...existing SizeChart content... */}
                       <SizeChart
                         showSizeChart={showSizeChart}
                         setShowSizeChart={setShowSizeChart}
@@ -350,22 +423,37 @@ export default function ProductPage() {
               </div>
             )}
 
-            {/* Buttons */}
-
             {/* Description */}
             {product.description && (
               <div className="mt-2">
                 <h3 className="font-medium text-gray-900 mb-1">Description</h3>
                 <div className="prose prose-sm text-gray-700">
-                  <p>{product.description}</p>
+                  {product.description.split("\n").map((line, index) => {
+                    const isHighlightLine = line.includes(
+                      "Product Highlights:"
+                    );
+
+                    return (
+                      <p
+                        key={index}
+                        className={
+                          isHighlightLine ? "text-black font-semibold" : ""
+                        }
+                      >
+                        {line}
+                      </p>
+                    );
+                  })}
                 </div>
               </div>
             )}
+
+            {/* Buttons */}
             <div className="space-y-4 mt-8">
               <button
                 onClick={addToCart}
                 type="button"
-                class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 shadow-lg shadow-pink-500/50 dark:shadow-lg dark:shadow-pink-800/80 font-medium rounded-lg text-sm px-5 py-3 text-center me-2 mb-2 mt-6  mr-8 flex items-center justify-center w-full  "
+                className="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 shadow-lg shadow-pink-500/50 dark:shadow-lg dark:shadow-pink-800/80 font-medium rounded-lg text-sm px-5 py-3 text-center me-2 mb-2 mt-6  mr-8 flex items-center justify-center w-full"
               >
                 <ShoppingBag className="w-5 h-5 mr-2" />
                 Add to cart
@@ -387,6 +475,33 @@ export default function ProductPage() {
       {isCartOpen && (
         <QazmiCart isOpen={isCartOpen} setIsOpen={setIsCartOpen} />
       )}
+
+      {/* Enhanced CSS for preventing image downloads */}
+      <style jsx>{`
+        /* Additional protection styles */
+        img {
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+          -webkit-user-drag: none;
+          -webkit-touch-callout: none;
+          pointer-events: none;
+        }
+
+        /* Disable image context menu on mobile */
+        img::-webkit-image-inner-element {
+          -webkit-touch-callout: none;
+        }
+
+        /* Disable text selection */
+        .select-none {
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+        }
+      `}</style>
     </div>
   );
 }

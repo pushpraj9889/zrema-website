@@ -56,6 +56,56 @@ const Collections = () => {
     setIsCartOpen(true);
   };
 
+  // Prevent right-click context menu
+  const handleContextMenu = (e) => {
+    e.preventDefault();
+    return false;
+  };
+
+  // Prevent drag and drop
+  const handleDragStart = (e) => {
+    e.preventDefault();
+    return false;
+  };
+
+  // Prevent various keyboard shortcuts
+  const handleKeyDown = (e) => {
+    // Prevent Ctrl+S (Save), Ctrl+A (Select All), F12 (DevTools), etc.
+    if (
+      (e.ctrlKey &&
+        (e.key === "s" || e.key === "a" || e.key === "u" || e.key === "c")) ||
+      e.key === "F12" ||
+      (e.ctrlKey && e.shiftKey && e.key === "I") ||
+      (e.ctrlKey && e.shiftKey && e.key === "C") ||
+      (e.ctrlKey && e.shiftKey && e.key === "J")
+    ) {
+      e.preventDefault();
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    // Add global event listeners for additional protection
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("contextmenu", handleContextMenu);
+
+    // Disable text selection on the entire page
+    document.body.style.userSelect = "none";
+    document.body.style.webkitUserSelect = "none";
+    document.body.style.mozUserSelect = "none";
+    document.body.style.msUserSelect = "none";
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("contextmenu", handleContextMenu);
+      // Reset user selection when component unmounts
+      document.body.style.userSelect = "";
+      document.body.style.webkitUserSelect = "";
+      document.body.style.mozUserSelect = "";
+      document.body.style.msUserSelect = "";
+    };
+  }, []);
+
   return (
     <section className="py-8 bg-gray-50">
       <div className="container mx-auto px-4">
@@ -78,19 +128,41 @@ const Collections = () => {
 
               {/* Product Image */}
               <div className="relative">
+                {/* Invisible overlay to prevent direct image interaction */}
+                <div
+                  className="absolute inset-0 z-20 cursor-pointer"
+                  onClick={() => viewProductPage(product._id)}
+                  onContextMenu={handleContextMenu}
+                  onDragStart={handleDragStart}
+                />
+
                 <img
                   src={product.images && product.images[0]}
-                  className="w-full h-[255px] sm:h-[320px] object-cover cursor-pointer"
+                  className="w-full h-[255px] sm:h-[320px] object-cover pointer-events-none select-none"
                   alt={product.name}
-                  onClick={() => viewProductPage(product._id)}
+                  onContextMenu={handleContextMenu}
+                  onDragStart={handleDragStart}
+                  draggable={false}
+                  style={{
+                    userSelect: "none",
+                    webkitUserSelect: "none",
+                    mozUserSelect: "none",
+                    msUserSelect: "none",
+                    webkitTouchCallout: "none",
+                    webkitUserDrag: "none",
+                    webkitTapHighlightColor: "transparent",
+                  }}
                 />
 
                 {/* Shopping Basket Button */}
-                <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30">
                   <button
                     className="bg-green-600 text-white p-2 rounded-full shadow-md hover:bg-green-800"
                     aria-label="Add to bag"
-                    onClick={() => openCartModal(product)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openCartModal(product);
+                    }}
                   >
                     <ShoppingBasket size={18} />
                   </button>
@@ -99,7 +171,16 @@ const Collections = () => {
 
               {/* Product Info */}
               <div className="px-3 py-3">
-                <h3 className="text-sm font-normal text-center font-Lato line-clamp-2 h-10">
+                <h3
+                  className="text-sm font-normal text-center font-Lato line-clamp-2 h-10 cursor-pointer"
+                  onClick={() => viewProductPage(product._id)}
+                  style={{
+                    userSelect: "none",
+                    webkitUserSelect: "none",
+                    mozUserSelect: "none",
+                    msUserSelect: "none",
+                  }}
+                >
                   {product.name}
                 </h3>
                 <div className="flex justify-center items-center mt-1">
@@ -138,6 +219,39 @@ const Collections = () => {
           <ArrowUp size={24} />
         </button>
       </div>
+
+      {/* Additional CSS for image protection */}
+      <style jsx>{`
+        img {
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+          -webkit-user-drag: none;
+          -webkit-touch-callout: none;
+          -webkit-tap-highlight-color: transparent;
+          pointer-events: none;
+        }
+
+        .product-image-container {
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+        }
+
+        /* Disable highlighting */
+        * {
+          -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Additional protection against print screen */
+        @media print {
+          img {
+            display: none !important;
+          }
+        }
+      `}</style>
     </section>
   );
 };
