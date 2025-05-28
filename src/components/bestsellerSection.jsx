@@ -157,12 +157,15 @@ const BestsellersSection = () => {
             {/* For small screens - Grid view */}
             <div className="grid grid-cols-2 gap-1 sm:hidden px-2">
               {products.slice(0, 8)?.map((product) => (
-                <div key={product.id} className="bg-white p-2">
+                <div
+                  key={product.id}
+                  className="bg-white p-2 cursor-pointer"
+                  onClick={() => viewPagePree(product._id)}
+                >
                   <img
                     src={product.images[0]}
                     className="w-full h-[235px] object-cover pointer-events-none select-none"
                     alt={product.name}
-                    onClick={() => viewPagePree(product._id)}
                     onContextMenu={handleContextMenu}
                     onDragStart={handleDragStart}
                     draggable={false}
@@ -218,7 +221,6 @@ const BestsellersSection = () => {
                         src={product.images[0]}
                         className="w-full h-[430px] object-cover pointer-events-none select-none"
                         alt={product.name}
-                        onClick={() => viewPagePree(product._id)}
                         onContextMenu={handleContextMenu}
                         onDragStart={handleDragStart}
                         draggable={false}
