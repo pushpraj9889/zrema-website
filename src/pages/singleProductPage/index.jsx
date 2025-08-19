@@ -69,7 +69,7 @@ export default function ProductPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`https://api.zrema.in/product/${id}`);
+      const response = await axios.get(`https://api.zrema.com/product/${id}`);
 
       if (response?.data) {
         setProduct(response.data);

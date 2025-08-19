@@ -25,7 +25,7 @@ export default function OrderStatus() {
 
   useEffect(() => {
     if (orderId) {
-      fetch(`https://api.zrema.in/payment/verify/${orderId}`)
+      fetch(`https://api.zrema.com/payment/verify/${orderId}`)
         .then((res) => res.json())
         .then((data) => {
           console.log("Verification result:", data);

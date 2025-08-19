@@ -52,7 +52,7 @@ export default function HeaderSection() {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `https://api.zrema.in/product/search?query=${query}`
+        `https://api.zrema.com/product/search?query=${query}`
       );
       console.log("searchresponse", response.data);
       setSearchResults(response.data || []);

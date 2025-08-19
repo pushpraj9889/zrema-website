@@ -11,7 +11,7 @@ const OrderHistory = () => {
 
   const fetchMyOrders = async () => {
     try {
-      const response = await axios.get("https://api.zrema.in/order/my-orders", {
+      const response = await axios.get("https://api.zrema.com/order/my-orders", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

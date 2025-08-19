@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const https = axios.create({
-  baseURL: "https://api.zrema.in",
+  baseURL: "https://api.zrema.com",
   timeout: 5000,
   headers: {
     "Content-Type": "application/json",

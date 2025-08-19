@@ -76,7 +76,7 @@ export default function Order() {
     setTimeout(async () => {
       try {
         const response = await axios.post(
-          "https://api.zrema.in/order/create",
+          "https://api.zrema.com/order/create",
           {
             products: cart,
             shipping_address: userDetails?.address,

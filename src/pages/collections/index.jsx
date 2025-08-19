@@ -18,14 +18,14 @@ const Collections = () => {
     try {
       setLoading(true);
 
-      let url = "https://api.zrema.in/product/all";
+      let url = "https://api.zrema.com/product/all";
 
       if (subcategory === "Chikankari") {
-        url = `https://api.zrema.in/product/all?category=${encodeURIComponent(
+        url = `https://api.zrema.com/product/all?category=${encodeURIComponent(
           subcategory
         )}`;
       } else if (subcategory) {
-        url = `https://api.zrema.in/product/all?subcategory=${encodeURIComponent(
+        url = `https://api.zrema.com/product/all?subcategory=${encodeURIComponent(
           subcategory
         )}`;
       }
