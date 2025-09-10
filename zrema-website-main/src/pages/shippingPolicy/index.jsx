@@ -35,7 +35,7 @@ export default function ShippingPolicy() {
           <p className="text-gray-700">
             This document sets out the shipping policy that applies to customers
             that make a purchase at{" "}
-            <span className="font-medium">www.zrema.in</span>. If you have any
+            <span className="font-medium">www.zrema.com</span>. If you have any
             questions, please contact our customer service team at{" "}
             <a
               href="mailto:support@zrema.in"

@@ -10,7 +10,7 @@ export default function RefundPolicy() {
       <div className="px-6 py-8">
         <p className="text-gray-700 mb-4">
           Thanks for purchasing our products at{" "}
-          <span className="font-medium">www.zrema.in</span> operated by M S A
+          <span className="font-medium">www.zrema.com</span> operated by M S A
           SHAH CREATIONS.
         </p>
 

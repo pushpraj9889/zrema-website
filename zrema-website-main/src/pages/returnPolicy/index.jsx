@@ -33,12 +33,19 @@ const ReturnPolicy = () => {
                   original tags and packaging intact.
                 </p>
                 <p className="text-gray-700 mb-4">
-                  We accept return and damage, Replacement products in 7
-                  business day.
+                  Request for returns or replacements will be processed within{" "}
+                  <span className="font-medium text-pink-700">
+                    7 business days
+                  </span>{" "}
+                  from the date of delivery.
                 </p>
+
                 <p className="text-gray-700 mb-4">
-                  Replacement and damage products will be delivered in 5 to 7
-                  business day.
+                  Replacement or repaired products will be delivered within{" "}
+                  <span className="font-medium text-pink-700">
+                    7 business days
+                  </span>{" "}
+                  after the return is received and verified.
                 </p>
 
                 <div className="bg-pink-50 p-4 rounded-md border-l-4 border-pink-400 mt-4">
