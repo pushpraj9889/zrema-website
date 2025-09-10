@@ -11,6 +11,7 @@ import QazmiCartProduct from "./commonProductModal";
 import calculateMrp from "../utils/commonFunctions";
 import { addTocartAction } from "../redux/actions";
 import { useDispatch } from "react-redux";
+import toast from "react-hot-toast"; // ✅ import toast
 
 const BestsellersSection = () => {
   const scrollContainerRef = useRef(null);
@@ -36,15 +37,35 @@ const BestsellersSection = () => {
     bestSellerCall();
   }, []);
 
-  // Add to cart
+  // ✅ Add to cart with toast
   const addtoCart = (productdata) => {
     dispatch(addTocartAction(productdata));
+    toast.success(`${productdata.name.slice(0, 20)} added to cart! 🛒`, {
+      duration: 2000,
+      style: {
+        background: "#10B981",
+        color: "#fff",
+        fontWeight: "bold",
+        borderRadius: "8px",
+        padding: "10px",
+      },
+    });
   };
 
-  // Buy it now
+  // ✅ Buy it now (with toast + navigate)
   const buyitNow = (productdata) => {
     dispatch(addTocartAction(productdata));
-    navigate("/CheckoutPage");
+    toast.success(`Proceeding to checkout with ${productdata.name.slice(0, 20)}`, {
+      duration: 1500,
+      style: {
+        background: "#F59E0B",
+        color: "#fff",
+        fontWeight: "bold",
+        borderRadius: "8px",
+        padding: "10px",
+      },
+    });
+    setTimeout(() => navigate("/CheckoutPage"), 1200);
   };
 
   // Prevent context menu + drag
@@ -154,11 +175,12 @@ const BestsellersSection = () => {
                 <div
                   key={product._id}
                   className="bg-white p-2 cursor-pointer rounded shadow-sm"
+                  onClick={() => viewPagePree(product._id)}
                 >
                   <img
                     src={product.images[0]}
                     alt={product.name}
-                    className="w-full h-[220px] object-cover rounded pointer-events-none select-none"
+                    className="w-full h-[250px] object-cover rounded pointer-events-none select-none"
                     onContextMenu={handleContextMenu}
                     onDragStart={handleDragStart}
                     draggable={false}
@@ -184,13 +206,19 @@ const BestsellersSection = () => {
                   <div className="mt-3 space-y-2">
                     <button
                       className="w-full py-2 bg-pink-400 hover:bg-pink-500 text-white text-sm font-medium rounded"
-                      onClick={() => addtoCart(product)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        addtoCart(product);
+                      }}
                     >
                       Add to Cart
                     </button>
                     <button
                       className="w-full py-2 border border-gray-300 hover:border-gray-400 text-sm font-medium rounded"
-                      onClick={() => buyitNow(product)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        buyitNow(product);
+                      }}
                     >
                       Buy it Now
                     </button>

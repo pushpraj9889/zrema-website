@@ -17,6 +17,7 @@ import Collections from "./pages/collections";
 import ReturnPolicy from "./pages/returnPolicy";
 import OrderHistroy from "./pages/orderHistory";
 import OrderStatus from "./pages/orderStatus";
+import { Toaster } from "react-hot-toast";
 
 export default function App() {
   const location = useLocation();
@@ -56,6 +57,7 @@ export default function App() {
         <Route path="/order-status" element={<OrderStatus />}></Route>
       </Routes>
       <QazmiFooter />
+        <Toaster position="top-center" reverseOrder={false} />
     </>
   );
 }

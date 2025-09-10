@@ -4,14 +4,12 @@ import SocialStoriesSection from "../../components/socialMedia";
 import QazmiBestsellers from "../../components/zremaBestsellers";
 import QazmiTestimonials from "../../components/testimonials";
 import QazmiFooter from "../../components/footerSection";
-import banner from "../../assets/images/banner.png";
 import ResponsiveBannerCarousel from "../../components/crasoul";
 
 export default function Home() {
   const categories = [
     {
       name: "SHORT KURTIS",
-
       image:
         "https://zrema.s3.ap-south-1.amazonaws.com/images/392ad32d904febf3d84747ee07d6bdc1.jpg",
       alt: "Short Kurtis",
@@ -35,7 +33,7 @@ export default function Home() {
       name: "KASHMIRI SHORT KURTIS",
       image:
         "https://zrema.s3.ap-south-1.amazonaws.com/images/5ef70dfc752e4a8bf058eb9d36ee7330.jpg",
-      alt: "Kaftans",
+      alt: "Kashmiri Short Kurtis",
       link: "/Collections/Kashmiri Short Kurti",
     },
     {
@@ -58,9 +56,13 @@ export default function Home() {
       {/* Category circles section */}
       <section className="py-8 bg-gray-100">
         <div className="container mx-auto px-4">
-          <div className="flex flex-wrap justify-center gap-4">
+          {/* ✅ Horizontal scroll on mobile, wrap on larger screens */}
+          <div className="flex overflow-x-auto sm:flex-wrap sm:justify-center gap-4 scrollbar-hide">
             {categories.map((category, index) => (
-              <div key={index} className="flex flex-col items-center">
+              <div
+                key={index}
+                className="flex flex-col items-center flex-shrink-0"
+              >
                 <a
                   href={category.link}
                   className="rounded-full border-2 border-pink-300 p-1 mb-2"
@@ -69,13 +71,13 @@ export default function Home() {
                     <img
                       src={category.image}
                       alt={category.alt}
-                      className="h-full object-cover"
+                      className="h-full w-full object-cover"
                     />
                   </div>
                 </a>
                 <a
                   href={category.link}
-                  className="text-xs md:text-sm font-medium text-center hover:text-[#f542a7] cursor-pointer"
+                  className="text-xs md:text-sm font-medium text-center hover:text-[#f542a7] cursor-pointer whitespace-nowrap"
                 >
                   {category.name}
                 </a>
@@ -101,7 +103,19 @@ export default function Home() {
         <SocialStoriesSection />
         <QazmiBestsellers />
         <QazmiTestimonials />
+        <QazmiFooter />
       </div>
+
+      {/* ✅ Hide scrollbar style */}
+      <style jsx>{`
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </div>
   );
 }
