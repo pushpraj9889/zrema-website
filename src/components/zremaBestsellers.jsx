@@ -237,7 +237,7 @@ const QazmiBestsellers = () => {
                     <img
                       src={product.images[0]}
                       alt={product.name}
-                      className="w-full h-[200px] object-cover rounded pointer-events-none select-none"
+                      className="w-full h-[380px] object-cover rounded pointer-events-none select-none"
                       onContextMenu={handleContextMenu}
                       onDragStart={handleDragStart}
                       draggable={false}

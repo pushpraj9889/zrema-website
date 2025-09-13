@@ -142,7 +142,7 @@ const PremiumBannerCarousel = () => {
                   alt={banner.alt}
                   className={`w-full ${
                     isMobile
-                      ? "h-[300px] sm:h-[350px]"
+                      ? "h-[480px] sm:h-[480px]"
                       : "h-[400px] sm:h-[500px] md:h-[550px]"
                   } object-cover rounded-2xl group-hover:scale-105 transition-transform duration-700`}
                 />
