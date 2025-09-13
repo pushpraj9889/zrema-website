@@ -1,6 +1,6 @@
 import Home from "./pages/home";
 import { Route, BrowserRouter, Routes, useLocation } from "react-router-dom";
-import React from "react";
+import React, { useEffect } from "react";
 import HeaderSection from "./components/header";
 import CheckoutPage from "./pages/checkoutPage";
 import Viewcart from "./pages/ViewcartPage";
@@ -20,6 +20,24 @@ import OrderStatus from "./pages/orderStatus";
 import { Toaster } from "react-hot-toast";
 
 export default function App() {
+  const useMetaPixel = () => {
+  useEffect(() => {
+    // Load Facebook Pixel
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    
+    window.fbq('init', '1164114965380634');
+    window.fbq('track', 'PageView');
+  }, []);
+};
+useMetaPixel();
+
   const location = useLocation();
   const noHeaderRoutes = [
     "/CheckoutPage",
