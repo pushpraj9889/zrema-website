@@ -44,7 +44,7 @@ const OrderHistory = () => {
                 <img
                   src={product.images[0]}
                   alt={product.name}
-                  className="w-24 h-24 object-cover rounded-lg"
+                  className="w-24 h-27 object-cover rounded-lg"
                 />
                 <div>
                   <h3 className="text-lg font-medium">{product.name}</h3>

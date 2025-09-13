@@ -202,7 +202,7 @@ export default function Contact() {
               <p className="mb-1">
                 India{" "}
                 <a
-                  href="https://maps.google.com"
+                  href="https://www.google.com/maps/place/ZREMA+Clothing/@28.5004469,77.2498017,17z/data=!3m1!4b1!4m6!3m5!1s0x390ce114fd5b9715:0xec88169d411dab87!8m2!3d28.5004469!4d77.252382!16s%2Fg%2F11w92x7xxp?authuser=0&entry=tts&g_ep=EgoyMDI1MDkxMC4wIPu8ASoASAFQAw%3D%3D&skid=36ef01ef-eaa7-470d-8f14-06db13d323af"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-white underline hover:text-pink-300"

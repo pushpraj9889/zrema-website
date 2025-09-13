@@ -1,27 +1,47 @@
-import React, { useState, useEffect, useRef } from "react";
+
+import React, { useState, useRef, useEffect } from "react";
+import {
+  ChevronRight,
+  ChevronLeft,
+  ArrowUp,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { get } from "../Services/apicallMethode";
-import { ChevronLeft, ChevronRight, X, CheckCircle } from "lucide-react";
 import calculateMrp from "../utils/commonFunctions";
 import { addTocartAction } from "../redux/actions";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import toast from "react-hot-toast";
+import QazmiCart from "./cat";
 
-export default function QazmiBestsellers() {
-  const [products, setProducts] = useState([]);
+const QazmiBestsellers = () => {
+  const scrollContainerRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
-  const [alertVisible, setAlertVisible] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
-  const productsGridRef = useRef(null);
+  const [products, setProducts] = useState([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedSizes, setSelectedSizes] = useState({});
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const availableSizes = ["XS", "S", "M", "L", "XL", "XXL"];
 
   const bestSellerCall = async () => {
     try {
       const responsedata = await get("/product/all");
-      console.log("responsedata", responsedata);
       setProducts(responsedata);
+
+      const initialSizes = {};
+      responsedata.forEach((product) => {
+        if (product.sizes && product.sizes.length > 0) {
+          initialSizes[product._id] = product.sizes[0];
+        } else {
+          initialSizes[product._id] = "M";
+        }
+      });
+      setSelectedSizes(initialSizes);
     } catch (error) {
-      console.log("getting error", error);
+      console.log("Error fetching products", error);
     }
   };
 
@@ -29,44 +49,63 @@ export default function QazmiBestsellers() {
     bestSellerCall();
   }, []);
 
-  const navigate = useNavigate();
-  const viewPagePree = (id) => {
-    navigate(`/ProductPage/${id}`);
-  };
-
-  // Show alert function
-  const showAlert = (message) => {
-    setAlertMessage(message);
-    setAlertVisible(true);
-    // Auto-hide alert after 3 seconds
-    setTimeout(() => {
-      setAlertVisible(false);
-    }, 3000);
-  };
-
-  // Hide alert function
-  const hideAlert = () => {
-    setAlertVisible(false);
+  const handleSizeSelect = (productId, size) => {
+    setSelectedSizes((prev) => ({
+      ...prev,
+      [productId]: size,
+    }));
   };
 
   const addtoCart = (productdata) => {
-    dispatch(addTocartAction(productdata));
-    // showAlert(`${productdata.name} added to cart successfully!`);
-    showAlert(` added to cart successfully!`);
+    const selectedSize = selectedSizes[productdata._id];
+    const productWithSize = { ...productdata, selectedSize };
+    dispatch(addTocartAction(productWithSize));
+    setIsCartOpen(true);
+    setSelectedProduct(productdata);
+
+    toast.success(
+      `${productdata.name.slice(0, 20)} (Size: ${selectedSize}) added to cart! 🛒`,
+      {
+        duration: 2000,
+        style: {
+          background: "#10B981",
+          color: "#fff",
+          fontWeight: "bold",
+          borderRadius: "8px",
+          padding: "10px",
+        },
+      }
+    );
   };
 
   const buyitNow = (productdata) => {
-    dispatch(addTocartAction(productdata));
-    showAlert(`${productdata.name} added to cart! Redirecting to checkout...`);
-    // Small delay before navigation to show the alert
-    setTimeout(() => {
-      navigate("/CheckoutPage");
-    }, 1000);
+    const selectedSize = selectedSizes[productdata._id];
+    const productWithSize = { ...productdata, selectedSize };
+    dispatch(addTocartAction(productWithSize));
+    toast.success(
+      `Proceeding to checkout with ${productdata.name.slice(0, 20)} (Size: ${selectedSize})`,
+      {
+        duration: 1500,
+        style: {
+          background: "#F59E0B",
+          color: "#fff",
+          fontWeight: "bold",
+          borderRadius: "8px",
+          padding: "10px",
+        },
+      }
+    );
+    setTimeout(() => navigate("/CheckoutPage"), 1200);
   };
 
-  // Check if scrolling is possible
+  const getProductSizes = (product) =>
+    product.sizes && product.sizes.length > 0 ? product.sizes : availableSizes;
+
+  const handleContextMenu = (e) => e.preventDefault();
+  const handleDragStart = (e) => e.preventDefault();
+
   const checkScrollability = () => {
-    const container = productsGridRef.current;
+    const container = scrollContainerRef.current;
     if (container) {
       setCanScrollLeft(container.scrollLeft > 0);
       setCanScrollRight(
@@ -75,32 +114,24 @@ export default function QazmiBestsellers() {
     }
   };
 
-  // Scroll handlers
   const scrollLeft = () => {
-    const container = productsGridRef.current;
-    if (container) {
-      container.scrollBy({
-        left: -300,
-        behavior: "smooth",
-      });
-      setTimeout(checkScrollability, 500);
-    }
+    scrollContainerRef.current?.scrollBy({
+      left: -scrollContainerRef.current.clientWidth / 2,
+      behavior: "smooth",
+    });
+    setTimeout(checkScrollability, 500);
   };
 
   const scrollRight = () => {
-    const container = productsGridRef.current;
-    if (container) {
-      container.scrollBy({
-        left: 300,
-        behavior: "smooth",
-      });
-      setTimeout(checkScrollability, 500);
-    }
+    scrollContainerRef.current?.scrollBy({
+      left: scrollContainerRef.current.clientWidth / 2,
+      behavior: "smooth",
+    });
+    setTimeout(checkScrollability, 500);
   };
 
-  // Add scroll event listener
   useEffect(() => {
-    const container = productsGridRef.current;
+    const container = scrollContainerRef.current;
     if (container) {
       container.addEventListener("scroll", checkScrollability);
       checkScrollability();
@@ -111,206 +142,250 @@ export default function QazmiBestsellers() {
         window.removeEventListener("resize", checkScrollability);
       };
     }
-  }, [products]); // Re-check when products load
+  }, []);
 
-  const viewAllClick = () => {
-    navigate("/Collections");
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  return (
-    <section className="w-full max-w-7xl mx-auto px-4 py-8 md:py-12">
-      {/* Alert Toast Notification */}
-      {alertVisible && (
-        <div className="fixed top-4 right-4 z-50 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center space-x-3 animate-slide-in">
-          <CheckCircle size={20} />
-          <span className="font-medium">{alertMessage}</span>
-          <button
-            onClick={hideAlert}
-            className="text-white hover:text-gray-200 transition-colors"
-          >
-            <X size={18} />
-          </button>
-        </div>
-      )}
+  const viewPagePree = (id) => {
+    navigate(`/ProductPage/${id}`);
+  };
 
-      <div className="text-center mb-8">
-        <h2 className="text-xl md:text-4xl font-bold text-gray-800 mb-2">
-          Discover Zrema's Timeless Bestsellers
-        </h2>
-        <p className="text-black-400 text-sm md:text-lg font-bold">
-          Experience the elegance and craftsmanship of Zrema's most beloved
-          pieces
+  const SizeSelector = ({
+    product,
+    selectedSize,
+    onSizeSelect,
+    isSmallScreen = false,
+  }) => {
+    const productSizes = getProductSizes(product);
+
+    return (
+      <div className={`mb-3 ${isSmallScreen ? "px-1" : ""}`}>
+        <p
+          className={`${
+            isSmallScreen ? "text-xs" : "text-sm"
+          } font-medium mb-2 text-center`}
+        >
+          Size: <span className="text-pink-600">{selectedSize}</span>
         </p>
-      </div>
-
-      {/* Category buttons - horizontally scrollable on all devices */}
-      <div className="overflow-x-auto pb-6 mb-6">
-        <div className="flex space-x-3 min-w-max md:justify-center">
-          {[
-            "KURTA SETS",
-            "LONG KURTIS",
-            "SHORT KURTIS",
-            "Kashmiri Short  Kurti",
-          ].map((category) => (
+        <div
+          className={`flex flex-wrap justify-center gap-1 ${
+            isSmallScreen ? "gap-1" : "gap-2"
+          }`}
+        >
+          {productSizes.map((size) => (
             <button
-              key={category}
-              onClick={() => navigate(`/Collections/${category}`)}
-              className="px-6 py-3 bg-pink-500 text-white rounded-full font-medium hover:bg-pink-600 transition-colors whitespace-nowrap"
+              key={size}
+              onClick={(e) => {
+                e.stopPropagation();
+                onSizeSelect(product._id, size);
+              }}
+              className={`
+                ${isSmallScreen ? "px-2 py-1 text-xs" : "px-3 py-1 text-sm"}
+                border rounded font-medium transition-all duration-200
+                ${
+                  selectedSize === size
+                    ? "bg-pink-500 text-white border-pink-500"
+                    : "bg-white text-gray-700 border-gray-300 hover:border-pink-300 hover:text-pink-600"
+                }
+              `}
             >
-              {category.toLocaleUpperCase()}
+              {size}
             </button>
           ))}
         </div>
       </div>
+    );
+  };
 
-      {/* Products scrollable container with navigation arrows */}
-      <div className="relative">
-        {/* Navigation Arrows - only shown when scrolling is possible */}
-        {canScrollLeft && (
-          <button
-            onClick={scrollLeft}
-            className="absolute top-1/2 left-0 transform -translate-y-1/2 -translate-x-3 bg-white rounded-full p-2 shadow-md z-10 hidden md:block"
-            aria-label="Scroll left"
-          >
-            <ChevronLeft size={24} />
-          </button>
-        )}
+  return (
+    <section className="py-8 bg-gray-50">
+      <div className="container mx-auto">
+        <h2 className="text-xl sm:text-4xl font-serif text-center mb-8 font-black">
+          Discover Bestsellers
+        </h2>
 
-        {canScrollRight && (
-          <button
-            onClick={scrollRight}
-            className="absolute top-1/2 right-0 transform -translate-y-1/2 translate-x-3 bg-white rounded-full p-2 shadow-md z-10 hidden md:block"
-            aria-label="Scroll right"
-          >
-            <ChevronRight size={24} />
-          </button>
-        )}
-
-        {/* Scrollable Products Grid */}
-        <div
-          ref={productsGridRef}
-          className="flex overflow-x-auto gap-4 md:gap-6 pb-4 snap-x"
-          style={{ scrollBehavior: "smooth" }}
-        >
-          {products.slice(9, 18)?.map((product) => (
-            <div
-              key={product.id}
-              className="flex-shrink-0 group relative border border-gray-200 rounded-lg overflow-hidden snap-start"
-              style={{ width: "250px" }} // Fixed width for consistent sizing
+        <div className="relative">
+          {canScrollLeft && (
+            <button
+              onClick={scrollLeft}
+              className="absolute top-1/2 -left-2 sm:-left-4 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md z-10"
             >
-              <div className="relative">
-                <span className="absolute top-3 left-3 bg-red-500 text-white px-3 py-1 text-sm font-medium rounded">
-                  Sale
-                </span>
-                <img
-                  src={product.images[1]}
-                  alt={product.name}
-                  className="w-full h-[360px] object-cover"
-                />
-                <div className="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <button
-                    className="bg-white text-gray-800 px-4 py-2 rounded-full font-medium transform -translate-y-2 group-hover:translate-y-0 transition-all"
-                    onClick={() => viewPagePree(product._id)}
-                  >
-                    Quick View
-                  </button>
-                </div>
-              </div>
-              <div className="p-1">
-                <h3 className="font-medium text-gray-800 truncate">
-                  {product.name}
-                </h3>
-                <div className="flex justify-center items-center mt-1">
-                  <span className="text-primary line-through mr-2 text-xs sm:text-s">
-                    Rs. {Number(product.mrp).toFixed(2)}
-                  </span>
-                  <span className="text-black font-medium text-xs sm:text-s">
-                    Rs.{" "}
-                    {calculateMrp(
-                      Number(product.mrp),
-                      Number(product.discount)
-                    ).toFixed(2)}
-                  </span>
-                </div>
-                <div className="flex mt-1 space-x-2">
-                  {product?.colors?.map((color, idx) => (
+              <ChevronLeft size={24} />
+            </button>
+          )}
+
+          {canScrollRight && (
+            <button
+              onClick={scrollRight}
+              className="absolute top-1/2 -right-2 sm:-right-4 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md z-10"
+            >
+              <ChevronRight size={24} />
+            </button>
+          )}
+
+          <div>
+            {/* Small screens */}
+            <div className="grid grid-cols-2 gap-3 sm:hidden px-2">
+              {products.slice(10, 18)?.map((product) => (
+                <div
+                  key={product._id}
+                  className="bg-white p-2 cursor-pointer rounded shadow-sm"
+                >
+                  <div onClick={() => viewPagePree(product._id)}>
+                    <img
+                      src={product.images[0]}
+                      alt={product.name}
+                      className="w-full h-[200px] object-cover rounded pointer-events-none select-none"
+                      onContextMenu={handleContextMenu}
+                      onDragStart={handleDragStart}
+                      draggable={false}
+                    />
+                    <h3 className="text-sm mt-2 text-center font-Lato">
+                      {product.name.slice(0, 25)}
+                    </h3>
+                    <div className="flex justify-center gap-2 mt-1 items-center">
+                      <span className="line-through text-xs text-gray-400">
+                        Rs. {Number(product.mrp).toFixed(2)}
+                      </span>
+                      <span className="text-black font-medium text-xs">
+                        Rs.{" "}
+                        {calculateMrp(
+                          Number(product.mrp),
+                          Number(product.discount)
+                        ).toFixed(2)}
+                      </span>
+                      <span className="bg-pink-100 text-pink-600 text-xs px-2 py-0.5 rounded">
+                        {product.discount}% OFF
+                      </span>
+                    </div>
+                  </div>
+
+                  <SizeSelector
+                    product={product}
+                    selectedSize={selectedSizes[product._id]}
+                    onSizeSelect={handleSizeSelect}
+                    isSmallScreen={true}
+                  />
+
+                  <div className="mt-2 space-y-2">
                     <button
-                      key={idx}
-                      className={`w-6 h-6 rounded-full ${color} border border-gray-300`}
-                    ></button>
-                  ))}
+                      className="w-full py-3 bg-pink-400 hover:bg-pink-500 text-white text-sm font-medium rounded"
+                      onClick={() => addtoCart(product)}
+                    >
+                      Add to Cart
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div>
-                <button
-                  className="w-full py-4 bg-pink-400 hover:bg-pink-500 text-white font-medium rounded transition"
-                  onClick={() => addtoCart(product)}
-                >
-                  Add to cart
-                </button>
-                <button
-                  className="w-full py-4 mt-1 border border-gray-300 hover:border-gray-400 font-medium rounded transition"
-                  onClick={() => buyitNow(product)}
-                >
-                  Buy it now
-                </button>
-              </div>
+              ))}
             </div>
-          ))}
+
+            {/* Large screens */}
+            <div
+              ref={scrollContainerRef}
+              className="hidden sm:flex overflow-x-auto pb-6 scrollbar-hide snap-x"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            >
+              {products?.map((product) => (
+                <div
+                  key={product._id}
+                  className="snap-start flex-shrink-0 mx-2 w-[90%] sm:w-[33.33%] lg:w-[25%] max-w-[320px]"
+                >
+                  <div className="bg-white rounded overflow-hidden shadow-sm relative group">
+                    <div className="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 text-sm z-[2]">
+                      Sale
+                    </div>
+                    <div className="relative">
+                      <img
+                        src={product.images[0]}
+                        alt={product.name}
+                        className="w-full h-[390px] object-cover rounded pointer-events-none select-none"
+                        onContextMenu={handleContextMenu}
+                        onDragStart={handleDragStart}
+                        draggable={false}
+                      />
+                      <div
+                        className="absolute inset-0 z-[1] cursor-pointer"
+                        onClick={() => viewPagePree(product._id)}
+                        onContextMenu={handleContextMenu}
+                      />
+                    </div>
+
+                    <div className="px-3 py-2">
+                      <h3 className="text-sm text-center font-Lato mb-2">
+                        {product.name.slice(0, 30)}
+                      </h3>
+                      <div className="flex justify-center items-center gap-2 mb-3">
+                        <span className="line-through text-xs text-gray-400">
+                          Rs. {Number(product.mrp).toFixed(2)}
+                        </span>
+                        <span className="text-black font-medium text-xs">
+                          Rs.{" "}
+                          {calculateMrp(
+                            Number(product.mrp),
+                            Number(product.discount)
+                          ).toFixed(2)}
+                        </span>
+                        <span className="bg-pink-100 text-pink-600 text-xs px-2 py-0.5 rounded">
+                          {product.discount}% OFF
+                        </span>
+                      </div>
+
+                      <SizeSelector
+                        product={product}
+                        selectedSize={selectedSizes[product._id]}
+                        onSizeSelect={handleSizeSelect}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mt-3 space-y-2">
+                    <button
+                      className="w-full py-3 bg-pink-400 hover:bg-pink-500 text-white text-sm font-medium rounded"
+                      onClick={() => addtoCart(product)}
+                    >
+                      Add to Cart
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* "View All" button */}
-      <div className="text-center mt-1">
+      {/* Cart modal shown globally */}
+      {isCartOpen && (
+        <QazmiCart
+          isOpen={isCartOpen}
+          setIsOpen={setIsCartOpen}
+          product={selectedProduct}
+        />
+      )}
+
+      <div className="fixed bottom-6 right-6 z-50">
         <button
-          className="px-8 py-3 bg-pink-500 text-white rounded-full font-medium hover:bg-pink-600 transition-colors"
-          onClick={viewAllClick}
+          onClick={scrollToTop}
+          className="bg-pink-500 hover:bg-pink-600 text-white rounded-full p-3 shadow-lg"
         >
-          View All Bestsellers
+          <ArrowUp size={24} />
         </button>
       </div>
 
-      {/* Floating cart button (visible on mobile) */}
-      <div className="fixed right-6 bottom-6 md:hidden">
-        <button className="bg-green-500 rounded-full w-12 h-12 flex items-center justify-center shadow-lg">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6 text-white"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-            />
-          </svg>
-        </button>
-      </div>
-
-      {/* CSS for hiding scrollbar and alert animation */}
       <style jsx>{`
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
         }
-
-        .animate-slide-in {
-          animation: slideIn 0.3s ease-out;
-        }
-
-        @keyframes slideIn {
-          from {
-            transform: translateX(100%);
-            opacity: 0;
-          }
-          to {
-            transform: translateX(0);
-            opacity: 1;
-          }
+        img {
+          user-select: none;
+          -webkit-user-drag: none;
+          -webkit-touch-callout: none;
+          pointer-events: none;
         }
       `}</style>
     </section>
   );
-}
+};
+
+export default QazmiBestsellers;

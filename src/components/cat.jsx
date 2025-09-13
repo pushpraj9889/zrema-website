@@ -90,8 +90,8 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
         ></div>
 
         {/* Cart panel with premium design */}
-        <div className="absolute inset-y-0 right-0 max-w-full flex">
-          <div className="relative w-screen max-w-md">
+        <div className="absolute inset-y-0 right-0 w-3/4 sm:w-80 md:w-96 lg:w-96 xl:w-md flex">
+          <div className="relative w-full">
             <div className="h-full flex flex-col bg-white shadow-xl">
               {/* Premium Cart header with gradient */}
               <div className="bg-gradient-to-r from-pink-400 to-pink-600 px-6 py-4">
@@ -150,12 +150,12 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
                     </button>
                   </div>
                 ) : (
-                  <div className="divide-y divide-gray-100 px-6">
+                  <div className="divide-y divide-gray-100 px-2">
                     {cart?.map((item) => {
                       return (
                         <div key={item._id} className="py-5 flex">
                           {/* Product image with improved styling */}
-                          <div className="flex-shrink-0 w-24 h-28 border border-gray-100 rounded-lg overflow-hidden shadow-sm">
+                          <div className="flex-shrink-0 w-20 sm:w-24 h-24 sm:h-28 border border-gray-100 rounded-lg overflow-hidden shadow-sm">
                             <img
                               src={item?.images[0]}
                               alt={item.name}
@@ -164,15 +164,15 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
                           </div>
 
                           {/* Product details with improved typography */}
-                          <div className="ml-4 flex-1 flex flex-col">
+                          <div className="ml-3 sm:ml-4 flex-1 flex flex-col">
                             <div>
                               <div className="flex justify-between">
-                                <h3 className="text-sm font-medium text-gray-900 leading-tight">
-                                  {item.name.slice(0, 40)}
-                                  {item.name.length > 40 ? "..." : ""}
+                                <h3 className="text-xs sm:text-sm font-medium text-gray-900 leading-tight">
+                                  {item.name.slice(0, 30)}
+                                  {item.name.length > 30 ? "..." : ""}
                                 </h3>
                                 <div className="flex">
-                                  <p className="ml-4 text-sm text-pink-500">
+                                  <p className="ml-2 sm:ml-4 text-xs sm:text-sm text-pink-500 font-semibold">
                                     ₹{" "}
                                     {(
                                       calculateMrp(item.mrp, item.discount) *
@@ -193,23 +193,23 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
                             <div className="flex-1 flex items-end justify-between mt-2">
                               <div className="flex items-center border border-gray-200 rounded-md overflow-hidden shadow-sm">
                                 <button
-                                  className="px-2 py-1 text-gray-500 hover:bg-gray-50 transition-colors"
+                                  className="px-1.5 sm:px-2 py-1 text-gray-500 hover:bg-gray-50 transition-colors"
                                   onClick={() =>
                                     handleDecrementQuantity(item._id)
                                   }
                                 >
-                                  <ChevronDown size={16} />
+                                  <ChevronDown size={14} />
                                 </button>
-                                <span className="px-3 py-1 text-black font-medium bg-gray-50">
+                                <span className="px-2 sm:px-3 py-1 text-black font-medium bg-gray-50 text-sm">
                                   {item.quantity}
                                 </span>
                                 <button
-                                  className="px-2 py-1 text-gray-500 hover:bg-gray-50 transition-colors"
+                                  className="px-1.5 sm:px-2 py-1 text-gray-500 hover:bg-gray-50 transition-colors"
                                   onClick={() =>
                                     handleIncrementQuantity(item._id)
                                   }
                                 >
-                                  <ChevronUp size={16} />
+                                  <ChevronUp size={14} />
                                 </button>
                               </div>
 
@@ -217,7 +217,7 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
                                 className="text-xs font-medium text-pink-500 hover:text-pink-700 flex items-center transition-colors"
                                 onClick={() => removeItem(item._id)}
                               >
-                                <X size={14} className="mr-1" />
+                                <X size={12} className="mr-1" />
                                 Remove
                               </button>
                             </div>
@@ -231,7 +231,7 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
 
               {/* Enhanced Cart footer with totals and checkout buttons */}
               {cart.length > 0 && (
-                <div className="bg-white border-t border-gray-100 pt-4 pb-6 px-6 shadow-inner">
+                <div className="bg-white border-t border-gray-100 pt-1 pb-6 px-4 sm:px-6 shadow-inner">
                   {/* Order summary */}
                   <h3 className="text-sm font-semibold text-gray-900 mb-3">
                     Order Summary
@@ -261,7 +261,7 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
                     <div className="border-t border-dashed border-gray-200 pt-2 mt-2">
                       <div className="flex justify-between font-bold text-gray-900">
                         <p>Total</p>
-                        {/* <p>₹ {totalAmount?.toFixed(2)}</p> */}
+                        <p>₹ {totalAmount}</p>
                       </div>
                       <p className="text-xs text-green-600 mt-1">
                         {/* You save ₹ {discountAmount.toFixed(2)} on this order */}
@@ -273,11 +273,11 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
                   <div className="bg-pink-50 rounded-lg p-3 mb-4">
                     <div className="flex items-center text-xs text-pink-700 mb-2">
                       <Shield size={14} className="mr-2 text-pink-500" />
-                      <span>Secured checkout with encryption</span>
+                      <span className="text-xs">Secured checkout with encryption</span>
                     </div>
                     <div className="flex items-center text-xs text-pink-700">
                       <Gift size={14} className="mr-2 text-pink-500" />
-                      <span>Free gifts with purchase over ₹999</span>
+                      <span className="text-xs">Free gifts with purchase over ₹999</span>
                     </div>
                   </div>
 
@@ -285,17 +285,17 @@ export default function QazmiCart({ isOpen, setIsOpen }) {
                   <div className="grid grid-cols-1 gap-3">
                     <button
                       onClick={goToCheckOut}
-                      className="w-full bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-medium py-3 px-4 rounded-lg shadow-md shadow-pink-200 transition-all flex items-center justify-center"
+                      className="w-full bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-medium py-3 px-4 rounded-lg shadow-md shadow-pink-200 transition-all flex items-center justify-center text-sm"
                     >
-                      <CreditCard size={18} className="mr-2" />
+                      <CreditCard size={16} className="mr-2" />
                       Checkout Now
                     </button>
 
                     <button
                       onClick={goToCartPage}
-                      className="w-full border border-pink-200 bg-white text-pink-600 hover:bg-pink-50 font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
+                      className="w-full border border-pink-200 bg-white text-pink-600 hover:bg-pink-50 font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center text-sm"
                     >
-                      View Full Cart <ChevronRight size={16} className="ml-1" />
+                      View Full Cart <ChevronRight size={14} className="ml-1" />
                     </button>
                   </div>
                 </div>

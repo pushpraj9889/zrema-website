@@ -138,7 +138,7 @@ const Collections = () => {
 
                 <img
                   src={product.images && product.images[0]}
-                  className="w-full h-[255px] sm:h-[320px] object-cover pointer-events-none select-none"
+                  className="w-full h-[265px] sm:h-[350px] object-cover pointer-events-none select-none"
                   alt={product.name}
                   onContextMenu={handleContextMenu}
                   onDragStart={handleDragStart}
